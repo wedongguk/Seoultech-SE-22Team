@@ -18,23 +18,18 @@ class game: # game 클래스 생성
         pass
 
     def ready(self): #게임을 준비하는 메서드
-        
-        deckList = self.deckList
-        playerList = self.playerList
-        openCard = self.openCard
-        
         deckPreset = self.setDeck() # 사전에 정의한 덱 리스트
         
-        deckList + deckPreset # 덱에 deckPreset을 넣는다.
-        deckList.shuffle()
+        self.deckList + deckPreset # 덱에 deckPreset을 넣는다.
+        self.deckList.shuffle()
 
 
-        for i in range(0, len(playerList)): # 각 플레이어들에게 카드를 나눠줍니다.
-            playerList[i].draw(deckList, 5) # 나눠줄 카드의 개수 : 임의로 5로 설정했음
-            print(playerList[i].playerName + ": ", playerList[i].allHand(),"\n")
+        for i in range(0, len(self.playerList)): # 각 플레이어들에게 카드를 나눠줍니다.
+            self.playerList[i].draw(self.deckList, 5) # 나눠줄 카드의 개수 : 임의로 5로 설정했음
+            print(self.playerList[i].playerName + ": ", self.playerList[i].allHand(),"\n")
 
-        self.placeOpenCardZone(deckList.takeTopCard()) # 덱 맨 위에서 카드를 1장 오픈합니다.
-        print("TopCard" +": " + openCard.cardList[-1].info()+"\n")
+        self.placeOpenCardZone(self.deckList.takeTopCard()) # 덱 맨 위에서 카드를 1장 오픈합니다.
+        print("TopCard" +": " + self.openCard.cardList[-1].info()+"\n")
 
     def placeOpenCardZone(self, card): #OpenCardList에 카드를 놓습니다.
         self.openCard + [card]
@@ -50,25 +45,33 @@ class game: # game 클래스 생성
     
     def executeTurn(self): # 하나의 턴을 실행합니다.
         
-        tunPlayer = self.playerList[self.turnPlayer]
-        
-        if tunPlayer.isUser == True: # 턴 플레이어가 유저
+        if self.playerList[self.turnPlayer].isUser == True: # 턴 플레이어가 유저
                 self.mainPhase()
-        
+                print("User",self.playerList[self.turnPlayer].playerName, "의 턴")
         else: # 턴 플레이어가 봇
             self.unoBot()
         
-        result = self.endPhase() 
+        result = self.endPhase()
         return result # 게임이 끝났는지, 승자는 누구인지
     
     def mainPhase(self):
-        pass
+        
+        if self.attackCard > 0: # 공격 처리
+            self.playerList[self.turnPlayer].draw(self.deckList, self.attackCard)
+            self.attackCard = 0
+        
+        # 카드 내기 or 드로우 or 우노
     
     def endPhase(self):
-        pass
+        self.turnPlayer = (self.turnPlayer+1)%len(self.playerList)
+        
+        if (self.turnPlayer):
+            return True
+        
+        return False
     
     def unoBot(self):
-        pass
+        print("bot",self.playerList[self.turnPlayer].playerName, "의 턴")
 
 class pile: # pile 클래스 생성
     cardList = []
@@ -100,7 +103,7 @@ class player: # player 클래스 생성
 
     def __init__(self, player_name, is_user): # player 클래스 생성자
         self.playerName = player_name
-        self.isUser = player
+        self.isUser = is_user
         self.handCardList = []
 
     def __del__(self): # player class 소멸자
@@ -117,7 +120,6 @@ class player: # player 클래스 생성
             tempList.append(handCardList[i].info())
 
         return tempList
-
 
     def delCard(self, index): # player의 카드를 삭제합니다. i : 삭제할 인덱스
         del self.handCardList[index]
@@ -173,3 +175,11 @@ c1 = card(1, 1)
 print(c1.cardColor)
 print(c1.cardNumber)
 g.placeOpenCardZone(c)
+
+g.executeTurn()
+g.executeTurn()
+g.executeTurn()
+g.executeTurn()
+g.executeTurn()
+g.executeTurn()
+g.executeTurn()
