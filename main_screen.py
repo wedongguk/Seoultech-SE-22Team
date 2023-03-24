@@ -21,8 +21,6 @@ def init_bg(image, width, height):
     return pygame.transform.scale(bg, (width, height))
 
 
-
-
 def play():
     return 0
 
@@ -48,7 +46,6 @@ def options():
                               size=(button_width-10, button_height+10))
 
         
-
         init_button(screen, [back_button, save_button, reset_button])
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
