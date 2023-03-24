@@ -1,19 +1,18 @@
 import pygame
 
 class Button():
-    def __init__(self, image, pos, width, height):
+    def __init__(self, image, pos, size):
         self.image = image
         self.x_pos = pos[0]
         self.y_pos = pos[1]
         # self.rect = self.image.get_rect(center=(self.x_pos, self.y_pos))
-        self.width = width
-        self.height = height
+        self.width = size[0]
+        self.height = size[1]
         self.rect = pygame.Rect(self.x_pos, self.y_pos, self.width, self.height)
 
 
     def update(self, btn, screen):
         screen.blit(btn, (self.x_pos, self.y_pos))
-
 
     def set_size(self):
         return pygame.transform.scale(self.image, (self.width, self.height))
