@@ -129,36 +129,97 @@ class player: # player 클래스 생성
         for c in self.handCardList:
             #c.cardNumber = 3
             #c.cardColor = green
-            if c.cardNumber == i: # 이 부분이 수행 안됨
+            if c.number == i: # 이 부분이 수행 안됨
                 #print(c.cardNumber)
-                if c.cardColor == color: # 이 부분이 수행 안됨
+                if c.color == color: # 이 부분이 수행 안됨
                     return player.handCardList.index(c) # c의 인덱스 값 리턴
 
     def printCurSta(self): # 현재 Player 카드 리스트
         print(self.playerName + ": ", self.allHand(), "\n")
 
 class card: # 카드 클래스 생성
-    cardColor = -1 # 0: red, 1: green, 2: yellow, 3: blue, -1: none_color_card
-    cardNumber = -1 # -1: special_card
-    changedColor = -1 # 카드의 색이 바뀌었을 경우에 바뀐 색을 표기함
+    '''
+    cardColor, cardNumber 에서 card를 빼는게 어떨까요 ?
+    '''
+    color = -1 # 0: red, 1: green, 2: yellow, 3: blue, -1: none_color_card
+    number = -1 # -1: special_card
 
-    def __init__(self, color, number): # card 클래스 생성자
-        self.cardColor = color
-        self.cardNumber = number
+    attack = -1 # 1 : +2 효과 기능, -1 : none
+    changeSequence = -1 # 1 : 순서 변경 기능,-1 : none
+    changeNumber = -1 # 1 : 숫자 변경 기능, -1 : none
+    turnPass = -1 # 1 : 턴 넘기기 기능, -1 : none
+    changeDeck = -1 # 1 : 덱 변경 기능, -1 : none
+    changeColor = -1 # 1 : 컬러 변경 기능, -1 : none
+
+    applyNumber = -1
+    applyColor = -1
+
+
+    def __init__(self, color, number, attack = -1, changeSequence = -1, changeNumber = -1, turnPass = -1, changeDeck = -1, changeColor = -1): # card 클래스 생성자
+
+        # 특수 카드 생성시에는 인자로 기능들을 구분해야 하나 ?
+
+        self.color = color
+        self.number = number
+        self.attack = attack
+        self.changeSequence = changeSequence
+        self.changeNumber = changeNumber
+        self.turnPass = turnPass
+        self.changeDeck = changeDeck
+        self.changeColor = changeColor
+        self.applyNumber = self.number # applyNumber 는 cardNumber 로 초기값 설정
+        self.applyColor = self.color # applyColor 는 cardColor 로 초기값 설정
+
+
+
 
     def __del__(self): # card class 소멸자
         pass
 
-    def cardEffect(self): # 특수 카드의 효과를 처리하기 위한 메서드.
-        ## 임시 코드
-        if self.cardNumber == -1:
-            print("+2 공격이 시행되었어요")
-        else:
-            print(self.info() + "가 놓여졌어요")
+    def cardEffect(self, game): # 특수 카드의 효과를 처리하기 위한 메서드.
+
+
+        if self.attack == 1:
+            game.attackCard += 2
+        if self.changeSequence == 1:
+            # game.playerList.reverse()
+            tp = game.turnPlayer
+            tmp_Lst = []
+
+            for _ in range(len(game.playerList)):
+                tp -= 1
+                tmp_Lst.append(game.playerList[tp])
+
+        if self.changeNumber == 1:
+            applyNumber = int(input())
+
+        if self.turnPass == 1:
+            # turn pass turn flow 에서 넘겨야하나 ?
+            game.jumpNumber += 1
+
+        if self.changeDeck == 1:
+            # change deck 가장 낮은 리스트 개수와 변경
+            lstNum = []
+            for p in game.playerList:
+                lstNum.append(len(p.handCardList))
+
+            MAX = lstNum.index(max(lstNum))
+            MIN = lstNum.index(min(lstNum))
+
+            game.playerList[MAX].handCardList, game.playerList[MIN].handCardList  = game.playerList[MIN].handCardList, game.playerList[MAX].handCardList
+
+        if self.changeColor == 1:
+            applyColor = int(input())
+
+
+    def attack(self):
+        player.draw()
+
+
 
     def info(self): # 카드 정보 표시
         colorDict = {-1:'None', 0:'red', 1:'green', 2:'yellow', 3:'blue'}
-        return colorDict[self.cardColor] + ' ' + str(self.cardNumber)
+        return colorDict[self.color] + ' ' + str(self.number)
 
 ## 테스트용 ##
 user1 = player('USER', True)
@@ -172,8 +233,8 @@ g.ready()
 
 c = card(0, -1)
 c1 = card(1, 1)
-print(c1.cardColor)
-print(c1.cardNumber)
+print(c1.color)
+print(c1.number)
 g.placeOpenCardZone(c)
 
 g.executeTurn()
