@@ -12,7 +12,7 @@ screen_size = (800, 600)
 screen = pygame.display.set_mode(screen_size)
 
 font = pygame.font.SysFont(None, 30)
-button = pygame.image.load("gray button.png")
+button = pygame.image.load("save_button.png")
 button = pygame.transform.scale(button, (40, 40))
 
 # 옵션 텍스트 만듦

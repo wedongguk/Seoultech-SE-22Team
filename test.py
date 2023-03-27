@@ -1,71 +1,51 @@
 import pygame
-import os
-import sys
-from button import Button, init_button
 
-os.chdir(os.getcwd() + "/img")
-
+# Initialize Pygame
 pygame.init()
-pygame.display.set_caption("Uno game")
 
-screen_width = 1280
-screen_height = 720
-button_width = 220
-button_height = 50
+# Set up the display
+screen = pygame.display.set_mode((400, 400))
+pygame.display.set_caption("Checkbox Demo")
 
-screen = pygame.display.set_mode((screen_width, screen_height))
+# Define the checkbox class
+class Checkbox:
+    def __init__(self, x, y, width, height):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.checked = False
+        self.check_image = pygame.Surface((width, height))
+        self.check_image.fill((255, 255, 255))
+        pygame.draw.line(self.check_image, (0, 0, 0), (0, height // 2), (width // 2, height), 2)
+        pygame.draw.line(self.check_image, (0, 0, 0), (width // 2, height), (width, 0), 2)
 
-main_bg = pygame.image.load("start_screen.jpeg")
-main_bg = pygame.transform.scale(main_bg, (screen_width, screen_height))
+    def draw(self, surface):
+        if self.checked:
+            surface.blit(self.check_image, self.rect)
+        else:
+            pygame.draw.rect(surface, (255, 255, 255), self.rect)
+            pygame.draw.rect(surface, (0, 0, 0), self.rect, 2)
 
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.rect.collidepoint(event.pos):
+                self.checked = not self.checked
 
-def play():
-    return 0
+# Create a checkbox instance
+checkbox = Checkbox(100, 100, 50, 50)
 
+# Main game loop
+running = True
+while running:
+    # Handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        checkbox.handle_event(event)
 
-def options():
-    return 0
+    # Draw the checkbox
+    checkbox.draw(screen)
 
+    # Update the display
+    pygame.display.update()
 
-def quit():
-    pygame.quit()
-    sys.exit()
-
-
-# 메인 루프
-def main_screen():
-    while True:
-        screen.blit(main_bg, (0, 0))
-
-        play_button = Button(image=pygame.image.load("play_button.png"),
-                             pos=(screen_width / 2 - button_width / 2, screen_height / 2 - button_height / 2 + 200),
-                             width=button_width,
-                             height=button_height)
-
-        options_button = Button(image=pygame.image.load("options_button.png"),
-                                pos=(screen_width / 2 - button_width / 2, screen_height / 2 - button_height / 2 + 260),
-                                width=button_width,
-                                height=button_height)
-
-        exit_button = Button(image=pygame.image.load("exit_button.png"),
-                             pos=(screen_width / 2 - button_width / 2, screen_height / 2 - button_height / 2 + 320),
-                             width=button_width,
-                             height=button_height)
-
-        init_button(screen, [play_button, options_button, exit_button])
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if play_button.rect.collidepoint(event.pos):
-                    print("1")
-                elif options_button.rect.collidepoint(event.pos):
-                    print("2")
-                elif exit_button.rect.collidepoint(event.pos):
-                    quit()
-        pygame.display.update()
-
-
-
-main_screen()
+# Clean up
+pygame.quit()
