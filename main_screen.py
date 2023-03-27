@@ -5,11 +5,27 @@ from button import Button
 from view import init_view
 from checkbox import Checkbox
 from text import Text
+import configparser
 
 os.chdir(os.getcwd() + "/img")
 
 pygame.init()
 pygame.display.set_caption("Uno game")
+
+config = configparser.ConfigParser()
+config.read('config.ini', encoding='utf-8')
+try:
+    if config['system']['is_new'] == "False":
+        print("config file o")
+        UNO = eval(f"{config['system']['UNO']}")
+except:
+    print("config file x")
+    config['system'] = {}
+    config['system']['is_new'] = "False"
+    config['system']['UNO'] = 'pygame.K_u'
+    with open('config.ini', 'w', encoding='utf-8') as configfile:
+        config.write(configfile)
+    UNO = eval(f"{config['system']['UNO']}")
 
 screen_width = 1280
 screen_height = 720
@@ -18,8 +34,8 @@ button_height = 50
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 
-
 font = pygame.font.SysFont(None, 30)
+
 
 def init_bg(image, width, height):
     bg = pygame.image.load(image)
@@ -30,22 +46,22 @@ def play():
     return 0
 
 
-UNO = pygame.K_u
 SELECT = pygame.K_RETURN
 LEFT = pygame.K_LEFT
 RIGHT = pygame.K_RIGHT
 
-def key_change() :
+
+def key_change():
     tmp = 0
     # 바꿀 조작키 입력 루프
     while True:
         event = pygame.event.wait()
         if event.type == pygame.KEYDOWN:
-                tmp = event.key
-                if (tmp == UNO or tmp == SELECT or tmp == LEFT or tmp == RIGHT) :
-                    print("used key")
-                else :
-                    break
+            tmp = event.key
+            if (tmp == UNO or tmp == SELECT or tmp == LEFT or tmp == RIGHT):
+                print("used key")
+            else:
+                break
     return tmp
 
 
@@ -57,18 +73,18 @@ def options():
         screen.blit(options_bg, (0, 0))
 
         # option screen에서 필요한 버튼 설정
-        x_pos = screen_width/2 - button_width/2
-        y_pos = screen_height/2 - button_height / 2
+        x_pos = screen_width / 2 - button_width / 2
+        y_pos = screen_height / 2 - button_height / 2
 
         back_button = Button(image=pygame.image.load("back_button.png"),
                              pos=(30, 30),
                              size=(50, 50))
         save_button = Button(image=pygame.image.load("save_button.png"),
                              pos=(x_pos, y_pos + 230),
-                             size=(button_width-30, button_height+5))
+                             size=(button_width - 30, button_height + 5))
         reset_button = Button(image=pygame.image.load("reset_button.png"),
                               pos=(x_pos, y_pos + 300),
-                              size=(button_width-30, button_height+5))
+                              size=(button_width - 30, button_height + 5))
 
         # 텍스트 설정
         Text(text_input="Color Weakness Mode",
@@ -99,32 +115,32 @@ def options():
         key_setting_bg = pygame.transform.scale(key_setting_bg, (40, 40))
         # 우노 버튼 설정
         Uno_button_rect = key_setting_bg.get_rect()
-        Uno_button_rect.centerx = screen.get_rect().centerx-120
-        Uno_button_rect.centery = screen.get_rect().centery-100
+        Uno_button_rect.centerx = screen.get_rect().centerx - 120
+        Uno_button_rect.centery = screen.get_rect().centery - 100
         Uno_text = font.render(pygame.key.name(UNO), True, (255, 255, 255))
         Uno_rect = Uno_text.get_rect()
         Uno_rect.centerx = Uno_button_rect.centerx
         Uno_rect.centery = Uno_button_rect.centery
         # 선택 버튼 설정
         Select_button_rect = key_setting_bg.get_rect()
-        Select_button_rect.centerx = screen.get_rect().centerx-40
-        Select_button_rect.centery = screen.get_rect().centery-100
+        Select_button_rect.centerx = screen.get_rect().centerx - 40
+        Select_button_rect.centery = screen.get_rect().centery - 100
         Select_text = font.render(pygame.key.name(SELECT), True, (255, 255, 255))
         Select_rect = Select_text.get_rect()
         Select_rect.centerx = Select_button_rect.centerx
         Select_rect.centery = Select_button_rect.centery
         # 왼쪽 이동 버튼 설정
         L_button_rect = key_setting_bg.get_rect()
-        L_button_rect.centerx = screen.get_rect().centerx+40
-        L_button_rect.centery = screen.get_rect().centery-100
+        L_button_rect.centerx = screen.get_rect().centerx + 40
+        L_button_rect.centery = screen.get_rect().centery - 100
         L_text = font.render(pygame.key.name(LEFT), True, (255, 255, 255))
         L_rect = L_text.get_rect()
         L_rect.centerx = L_button_rect.centerx
         L_rect.centery = L_button_rect.centery
         # 오른쪽 이동 버튼 설정
         R_button_rect = key_setting_bg.get_rect()
-        R_button_rect.centerx = screen.get_rect().centerx+120
-        R_button_rect.centery = screen.get_rect().centery-100
+        R_button_rect.centerx = screen.get_rect().centerx + 120
+        R_button_rect.centery = screen.get_rect().centery - 100
         R_text = font.render(pygame.key.name(RIGHT), True, (255, 255, 255))
         R_rect = R_text.get_rect()
         R_rect.centerx = R_button_rect.centerx
@@ -139,7 +155,6 @@ def options():
         screen.blit(key_setting_bg, R_button_rect)
         screen.blit(R_text, R_rect)
 
-
         # 메인 루프
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -152,6 +167,11 @@ def options():
                 elif Uno_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for Uno direction")
                     UNO = key_change()
+                    pygame.key.name(UNO)
+                    print(pygame.key.name(UNO))
+                    config['system']['UNO'] = 'pygame.K_' + pygame.key.name(UNO)
+                    with open('config.ini', 'w', encoding='utf-8') as configfile:
+                        config.write(configfile)
                 elif Select_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for Select direction")
                     SELECT = key_change()
@@ -186,8 +206,8 @@ def quit():
 # 메인 루프
 def main_screen():
     main_bg = init_bg("start_screen.jpeg", screen_width, screen_height)
-    x_pos = screen_width/2 - button_width/2
-    y_pos = screen_height/2 - button_height/2
+    x_pos = screen_width / 2 - button_width / 2
+    y_pos = screen_height / 2 - button_height / 2
 
     while True:
         screen.blit(main_bg, (0, 0))
@@ -217,5 +237,6 @@ def main_screen():
                 elif exit_button.rect.collidepoint(event.pos):
                     quit()
         pygame.display.update()
+
 
 main_screen()
