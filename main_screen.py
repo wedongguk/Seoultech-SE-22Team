@@ -43,10 +43,6 @@ except:
     save_config()
 
 
-UNO = change_str_to_var(config['system']['UNO'])
-SELECT = change_str_to_var(config['system']['SELECT'])
-LEFT = change_str_to_var(config['system']['LEFT_MOVE'])
-RIGHT = change_str_to_var(config['system']['RIGHT_MOVE'])
 screen_width = int(config['system']['SCREEN_WIDTH'])
 screen_height = int(config['system']['SCREEN_HEIGHT'])
 
@@ -111,9 +107,14 @@ def options():
 
         init_view(screen, [back_button, save_button, reset_button])
 
+        UNO = eval(f"{config['system']['UNO']}")
+        SELECT = eval(f"{config['system']['SELECT']}")
+        LEFT = eval(f"{config['system']['LEFT_MOVE']}")
+        RIGHT = eval(f"{config['system']['RIGHT_MOVE']}")
+
         # 키 설정
         key_setting_bg = pygame.image.load("gray_button.png")
-        key_setting_bg = pygame.transform.scale(key_setting_bg, (40, 40))
+        key_setting_bg = pygame.transform.scale(key_setting_bg, (80, 80))
         # 우노 버튼 설정
         Uno_button_rect = key_setting_bg.get_rect()
         Uno_button_rect.centerx = screen.get_rect().centerx - 120
@@ -165,18 +166,18 @@ def options():
                     main_screen()
                 elif save_button.rect.collidepoint(event.pos):
                     pygame.display.set_mode((720, 480))
-                elif Uno_rect.collidepoint(pygame.mouse.get_pos()):
+                elif Uno_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for Uno direction")
                     UNO = key_change()
                     pygame.key.name(UNO)
                     config['system']['UNO'] = 'pygame.K_' + pygame.key.name(UNO)
                     save_config()
-                elif Select_rect.collidepoint(pygame.mouse.get_pos()):
+                elif Select_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for Select direction")
                     SELECT = key_change()
-                elif L_rect.collidepoint(pygame.mouse.get_pos()):
+                elif L_button_rect.collidepoint(pygame.mouse.get_pos()):
                     LEFT = key_change()
-                elif R_rect.collidepoint(pygame.mouse.get_pos()):
+                elif R_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for RIGHT direction")
                     RIGHT = key_change()
 
