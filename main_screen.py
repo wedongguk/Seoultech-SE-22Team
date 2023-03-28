@@ -10,6 +10,8 @@ os.chdir(os.getcwd() + "/img")
 
 pygame.init()
 pygame.display.set_caption("Uno game")
+icon = pygame.image.load("icon.png")
+pygame.display.set_icon(icon)
 
 config = configparser.ConfigParser()
 config.read('config.ini', encoding='utf-8')
@@ -20,23 +22,34 @@ def save_config():
         config.write(config_file)
 
 
+def change_str_to_var(str):
+    return eval(f"{str}")
+
+
 try:
     if config['system']['is_new'] == "False":
         print("config file o")
-        UNO = eval(f"{config['system']['UNO']}")
 except:
     print("config file x")
     config['system'] = {}
     config['system']['is_new'] = "False"
+    config['system']['COLOR_WEAKNESS_MODE'] = "FALSE"
+    config['system']['SCREEN_WIDTH'] = "1280"
+    config['system']['SCREEN_HEIGHT'] = "720"
     config['system']['UNO'] = 'pygame.K_u'
     config['system']['LEFT_MOVE'] = 'pygame.K_RIGHT'
     config['system']['RIGHT_MOVE'] = 'pygame.K_LEFT'
-    config['sustem']['SELECT'] = 'pygame.K_RETURN'
+    config['system']['SELECT'] = 'pygame.K_RETURN'
     save_config()
-    UNO = eval(f"{config['system']['UNO']}")
 
-screen_width = 1280
-screen_height = 720
+
+UNO = change_str_to_var(config['system']['UNO'])
+SELECT = change_str_to_var(config['system']['SELECT'])
+LEFT = change_str_to_var(config['system']['LEFT_MOVE'])
+RIGHT = change_str_to_var(config['system']['RIGHT_MOVE'])
+screen_width = int(config['system']['SCREEN_WIDTH'])
+screen_height = int(config['system']['SCREEN_HEIGHT'])
+
 button_width = 220
 button_height = 50
 
@@ -52,21 +65,6 @@ def init_bg(image, width, height):
 
 def play():
     return 0
-
-
-def key_change():
-    tmp = 0
-    # 바꿀 조작키 입력 루프
-    while True:
-        event = pygame.event.wait()
-        if event.type == pygame.KEYDOWN:
-            tmp = event.key
-            if (tmp == UNO or tmp == SELECT or tmp == LEFT or tmp == RIGHT):
-                print("used key")
-            else:
-                break
-    return tmp
-
 
 def options():
     global UNO, SELECT, LEFT, RIGHT
@@ -197,6 +195,19 @@ def options():
                     pass
         pygame.display.flip()
 
+
+def key_change():
+    tmp = 0
+    # 바꿀 조작키 입력 루프
+    while True:
+        event = pygame.event.wait()
+        if event.type == pygame.KEYDOWN:
+            tmp = event.key
+            if tmp == UNO or tmp == SELECT or tmp == LEFT or tmp == RIGHT:
+                print("used key")
+            else:
+                break
+    return tmp
 
 def quit():
     pygame.quit()
