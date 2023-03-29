@@ -16,11 +16,4 @@ def canUse(TopCard_N, TopCard_C, TopCard_CC, TopCard_CN ,ChkCard_N, ChkCard_C): 
             return True
 
         return False # 이상의 조건을 통과하지 못했다면 내지 못함.
-    
-    
-def attacked(attackCard): # 공격 받고 있는 상태인지 체크합니다.
-        if attackCard > 0: # 공격 받음
-            return True
-        else: # 공격 안받음
-            return False
 
