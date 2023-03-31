@@ -1,4 +1,5 @@
 import random
+from uno_Card import *
 
 class pile: # pile 클래스 생성
     cardList = []
@@ -7,7 +8,10 @@ class pile: # pile 클래스 생성
         self.cardList = cardList.copy()
 
     def __del__(self): # player class 소멸자
-        pass
+        if self.cardList != []: # handCardList의 Card instance들을 모두 del 합니다.
+            for i in self.cardList:
+                del i
+            self.cardList = []
     
     def shuffle(self): # pile의 카드를 섞습니다.
         random.shuffle(self.cardList)
@@ -25,3 +29,10 @@ class pile: # pile 클래스 생성
     def printlist(self):
         lst = [x.info() for x in self.cardList]
         return lst
+    
+    def data(self): # Front에서 card instance의 정보를 dictionary로 확인하기 위한 메서드
+       cardList = self.cardList
+        
+       result = {'cardList': cardList}
+        
+       return result
