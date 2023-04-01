@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bb3206c8-e201-4c83-8bf3-7941932bc762" name="Changes" comment="chore : gitignore 추가">
-      <change afterPath="$PROJECT_DIR$/.idea/Seoultech-SE-22Team.iml" afterDir="false" />
+    <list default="true" id="bb3206c8-e201-4c83-8bf3-7941932bc762" name="Changes" comment="chore : 기타 환경 설정">
       <change afterPath="$PROJECT_DIR$/Effect.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Timer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unoCore.py" beforeDir="false" afterPath="$PROJECT_DIR$/unoCore.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/uno_Card.py" beforeDir="false" afterPath="$PROJECT_DIR$/uno_Card.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/uno_Const.py" beforeDir="false" afterPath="$PROJECT_DIR$/uno_Const.py" afterDir="false" />
@@ -80,6 +76,14 @@
     </recent_temporary>
   </component>
   <component name="TaskManager">
+    <task id="LOCAL-00001" summary="chore : 기타 환경 설정">
+      <created>1680355200474</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1680355200474</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -95,6 +99,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="chore : gitignore 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore : gitignore 추가" />
+    <MESSAGE value="chore : 기타 환경 설정" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore : 기타 환경 설정" />
   </component>
 </project>

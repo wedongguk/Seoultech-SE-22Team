@@ -1,11 +1,13 @@
 import random
+
+from Timer import Timer
 from uno_Const import * # const
 from uno_Pile import * # Pile Class
 from uno_Player import * # Player Class
 from uno_Card import * # Card Class
 import uno_ChkCon # Check Condition
 
-class game: # game 클래스 생성
+class Game: # game 클래스 생성
     deckList = [] # 남은 덱
     openCard = [] # 공개된 카드
     playerList = [] # 플레이어 목록
@@ -14,13 +16,14 @@ class game: # game 클래스 생성
     step = 1 # 턴 종료시, 플레이어를 넘기는 정도
     state = NORM
     botCompeteList = []
-    winner = [] # 게임이 진행중이라면 빈 테이블, winner player가 존재한다면 0번 인덱스에 넣는다. 
-
+    winner = [] # 게임이 진행중이라면 빈 테이블, winner player가 존재한다면 0번 인덱스에 넣는다.
+    timer = Timer(30)
+    effectTimer = Timer(10)
 
     def __init__(self, player_list): # game 클래스 생성자
         self.playerList = player_list
-        self.deckList = pile()
-        self.openCard = pile()
+        self.deckList = Pile()
+        self.openCard = Pile()
         state = NORM
         turnPlayer = -1
         attackCard = 0
@@ -47,18 +50,30 @@ class game: # game 클래스 생성
         
         
 
-    def placeOpenCardZone(self, card): #OpenCardList에 카드를 놓습니다.
+    def placeOpenCardZone(self, Card): #OpenCardList에 카드를 놓습니다.
         lst = []
-        lst.append(card)
-    
+        lst.append(Card)
         self.openCard + lst
-        card.cardEffect(self)
+    
+        # self.openCard.cardList.append(Card)
+        Card.cardEffect(self)
 
     def setDeck(self): # 게임에 사용할 덱의 CardList를 반환합니다.
         tempList = []
         for i in range(0, 4): # 0~9까지의 4색 카드를 임시 리스트에 넣습니다.
             for j in range(0, 10):
-                tempList.append(card(i, j))
+                tempList.append(Card(i, j, NO_EFFECT))
+
+        for i in range(0, 4): # 색상이 필요한 특수 카드
+            for j in [0B10, 0B100, 0B1000]:
+                    tempList.append(Card(i, NO_NUMBER, j))
+
+        for _ in range(0, 2): # 색상이 불필요한 특수카드
+            for j in [0B10000, 0B100000]:
+                tempList.append(Card(NO_COLOR, NO_NUMBER, j))
+
+
+
 
         return tempList
     
@@ -87,10 +102,40 @@ class game: # game 클래스 생성
             if input_act == 'p':
                 print("낼 카드의 인덱스를 입력하세요")
                 input_num = int(input())
-                if self.playerList[self.turnPlayer].handCardList[input_num].canUse(self):
-                    useCard = self.playerList[self.turnPlayer].delCard(input_num)
-                    self.placeOpenCardZone(useCard)
-                    cond = False
+                '''
+                turn flow
+                카드 사용 여부 체크
+                True
+                    특수카드 여부 체크
+                    True
+                        0. effect 타이머 업데이트
+                        1. 해당 카드 플레이어 리스트에서 삭제
+                        2. 해당 카드 OpenZone에 넣기
+                        3. 특수 카드 효과 실행
+                        4. cond 속성 False 변경
+                    False
+                        0. 일반 타이머 업데이트
+                        1. 2. 4 실행
+                False
+                    1. 낼 수 없습니다 출력
+                    2. 카드 한장을 덱에서 뽑음
+                    3. cond 속성 False 변경
+                
+                다시 반복  
+                '''
+                if self.playerList[self.turnPlayer].handCardList[input_num].canUse(self): # 사용 가능 여부 체크
+                    if self.playerList[self.turnPlayer].handCardList[input_num].checkEffect(self): #Effect 카드 인지 판단
+                        self.effectTimer.update() # effect 타이머 업데이트
+                        useCard = self.playerList[self.turnPlayer].delCard(input_num) # 사용한 카드 삭제
+                        self.placeOpenCardZone(useCard) #OpenZome 에 카드 넣기
+                        useCard.effect.cardEffect(self) # 특수 카드 효과 실행
+                        cond = False
+                    else:
+                        self.timer.update() # 일반 타이머 업데이트
+                        if self.playerList[self.turnPlayer].handCardList[input_num].canUse(self):  # 사용 가능 여부 체크
+                            useCard = self.playerList[self.turnPlayer].delCard(input_num)  # 사용한 카드 삭제
+                            self.placeOpenCardZone(useCard)  # OpenZome 에 카드 넣기
+                            cond = False
                 else:
                     print("그 카드는 낼 수 없습니다.")
             if input_act == 'd':
@@ -202,12 +247,12 @@ class game: # game 클래스 생성
 
 ## 테스트용 ##
 
-user1 = player('USER', True)
-pc1 = player('PC1', False)
-pc2 = player('PC2', False)
-pc3 = player('PC3', False)
+user1 = Player('USER', True)
+pc1 = Player('PC1', False)
+pc2 = Player('PC2', False)
+pc3 = Player('PC3', False)
 
 gamePlayerList = [user1, pc1, pc2, pc3]
-g = game(gamePlayerList)
+g = Game(gamePlayerList)
 
 g.ready()
