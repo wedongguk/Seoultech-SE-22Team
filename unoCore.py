@@ -31,9 +31,13 @@ class Game: # game 클래스 생성
         botCompeteList = []
         winner = []
         
-
     def __del__(self): # game class 소멸자
-        pass
+        del self.deckList
+        del self.openCard
+        if self.playerList != []: # playerList의 player instance들을 모두 del 합니다.
+            for i in self.playerList:
+                del i
+            self.playerList = []
 
     def ready(self): #게임을 준비하는 메서드
         deckPreset = self.setDeck() # 사전에 정의한 덱 리스트
@@ -47,8 +51,6 @@ class Game: # game 클래스 생성
             
         self.placeOpenCardZone(self.deckList.takeTopCard()) # 덱 맨 위에서 카드를 1장 오픈합니다.
         print("TopCard" +": " + self.openCard.cardList[-1].info()+"\n")
-        
-        
 
     def placeOpenCardZone(self, Card): #OpenCardList에 카드를 놓습니다.
         lst = []
