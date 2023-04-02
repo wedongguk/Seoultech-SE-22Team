@@ -1,7 +1,7 @@
 import random
 from uno_Card import *
 
-class pile: # pile 클래스 생성
+class Pile: # pile 클래스 생성
     cardList = []
 
     def __init__(self, cardList = []): # player 클래스 생성자
