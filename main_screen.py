@@ -2,6 +2,8 @@ import pygame
 import os
 import sys
 from button import Button
+from main import init_bg, init_pygame
+from play import play
 from view import init_view
 from text import Text
 import configparser
@@ -9,10 +11,7 @@ from checkbox import Checkbox
 
 os.chdir(os.getcwd() + "/img")
 
-pygame.init()
-pygame.display.set_caption("Uno game")
-icon = pygame.image.load("icon.png")
-pygame.display.set_icon(icon)
+init_pygame()
 
 config = configparser.ConfigParser()
 config.read('config.ini', encoding='utf-8')
@@ -54,15 +53,6 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 font = pygame.font.SysFont(None, 30)
 
 
-def init_bg(image, width, height):
-    bg = pygame.image.load(image)
-    return pygame.transform.scale(bg, (width, height))
-
-
-def play():
-    return 0
-
-
 def options():
     global UNO, SELECT, LEFT, RIGHT
 
@@ -75,6 +65,8 @@ def options():
     RESOLUTION_960 = Checkbox(screen, screen.get_rect().centerx + 80, 280, 1, caption='960 X 540')
 
     boxes = [COLOR_WEAKNESS_MODE_ON, COLOR_WEAKNESS_MODE_OFF, RESOLUTION_1920, RESOLUTION_1280, RESOLUTION_960]
+
+    #
     if config['system']['COLOR_WEAKNESS_MODE'] == "True":
         COLOR_WEAKNESS_MODE_ON.checked = True
         COLOR_WEAKNESS_MODE_OFF.checked = False
@@ -265,11 +257,12 @@ def main_screen():
                 quit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.rect.collidepoint(event.pos):
-                    print("1")
+                    play(screen, screen_width, screen_height)
                 elif options_button.rect.collidepoint(event.pos):
                     options()
                 elif exit_button.rect.collidepoint(event.pos):
                     quit()
         pygame.display.update()
+
 
 main_screen()
