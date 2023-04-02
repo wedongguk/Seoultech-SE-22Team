@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="44c7edeb-4f8f-4090-8649-a2e0779c4b46" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main_screen.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_screen.py" afterDir="false" />
+=======
+    <list default="true" id="bb3206c8-e201-4c83-8bf3-7941932bc762" name="Changes" comment="chore : 기타 환경 설정">
+      <change afterPath="$PROJECT_DIR$/Effect.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Timer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unoCore.py" beforeDir="false" afterPath="$PROJECT_DIR$/unoCore.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uno_Card.py" beforeDir="false" afterPath="$PROJECT_DIR$/uno_Card.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uno_Const.py" beforeDir="false" afterPath="$PROJECT_DIR$/uno_Const.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uno_Pile.py" beforeDir="false" afterPath="$PROJECT_DIR$/uno_Pile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uno_Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/uno_Player.py" afterDir="false" />
+>>>>>>> d2064f98d404a08a2eb2f54da044309b138d488b
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +31,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+<<<<<<< HEAD
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -78,6 +87,10 @@
       <method v="2" />
     </configuration>
     <configuration name="main_screen" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+=======
+  <component name="RunManager" selected="Python.unoCore">
+    <configuration name="unoCore" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+>>>>>>> d2064f98d404a08a2eb2f54da044309b138d488b
       <module name="Seoultech-SE-22Team" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -89,8 +102,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main_screen.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/unoCore.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -99,7 +111,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="uno_Const" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Seoultech-SE-22Team" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -111,8 +123,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/uno_Const.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -123,14 +134,19 @@
     </configuration>
     <recent_temporary>
       <list>
+<<<<<<< HEAD
         <item itemvalue="Python.button" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.main_screen" />
+=======
+        <item itemvalue="Python.unoCore" />
+        <item itemvalue="Python.uno_Const" />
+>>>>>>> d2064f98d404a08a2eb2f54da044309b138d488b
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+<<<<<<< HEAD
     <task active="true" id="Default" summary="Default task">
       <changelist id="44c7edeb-4f8f-4090-8649-a2e0779c4b46" name="Changes" comment="" />
       <created>1679384996616</created>
@@ -152,12 +168,30 @@
       <workItem from="1680009920252" duration="7496000" />
       <workItem from="1680018277216" duration="67000" />
       <workItem from="1680415055964" duration="5676000" />
+=======
+    <task id="LOCAL-00001" summary="chore : 기타 환경 설정">
+      <created>1680355200474</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1680355200474</updated>
+>>>>>>> d2064f98d404a08a2eb2f54da044309b138d488b
     </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
+<<<<<<< HEAD
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Seoultech_SE_22Team$start_screen.coverage" NAME="start_screen Coverage Results" MODIFIED="1679586283138" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Seoultech_SE_22Team$button.coverage" NAME="button Coverage Results" MODIFIED="1679999999514" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -169,5 +203,11 @@
     <SUITE FILE_PATH="coverage/Seoultech_SE_22Team$test.coverage" NAME="test Coverage Results" MODIFIED="1680017175573" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Seoultech_SE_22Team$main_screen.coverage" NAME="main_screen Coverage Results" MODIFIED="1680420782044" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Seoultech_SE_22Team$setting.coverage" NAME="setting Coverage Results" MODIFIED="1679921623304" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+=======
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="chore : gitignore 추가" />
+    <MESSAGE value="chore : 기타 환경 설정" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore : 기타 환경 설정" />
+>>>>>>> d2064f98d404a08a2eb2f54da044309b138d488b
   </component>
 </project>
