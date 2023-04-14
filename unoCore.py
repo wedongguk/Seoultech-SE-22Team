@@ -3,7 +3,7 @@ import random
 from Timer import Timer
 from uno_Const import * # const
 from uno_Pile import * # Pile Class
-from uno_Player import * # Player Class
+from uno_Player import * # player Class
 from uno_Card import * # Card Class
 import uno_ChkCon # Check Condition
 
@@ -73,9 +73,6 @@ class Game: # game 클래스 생성
         for _ in range(0, 2): # 색상이 불필요한 특수카드
             for j in [0B10000, 0B100000]:
                 tempList.append(Card(NO_COLOR, NO_NUMBER, j))
-
-
-
 
         return tempList
     

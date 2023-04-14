@@ -1,7 +1,8 @@
+import pygame
 from uno_Const import * # const
 import uno_ChkCon # Check Condition
 
-class card: # 카드 클래스 생성
+class Card(pygame.sprite.Sprite): # 카드 클래스 생성
     ## 카드의 오리지널 데이터 ##    
     color = NO_COLOR # 0: red, 1: green, 2: yellow, 3: blue, -1: none_color_card
     number = NO_NUMBER # -1: special_card
@@ -13,17 +14,21 @@ class card: # 카드 클래스 생성
     applyNumber = NO_NUMBER
     
     def __init__(self, color, number, effectCode = NO_EFFECT, attackNumber = -1): # card 클래스 생성자
+        super().__init__()
         self.color = color
         self.number = number
         self.effectCode = NO_EFFECT
         self.attackNumber = attackNumber
+        self.default_image = pygame.transform.smoothscale(pygame.image.load(f"cards/default_mode/{color}_{value}.png"), (self.screen_size[0] / 10, self.screen_size[1] / 5))
+        self.blind_image = pygame.transform.smoothscale(pygame.image.load(f"cards/color_blind_mode/{color}_{value}.png"), (self.screen_size[0] / 10, self.screen_size[1] / 5))
+        
         
         self.applyNumber = self.number # applyNumber 는 cardNumber 로 초기값 설정
         self.applyColor = self.color # applyColor 는 cardColor 로 초기값 설정
 
     def __del__(self): # card class 소멸자
         pass
-
+    
     def cardEffect(self, game): # 특수 카드의 효과를 처리하기 위한 메서드.
         eCode = self.effectCode
         if eCode & EFFECT_DRAW == EFFECT_DRAW: # 다음 상대에게 카드를 주는 효과
@@ -45,7 +50,7 @@ class card: # 카드 클래스 생성
             
         if eCode & EFFECT_NUMBER == EFFECT_NUMBER: # 카드의 숫자를 바꾸는 효과
             applyColor = int(input())
-        
+    
     def canUse(self, game):
         top = game.openCard.cardList[-1]
         result = uno_ChkCon.canUse(top.number, top.color, top.applyColor, top.applyNumber, self.number, self.color)
