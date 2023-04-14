@@ -19,7 +19,7 @@ class Game: # game 클래스 생성
     winner = [] # 게임이 진행중이라면 빈 테이블, winner player가 존재한다면 0번 인덱스에 넣는다.
     
     is_effctTime = False
-    timer = Timer(30)
+    timer = Timer(15)
     effectTimer = Timer(10)
 
     def __init__(self, player_list): # game 클래스 생성자
@@ -285,3 +285,4 @@ gamePlayerList = [user1, pc1, pc2, pc3]
 g = Game(gamePlayerList)
 
 g.ready()
+g.mainPhase
