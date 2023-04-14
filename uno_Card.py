@@ -1,7 +1,7 @@
 from uno_Const import * # const
 import uno_ChkCon # Check Condition
 
-class card: # 카드 클래스 생성
+class Card: # 카드 클래스 생성
     ## 카드의 오리지널 데이터 ##    
     color = NO_COLOR # 0: red, 1: green, 2: yellow, 3: blue, -1: none_color_card
     number = NO_NUMBER # -1: special_card
@@ -12,10 +12,10 @@ class card: # 카드 클래스 생성
     applyColor = NO_COLOR
     applyNumber = NO_NUMBER
     
-    def __init__(self, color, number, effectCode = NO_EFFECT, attackNumber = -1): # card 클래스 생성자
+    def __init__(self, color = NO_COLOR, number = NO_NUMBER, effectCode = NO_EFFECT, attackNumber = -1): # card 클래스 생성자
         self.color = color
         self.number = number
-        self.effectCode = NO_EFFECT
+        self.effectCode = effectCode
         self.attackNumber = attackNumber
         
         self.applyNumber = self.number # applyNumber 는 cardNumber 로 초기값 설정
@@ -56,6 +56,26 @@ class card: # 카드 클래스 생성
         colorDict = {NO_COLOR:'None', RED:'red', GREEN:'green', YELLOW:'yellow', BLUE:'blue'}
         return colorDict[self.color] + ' ' + str(self.number)
     
+    def imgName(self): # 카드에 연결될 이미지의 스트링에 대한 데이터를 반환
+        result = COLOR_TABLE[self.color]+'_'
+        temp = ''
+        if self.number != NO_NUMBER:
+            temp = str(self.number)
+        else:
+            if self.effectCode & EFFECT_DRAW == EFFECT_DRAW:
+                temp += '+' + str(self.attackNumber)
+            if self.effectCode & EFFECT_SKIP == EFFECT_SKIP:
+                temp += 'skip'
+            if self.effectCode & EFFECT_REVERSE == EFFECT_REVERSE:
+                temp += 'reverse'
+            if self.effectCode & EFFECT_COLOR == EFFECT_COLOR:
+                temp += 'wildColor'
+            if self.effectCode & EFFECT_NUMBER == EFFECT_NUMBER:
+                temp += 'wildNumber'
+        result += temp
+        
+        return result
+    
     def data(self): # Front에서 card instance의 정보를 dictionary로 확인하기 위한 메서드
         o_Col = self.color
         o_Num = self.number
@@ -68,3 +88,11 @@ class card: # 카드 클래스 생성
         result = {'orignColor': o_Col, 'orignNumber': o_Num, 'effctCode': e_Code, 'attackNumber': atk_Num, 'applyColor': a_Col,'applyNumber': a_Num}
         
         return result
+    
+#test code#
+
+#c1 = Card(RED, 2)
+#c2 = Card(RED, effectCode = EFFECT_DRAW+EFFECT_REVERSE, attackNumber = 2)
+#c3 = Card(NO_COLOR, effectCode = EFFECT_DRAW, attackNumber = 4)
+
+#print(c1.imgName(), c2.imgName(), c3.imgName())

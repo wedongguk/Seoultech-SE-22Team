@@ -17,6 +17,8 @@ class Game: # game 클래스 생성
     state = NORM
     botCompeteList = []
     winner = [] # 게임이 진행중이라면 빈 테이블, winner player가 존재한다면 0번 인덱스에 넣는다.
+    
+    is_effctTime = False
     timer = Timer(30)
     effectTimer = Timer(10)
 
@@ -194,8 +196,33 @@ class Game: # game 클래스 생성
         self.turnPlayer = (self.turnPlayer+self.jumpNumber)%len(self.playerList) # 점프 처리
         self.step = 1 # jumpNumber 리셋
     
-    def unoBot(self): # 봇의 턴
+    def update(self): # timer, effectimer 갱신용
+        if (self.is_effctTime == False): # 기본 타이머
+            self.timer.update()
+            self.timeEvent()
+        else: # 기술 카드 효과 적용시 타이머
+            self.effectTimer.update()
+            
+    def timeEvent(self): # 특정 시간이 되었다면, 특정 함수를 실행함.
+        ## 우노 경쟁
+        if self.state == UNO:
+            remainTime = -1
+            if self.playerList[self.turnPlayer].isUser == True:
+                remainTime = USER_TIME
+            else:
+                remainTime = BOT_TIME      
+            n = remainTime-min(self.botCompeteList)
+            if self.timer.time <= n:
+                self.processUno(self.botCompeteList.index(n))
         
+        ## timeOver
+        if self.timer.time <= 0:
+             if self.playerList[self.turnPlayer].isUser == True: # user의 턴
+                 self.eventDrawBtn()
+             else: # bot의 턴
+                 self.unoBot()
+    
+    def unoBot(self): # 봇의 턴    
         chkList = self.playerList[self.turnPlayer].canUseIdx(self)
         
         if chkList != []: # 낼 수 있는 카드가 있다면
