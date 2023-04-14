@@ -1,7 +1,7 @@
 from uno_Const import * # const
 import uno_ChkCon # Check Condition
 
-class card: # 카드 클래스 생성
+class Card: # 카드 클래스 생성
     ## 카드의 오리지널 데이터 ##    
     color = NO_COLOR # 0: red, 1: green, 2: yellow, 3: blue, -1: none_color_card
     number = NO_NUMBER # -1: special_card
@@ -91,8 +91,8 @@ class card: # 카드 클래스 생성
     
 #test code#
 
-#c1 = card(RED, 2)
-#c2 = card(RED, effectCode = EFFECT_DRAW+EFFECT_REVERSE, attackNumber = 2)
-#c3 = card(NO_COLOR, effectCode = EFFECT_DRAW, attackNumber = 4)
+#c1 = Card(RED, 2)
+#c2 = Card(RED, effectCode = EFFECT_DRAW+EFFECT_REVERSE, attackNumber = 2)
+#c3 = Card(NO_COLOR, effectCode = EFFECT_DRAW, attackNumber = 4)
 
 #print(c1.imgName(), c2.imgName(), c3.imgName())
