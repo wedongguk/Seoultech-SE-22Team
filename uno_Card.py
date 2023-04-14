@@ -25,26 +25,7 @@ class Card: # 카드 클래스 생성
         pass
 
     def cardEffect(self, game): # 특수 카드의 효과를 처리하기 위한 메서드.
-        eCode = self.effectCode
-        if eCode & EFFECT_DRAW == EFFECT_DRAW: # 다음 상대에게 카드를 주는 효과
-            game.playerList[(game.turnPlayer+1)%len(game.playerList)].draw(game, attackNumber)
-        
-        if eCode & EFFECT_SKIP == EFFECT_SKIP: # 다음 플레이어를 스킵하는 효과
-            self.jumpNumber += 1
-
-        if eCode & EFFECT_REVERSE == EFFECT_REVERSE: # 턴의 진행 방향을 반대로 바꾸는 효과
-            tp = game.turnPlayer
-            tmp_Lst = []
-
-            for _ in range(len(game.playerList)):
-                tp -= 1
-                tmp_Lst.append(game.playerList[tp])
-
-        if eCode & EFFECT_COLOR == EFFECT_COLOR: # 카드의 색을 바꾸는 효과
-            applyColor = int(input())
-            
-        if eCode & EFFECT_NUMBER == EFFECT_NUMBER: # 카드의 숫자를 바꾸는 효과
-            applyColor = int(input())
+       pass
         
     def canUse(self, game):
         top = game.openCard.cardList[-1]
@@ -53,8 +34,8 @@ class Card: # 카드 클래스 생성
         return result
 
     def info(self): # 카드 정보 출력용 함수
-        colorDict = {NO_COLOR:'None', RED:'red', GREEN:'green', YELLOW:'yellow', BLUE:'blue'}
-        return colorDict[self.color] + ' ' + str(self.number)
+        
+        return self.imgName()
     
     def imgName(self): # 카드에 연결될 이미지의 스트링에 대한 데이터를 반환
         result = COLOR_TABLE[self.color]+'_'
