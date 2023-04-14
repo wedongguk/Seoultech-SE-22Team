@@ -17,7 +17,7 @@ class Card(pygame.sprite.Sprite): # 카드 클래스 생성
         super().__init__()
         self.color = color
         self.number = number
-        self.effectCode = NO_EFFECT
+        self.effectCode = effectCode
         self.attackNumber = attackNumber
         self.default_image = pygame.transform.smoothscale(pygame.image.load(f"cards/default_mode/{color}_{value}.png"), (self.screen_size[0] / 10, self.screen_size[1] / 5))
         self.blind_image = pygame.transform.smoothscale(pygame.image.load(f"cards/color_blind_mode/{color}_{value}.png"), (self.screen_size[0] / 10, self.screen_size[1] / 5))
@@ -61,6 +61,26 @@ class Card(pygame.sprite.Sprite): # 카드 클래스 생성
         colorDict = {NO_COLOR:'None', RED:'red', GREEN:'green', YELLOW:'yellow', BLUE:'blue'}
         return colorDict[self.color] + ' ' + str(self.number)
     
+    def imgName(self): # 카드에 연결될 이미지의 스트링에 대한 데이터를 반환
+        result = COLOR_TABLE[self.color]+'_'
+        temp = ''
+        if self.number != NO_NUMBER:
+            temp = str(self.number)
+        else:
+            if self.effectCode & EFFECT_DRAW == EFFECT_DRAW:
+                temp += '+' + str(self.attackNumber)
+            if self.effectCode & EFFECT_SKIP == EFFECT_SKIP:
+                temp += 'skip'
+            if self.effectCode & EFFECT_REVERSE == EFFECT_REVERSE:
+                temp += 'reverse'
+            if self.effectCode & EFFECT_COLOR == EFFECT_COLOR:
+                temp += 'wildColor'
+            if self.effectCode & EFFECT_NUMBER == EFFECT_NUMBER:
+                temp += 'wildNumber'
+        result += temp
+        
+        return result
+    
     def data(self): # Front에서 card instance의 정보를 dictionary로 확인하기 위한 메서드
         o_Col = self.color
         o_Num = self.number
@@ -73,3 +93,11 @@ class Card(pygame.sprite.Sprite): # 카드 클래스 생성
         result = {'orignColor': o_Col, 'orignNumber': o_Num, 'effctCode': e_Code, 'attackNumber': atk_Num, 'applyColor': a_Col,'applyNumber': a_Num}
         
         return result
+    
+#test code#
+
+#c1 = card(RED, 2)
+#c2 = card(RED, effectCode = EFFECT_DRAW+EFFECT_REVERSE, attackNumber = 2)
+#c3 = card(NO_COLOR, effectCode = EFFECT_DRAW, attackNumber = 4)
+
+#print(c1.imgName(), c2.imgName(), c3.imgName())
