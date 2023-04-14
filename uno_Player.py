@@ -1,6 +1,6 @@
 from uno_Card import *
 
-class player: # player 클래스 생성
+class Player: # player 클래스 생성
     playerName = '' # 플레이어 이름
     isUser = True # user인가 bot인가 확인
     handCardList = [] # 들고 있는 카드
