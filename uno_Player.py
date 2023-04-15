@@ -78,7 +78,7 @@ class Player: # player 클래스 생성
             if c.number == i: # 이 부분이 수행 안됨
                 #print(c.cardNumber)
                 if c.color == color: # 이 부분이 수행 안됨
-                    return player.handCardList.index(c) # c의 인덱스 값 리턴
+                    return self.handCardList.index(c) # c의 인덱스 값 리턴
 
     def printCurSta(self): # 현재 Player 카드 리스트
         print(self.playerName + ": ", self.allHand(), "\n")

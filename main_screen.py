@@ -101,7 +101,6 @@ def options():
                                         size=50,
                                         screen=screen)
         color_weakness_mode_text.init_text()
-
         resolution_text = Text(text_input="Resolution",
                                font="notosanscjkkr",
                                color=(0, 0, 0),

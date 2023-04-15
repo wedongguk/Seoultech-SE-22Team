@@ -47,8 +47,8 @@ class Game: # game 클래스 생성
         del self.openCard
         del self.playerList
         
-    def ready(self): #게임을 준비하는 메서드
-        deckPreset = self.setDeck() # 사전에 정의한 덱 리스트
+    def ready(self, screen_size): #게임을 준비하는 메서드
+        deckPreset = self.setDeck(screen_size) # 사전에 정의한 덱 리스트
         
         
         self.deckList + deckPreset # 덱에 deckPreset을 넣는다.
@@ -71,22 +71,31 @@ class Game: # game 클래스 생성
         # self.openCard.cardList.append(Card)
         Card.cardEffect(self)
 
-    def setDeck(self): # 게임에 사용할 덱의 CardList를 반환합니다.
+    def setDeck(self, screen_size): # 게임에 사용할 덱의 CardList를 반환합니다.
         tempList = []
         for i in range(0, 4): # 0~9까지의 4색 카드를 임시 리스트에 넣습니다.
             for j in range(0, 10):
-                tempList.append(Card(i, j, NO_EFFECT))
+                card = Card(i, j, NO_EFFECT)
+                card.default_image = pygame.transform.smoothscale(pygame.image.load(f"images/{Card.imgColor(card)}_{Card.imgValue(card)}.png"), (screen_size[0] / 12.5, screen_size[0] / 8.333))
+                tempList.append(card)
 
-       # for i in range(0, 4): # 색상이 필요한 특수 카드
-        #    for j in [0B10, 0B100, 0B1000]:
-         #           tempList.append(Card(i, NO_NUMBER, j))
+        for i in range(0, 4): # 색상이 필요한 특수 카드
+            for j in [0B10, 0B100, 0B1000]:
+                if j == 0B10 :
+                    card = Card(i, NO_NUMBER, j , attackNumber=2)
+                else :
+                    card = Card(i, NO_NUMBER, j)
+                card.default_image = pygame.transform.smoothscale(pygame.image.load(f"images/{Card.imgColor(card)}_{Card.imgValue(card)}.png"), (screen_size[0] / 12.5, screen_size[0] / 8.333))
+                tempList.append(card)
 
-       # for _ in range(0, 2): # 색상이 불필요한 특수카드
-        #    for j in [0B10000, 0B100000]:
-         #       tempList.append(Card(NO_COLOR, NO_NUMBER, j))
-
+        for _ in range(0, 2): # 색상이 불필요한 특수카드
+            for j in [0B10000, 0B100000]:
+                card = Card(NO_COLOR, NO_NUMBER, j)
+                card.default_image = pygame.transform.smoothscale(pygame.image.load(f"images/{Card.imgColor(card)}_{Card.imgValue(card)}.png"), (screen_size[0] / 12.5, screen_size[0] / 8.333))
+                tempList.append(card)
 
         return tempList
+
     
     def actList(self): # 현재 활성화야햐하는 버튼의 딕셔너리를 반환
         result = {'drawBtn': True,'unoBtn': True, 'colorBtn': True, 'numberBtn': True}
@@ -236,7 +245,7 @@ class Game: # game 클래스 생성
         self.botCompeteList = temp.copy()
         self.state = UNO
  
-
+'''
 ## 테스트용 ##
 
 user1 = Player('USER', True)
@@ -298,3 +307,4 @@ while True:
         print(i.playerName + ": ", i.allHand(),"\n")
     print("TopCard" +": " + g.openCard.cardList[-1].info()+"\n")
     print(g.playerList.turnIdx)
+'''
