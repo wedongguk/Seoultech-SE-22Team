@@ -1,9 +1,9 @@
 import random
 
-from Timer import Timer
+from Timer import Timer2
 from uno_Const import * # const
 from uno_Pile import * # Pile Class
-from uno_Player import * # player Class
+from uno_Player import * # Player Class
 from uno_Card import * # Card Class
 import uno_ChkCon # Check Condition
 
@@ -19,8 +19,8 @@ class Game: # game 클래스 생성
     winner = [] # 게임이 진행중이라면 빈 테이블, winner player가 존재한다면 0번 인덱스에 넣는다.
     
     is_effctTime = False
-    timer = Timer(30)
-    effectTimer = Timer(10)
+    timer2 = Timer2(30)
+    effectTimer2 = Timer2(10)
 
     def __init__(self, player_list): # game 클래스 생성자
         self.playerList = player_list
@@ -41,8 +41,8 @@ class Game: # game 클래스 생성
                 del i
             self.playerList = []
 
-    def ready(self): #게임을 준비하는 메서드
-        deckPreset = self.setDeck() # 사전에 정의한 덱 리스트
+    def ready(self, screen_size): #게임을 준비하는 메서드
+        deckPreset = self.setDeck(screen_size) # 사전에 정의한 덱 리스트
         
         self.deckList + deckPreset # 덱에 deckPreset을 넣는다.
         self.deckList.shuffle()
@@ -62,20 +62,29 @@ class Game: # game 클래스 생성
         # self.openCard.cardList.append(Card)
         Card.cardEffect(self)
 
-    def setDeck(self): # 게임에 사용할 덱의 CardList를 반환합니다.
+    def setDeck(self, screen_size): # 게임에 사용할 덱의 CardList를 반환합니다.
         tempList = []
         for i in range(0, 4): # 0~9까지의 4색 카드를 임시 리스트에 넣습니다.
             for j in range(0, 10):
-                tempList.append(Card(i, j, NO_EFFECT))
+                card = Card(i, j, NO_EFFECT)
+                card.default_image = pygame.transform.smoothscale(pygame.image.load(f"images/{Card.imgColor(card)}_{Card.imgValue(card)}.png"), (screen_size[0] / 12.5, screen_size[0] / 8.333))
+                tempList.append(card)
 
         for i in range(0, 4): # 색상이 필요한 특수 카드
             for j in [0B10, 0B100, 0B1000]:
-                    tempList.append(Card(i, NO_NUMBER, j))
+                if j == 0B10 :
+                    card = Card(i, NO_NUMBER, j , attackNumber=2)
+                else :
+                    card = Card(i, NO_NUMBER, j)
+                card.default_image = pygame.transform.smoothscale(pygame.image.load(f"images/{Card.imgColor(card)}_{Card.imgValue(card)}.png"), (screen_size[0] / 12.5, screen_size[0] / 8.333))
+                tempList.append(card)
 
         for _ in range(0, 2): # 색상이 불필요한 특수카드
             for j in [0B10000, 0B100000]:
-                tempList.append(Card(NO_COLOR, NO_NUMBER, j))
-
+                card = Card(NO_COLOR, NO_NUMBER, j)
+                card.default_image = pygame.transform.smoothscale(pygame.image.load(f"images/{Card.imgColor(card)}_{Card.imgValue(card)}.png"), (screen_size[0] / 12.5, screen_size[0] / 8.333))
+                tempList.append(card)
+                
         return tempList
     
     def executeTurn(self): # 현재는 쓰지 않음
@@ -126,13 +135,13 @@ class Game: # game 클래스 생성
                 '''
                 if self.playerList[self.turnPlayer].handCardList[input_num].canUse(self): # 사용 가능 여부 체크
                     if self.playerList[self.turnPlayer].handCardList[input_num].checkEffect(self): #Effect 카드 인지 판단
-                        self.effectTimer.update() # effect 타이머 업데이트
+                        self.effectTimer2.update() # effect 타이머 업데이트
                         useCard = self.playerList[self.turnPlayer].delCard(input_num) # 사용한 카드 삭제
                         self.placeOpenCardZone(useCard) #OpenZome 에 카드 넣기
                         useCard.effect.cardEffect(self) # 특수 카드 효과 실행
                         cond = False
                     else:
-                        self.timer.update() # 일반 타이머 업데이트
+                        self.timer2.update() # 일반 타이머 업데이트
                         if self.playerList[self.turnPlayer].handCardList[input_num].canUse(self):  # 사용 가능 여부 체크
                             useCard = self.playerList[self.turnPlayer].delCard(input_num)  # 사용한 카드 삭제
                             self.placeOpenCardZone(useCard)  # OpenZome 에 카드 넣기
@@ -193,12 +202,12 @@ class Game: # game 클래스 생성
         self.turnPlayer = (self.turnPlayer+self.jumpNumber)%len(self.playerList) # 점프 처리
         self.step = 1 # jumpNumber 리셋
     
-    def update(self): # timer, effectimer 갱신용
+    def update(self): # timer2, effectimer2 갱신용
         if (self.is_effctTime == False): # 기본 타이머
-            self.timer.update()
+            self.timer2.update()
             self.timeEvent()
         else: # 기술 카드 효과 적용시 타이머
-            self.effectTimer.update()
+            self.effectTimer2.update()
             
     def timeEvent(self): # 특정 시간이 되었다면, 특정 함수를 실행함.
         ## 우노 경쟁
@@ -209,11 +218,11 @@ class Game: # game 클래스 생성
             else:
                 remainTime = BOT_TIME      
             n = remainTime-min(self.botCompeteList)
-            if self.timer.time <= n:
+            if self.timer2.time <= n:
                 self.processUno(self.botCompeteList.index(n))
         
         ## timeOver
-        if self.timer.time <= 0:
+        if self.timer2.time <= 0:
              if self.playerList[self.turnPlayer].isUser == True: # user의 턴
                  self.eventDrawBtn()
              else: # bot의 턴
@@ -272,13 +281,14 @@ class Game: # game 클래스 생성
  
 
 ## 테스트용 ##
-
+'''
 user1 = Player('USER', True)
-pc1 = Player('PC1', False)
+pcard = Player('Pcard', False)
 pc2 = Player('PC2', False)
 pc3 = Player('PC3', False)
 
-gamePlayerList = [user1, pc1, pc2, pc3]
+gamePlayerList = [user1, pcard, pc2, pc3]
 g = Game(gamePlayerList)
 
 g.ready()
+'''
