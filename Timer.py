@@ -22,5 +22,5 @@ class Timer2:
 
 
 
-timer = Timer2(15)
-timer.countdown()
+#timer = Timer2(15)
+#timer.countdown()
