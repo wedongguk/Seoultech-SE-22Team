@@ -1,3 +1,4 @@
+import pygame
 from uno_Const import * # const
 from Effect import effect # Effect
 import uno_ChkCon # Check Condition
@@ -21,6 +22,10 @@ class Card: # 카드 클래스 생성
         
         self.applyNumber = self.number # applyNumber 는 cardNumber 로 초기값 설정
         self.applyColor = self.color # applyColor 는 cardColor 로 초기값 설정
+        
+        self.screen_size = (1280, 720)
+        self.default_image = pygame.transform.smoothscale(pygame.image.load(f"images/back.png"), (self.screen_size[0] / 10, self.screen_size[1] / 5))
+        self.rect = self.default_image.get_rect()
 
     def __del__(self): # card class 소멸자
         pass
