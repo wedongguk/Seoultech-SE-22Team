@@ -60,7 +60,29 @@ class Card: # 카드 클래스 생성
         result += temp
         
         return result
-    
+    def imgColor(self): # 카드에 연결될 이미지의 스트링에 대한 데이터를 반환
+        result = COLOR_TABLE[self.color]
+        return result
+
+    def imgValue(self):
+        result = ''
+        temp = ''
+        if self.number != NO_NUMBER:
+            temp = str(self.number)
+        else:
+            if self.effectCode & EFFECT_DRAW == EFFECT_DRAW:
+                temp += '+' + str(self.attackNumber)
+            if self.effectCode & EFFECT_SKIP == EFFECT_SKIP:
+                temp += 'skip'
+            if self.effectCode & EFFECT_REVERSE == EFFECT_REVERSE:
+                temp += 'reverse'
+            if self.effectCode & EFFECT_COLOR == EFFECT_COLOR:
+                temp += 'wildColor'
+            if self.effectCode & EFFECT_NUMBER == EFFECT_NUMBER:
+                temp += 'wildNumber'
+        result += temp
+        
+        return result
     def data(self): # Front에서 card instance의 정보를 dictionary로 확인하기 위한 메서드
         o_Col = self.color
         o_Num = self.number
