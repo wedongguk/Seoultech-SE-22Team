@@ -30,13 +30,11 @@ def play(screen, screen_width, screen_height):
             if event.type == pygame.QUIT:
                 quit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                for i, sprite in enumerate(hand):
-                    if sprite.rect.collidepoint(pos):
-                        print("tlqkf")
-                        g.eventCardBtn(i)
-                        userHand(screen, g, user1, screen_size)
-                        screen.blit(g.openCard.cardList[0].default_image, (100,200))
+                if hand[0].rect.collidepoint(event.pos):
+                    print("tlqkf")
+                    #    g.eventCardBtn(i)
+                    userHand(screen, g, user1, screen_size)
+                    screen.blit(g.openCard.cardList[0].default_image, (100,200))
         pygame.display.flip()
 
 def userHand(screen, game, player, screen_size) :
