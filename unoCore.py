@@ -40,7 +40,7 @@ class Game: # game 클래스 생성
         
         self.is_effctTime = False
         self.timer = Timer(15)
-        self.effectTimer = Timer(10)
+        self.effectTimer = Timer(1000)
         
     def __del__(self): # game class 소멸자
         del self.deckList
@@ -61,6 +61,12 @@ class Game: # game 클래스 생성
         print("TopCard" +": " + self.openCard.cardList[-1].info()+"\n")
         
         self.playerList.nextTurn()
+        
+        if self.playerList.turnPlayer().isUser == True:
+            self.timer.reset(USER_TIME)
+        else:
+            self.timer.reset(BOT_TIME)
+        
 
     def placeOpenCardZone(self, card): #OpenCardList에 카드를 놓습니다.
         lst = []
@@ -114,18 +120,21 @@ class Game: # game 클래스 생성
             if self.playerList.turnPlayer().handCardList[idx].canUse(self) == True:
                 useCard = self.playerList.turnPlayer().delCard(idx)
                 self.placeOpenCardZone(useCard)
+                
+                if len(self.playerList.turnPlayer().handCardList) == 0: # 카드를 내서 0장이 되면 게임이 끝난다.
+                    self.winner = self.playerList.turnPlayer()
+                    
+                if len(self.playerList.turnPlayer().handCardList) == 1: # 카드를 내서 1장이 되면 우노 경쟁을 위한 처리를 시작한다.
+                    self.unoCompeteTable()
+                
+                self.endPhase()
             else:
                 print("그 카드는 낼 수 없어요")
         else:
             print("아직 당신의 턴이 아니에요")
         
-        if len(self.playerList.turnPlayer().handCardList) == 0: # 카드를 내서 0장이 되면 게임이 끝난다.
-            self.winner = self.playerList.turnPlayer()
-            
-        if len(self.playerList.turnPlayer().handCardList) == 1: # 카드를 내서 1장이 되면 우노 경쟁을 위한 처리를 시작한다.
-            self.unoCompeteTable()
         
-        self.endPhase()
+        
     
     def eventDrawBtn(self): # 드로우 버튼 클릭시 이벤트
         self.playerList.turnPlayer().draw(self, 1)
@@ -162,7 +171,7 @@ class Game: # game 클래스 생성
             self.timeEvent()
         else: # 기술 카드 효과 적용시 타이머
             self.effectTimer.update()
-            self.effectTimeEvent(self)
+            self.effectTimeEvent()
             
     def timeEvent(self): # 특정 시간이 되었다면, 특정 함수를 실행함.
         ## 우노 경쟁
