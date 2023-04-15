@@ -1,5 +1,5 @@
 import random
-import pygame
+
 from Timer import Timer
 from uno_Const import * # const
 from uno_Pile import * # Pile Class
@@ -47,55 +47,46 @@ class Game: # game 클래스 생성
         del self.openCard
         del self.playerList
         
-    def ready(self, screen_size): #게임을 준비하는 메서드
-        deckPreset = self.setDeck(screen_size) # 사전에 정의한 덱 리스트
+    def ready(self): #게임을 준비하는 메서드
+        deckPreset = self.setDeck() # 사전에 정의한 덱 리스트
         
         
         self.deckList + deckPreset # 덱에 deckPreset을 넣는다.
         self.deckList.shuffle()
+        top = self.deckList.takeTopCard()
         
-        for i in self.playerList.lst(): # 각 플레이어들에게 카드를 나눠줍니다.
-            i.draw(self, 5) # 나눠줄 카드의 개수 : 임의로 5로 설정했음
-            print(i.playerName + ": ", i.allHand(),"\n")
+        distribution(self, self.GameMode) # 카드 분배
             
-        self.placeOpenCardZone(self.deckList.takeTopCard()) # 덱 맨 위에서 카드를 1장 오픈합니다.
+        self.placeOpenCardZone(top) # 덱 맨 위에서 카드를 1장 오픈합니다.
         print("TopCard" +": " + self.openCard.cardList[-1].info()+"\n")
         
         self.playerList.nextTurn()
 
-    def placeOpenCardZone(self, Card): #OpenCardList에 카드를 놓습니다.
+    def placeOpenCardZone(self, card): #OpenCardList에 카드를 놓습니다.
         lst = []
-        lst.append(Card)
+        lst.append(card)
         self.openCard + lst
     
         # self.openCard.cardList.append(Card)
-        Card.cardEffect(self)
+        card.reset()
+        card.cardEffect(self)
 
-    def setDeck(self, screen_size): # 게임에 사용할 덱의 CardList를 반환합니다.
+    def setDeck(self): # 게임에 사용할 덱의 CardList를 반환합니다.
         tempList = []
         for i in range(0, 4): # 0~9까지의 4색 카드를 임시 리스트에 넣습니다.
             for j in range(0, 10):
-                card = Card(i, j, NO_EFFECT)
-                card.default_image = pygame.transform.smoothscale(pygame.image.load(f"images/{Card.imgColor(card)}_{Card.imgValue(card)}.png"), (screen_size[0] / 12.5, screen_size[0] / 8.333))
-                tempList.append(card)
+                tempList.append(Card(i, j, NO_EFFECT))
 
-        for i in range(0, 4): # 색상이 필요한 특수 카드
-            for j in [0B10, 0B100, 0B1000]:
-                if j == 0B10 :
-                    card = Card(i, NO_NUMBER, j , attackNumber=2)
-                else :
-                    card = Card(i, NO_NUMBER, j)
-                card.default_image = pygame.transform.smoothscale(pygame.image.load(f"images/{Card.imgColor(card)}_{Card.imgValue(card)}.png"), (screen_size[0] / 12.5, screen_size[0] / 8.333))
-                tempList.append(card)
+       # for i in range(0, 4): # 색상이 필요한 특수 카드
+        #    for j in [0B10, 0B100, 0B1000]:
+         #           tempList.append(Card(i, NO_NUMBER, j))
 
-        for _ in range(0, 2): # 색상이 불필요한 특수카드
-            for j in [0B10000, 0B100000]:
-                card = Card(NO_COLOR, NO_NUMBER, j)
-                card.default_image = pygame.transform.smoothscale(pygame.image.load(f"images/{Card.imgColor(card)}_{Card.imgValue(card)}.png"), (screen_size[0] / 12.5, screen_size[0] / 8.333))
-                tempList.append(card)
+       # for _ in range(0, 2): # 색상이 불필요한 특수카드
+        #    for j in [0B10000, 0B100000]:
+         #       tempList.append(Card(NO_COLOR, NO_NUMBER, j))
+
 
         return tempList
-
     
     def actList(self): # 현재 활성화야햐하는 버튼의 딕셔너리를 반환
         result = {'drawBtn': True,'unoBtn': True, 'colorBtn': True, 'numberBtn': True}
@@ -151,6 +142,7 @@ class Game: # game 클래스 생성
     def endPhase(self): # endPhase를 실행
         self.playerList.nextTurn()
         
+        endEvent(self, self.GameMode)
         if self.playerList.turnPlayer().isUser == True:
             self.timer.reset(USER_TIME)
         else:
@@ -209,7 +201,7 @@ class Game: # game 클래스 생성
         result = -1
         for i in self.playerList.lst():
             if i.isUser == True:
-                result = i
+                result = self.playerList.lst().index(i)
                 break
         
         return result
@@ -244,8 +236,9 @@ class Game: # game 클래스 생성
                 temp.append(time+1)
         self.botCompeteList = temp.copy()
         self.state = UNO
- 
-'''
+
+
+
 ## 테스트용 ##
 
 user1 = Player('USER', True)
@@ -307,4 +300,3 @@ while True:
         print(i.playerName + ": ", i.allHand(),"\n")
     print("TopCard" +": " + g.openCard.cardList[-1].info()+"\n")
     print(g.playerList.turnIdx)
-'''
