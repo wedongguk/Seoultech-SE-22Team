@@ -28,6 +28,12 @@ class Card(pygame.sprite.Sprite): # 카드 클래스 생성
             
     def __del__(self): # card class 소멸자
         pass
+    
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(event.pos):
+            return True
+        else : 
+            return False
 
     def cardEffect(self, game): # 특수 카드의 효과를 처리하기 위한 메서드.
         eCode = self.effectCode

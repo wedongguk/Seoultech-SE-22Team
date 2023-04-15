@@ -31,7 +31,7 @@ class Player: # player 클래스 생성
         tempList = []
         handCardList = self.handCardList
         for i in range(0, len(handCardList)):
-            tempList.append(handCardList[i])
+            tempList.append(handCardList[i].info())
 
         return tempList
 
