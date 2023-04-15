@@ -1,6 +1,6 @@
 import time
 
-class Timer2:
+class Timer:
     def __init__(self, time):
         self.time = time
         
@@ -13,12 +13,11 @@ class Timer2:
     
     def update(self):
         self.time -= 1
-        time.sleep(1)
 
     
 
-    def reset(self):
-        self.time = 15
+    def reset(self, num):
+        self.time = num
 
 
 
