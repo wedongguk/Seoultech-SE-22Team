@@ -436,7 +436,6 @@ def options():
                 elif Uno_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for Uno direction")
                     UNO = key_change()
-                    pygame.key.name(UNO)
                     config['system']['UNO'] = 'pygame.K_' + pygame.key.name(UNO)
                     save_config()
                 elif Select_button_rect.collidepoint(pygame.mouse.get_pos()):
