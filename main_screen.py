@@ -99,8 +99,8 @@ def loby():
                          pos=(30, 30),
                          size=(50, 50))
     next_button = Button(image=pygame.image.load("next_button.png"),
-                          pos=(x_pos, y_pos + 260),
-                          size=(button_width, button_height))
+                         pos=(x_pos, y_pos + 260),
+                         size=(button_width, button_height))
 
     AI_1 = Button(image=pygame.image.load("1_checked.png"),
                   pos=(x_pos - 360, y_pos - 30),
@@ -290,82 +290,85 @@ def story_mode():
 def options():
     global UNO, SELECT, LEFT, RIGHT
 
-    # 체크박스 초기화
-    COLOR_WEAKNESS_MODE_ON = Checkbox(screen, screen.get_rect().centerx - 100, 130, 0, caption='ON')
-    COLOR_WEAKNESS_MODE_OFF = Checkbox(screen, screen.get_rect().centerx + 30, 130, 1, caption='OFF')
+    # option screen에서 필요한 버튼 설정
+    back_button = Button(image=pygame.image.load("back_button.png"),
+                         pos=(30, 30),
+                         size=(50, 50))
+    save_button = Button(image=pygame.image.load("save_button.png"),
+                         pos=(x_pos, y_pos + 230),
+                         size=(button_width, button_height))
+    reset_button = Button(image=pygame.image.load("reset_button.png"),
+                          pos=(x_pos, y_pos + 300),
+                          size=(button_width, button_height))
 
-    RESOLUTION_1920 = Checkbox(screen, screen.get_rect().centerx - 230, 280, 0, caption='1920 X 1080')
-    RESOLUTION_1280 = Checkbox(screen, screen.get_rect().centerx - 70, 280, 1, caption='1280 X 720')
-    RESOLUTION_960 = Checkbox(screen, screen.get_rect().centerx + 80, 280, 1, caption='960 X 540')
+    on_button = Button(image=pygame.image.load("on.png"),
+                       pos=(screen.get_rect().centerx - 150, screen.get_rect().centery - 230),
+                       size=(130, 60))
+    off_button = Button(image=pygame.image.load("off.png"),
+                        pos=(screen.get_rect().centerx + 50, screen.get_rect().centery - 230),
+                        size=(130, 60))
+    button_1920 = Button(image=pygame.image.load("1920_button.png"),
+                         pos=(screen.get_rect().centerx - 300, screen.get_rect().centery - 80),
+                         size=(160, 60))
+    button_1280 = Button(image=pygame.image.load("1280_button.png"),
+                         pos=(screen.get_rect().centerx - 80, screen.get_rect().centery - 80),
+                         size=(160, 60))
+    button_960 = Button(image=pygame.image.load("960_button.png"),
+                        pos=(screen.get_rect().centerx + 140, screen.get_rect().centery - 80),
+                        size=(160, 60))
 
-    color_weakness_boxes = [COLOR_WEAKNESS_MODE_ON, COLOR_WEAKNESS_MODE_OFF]
-    resolution_boxes = [RESOLUTION_1920, RESOLUTION_1280, RESOLUTION_960]
+    color_weakness_mode_text = Text(text_input="Color Weakness Mode",
+                                    font="notosanscjkkr",
+                                    color=(0, 0, 0),
+                                    pos=(screen.get_rect().centerx, screen.get_rect().top + 100),
+                                    size=50,
+                                    screen=screen)
 
-    #
+    resolution_text = Text(text_input="Resolution",
+                           font="notosanscjkkr",
+                           color=(0, 0, 0),
+                           pos=(screen.get_rect().centerx, screen.get_rect().top + 240),
+                           size=50,
+                           screen=screen)
+
+    key_setting_text = Text(text_input="Key Setting",
+                            font="notosanscjkkr",
+                            color=(0, 0, 0),
+                            pos=(screen.get_rect().centerx, screen.get_rect().top + 380),
+                            size=50,
+                            screen=screen)
+
     if config['system']['COLOR_WEAKNESS_MODE'] == "True":
-        COLOR_WEAKNESS_MODE_ON.checked = True
-        COLOR_WEAKNESS_MODE_OFF.checked = False
+        on_button.image = pygame.image.load("on_checked.png")
+        off_button.image = pygame.image.load("off.png")
     else:
-        COLOR_WEAKNESS_MODE_ON.checked = False
-        COLOR_WEAKNESS_MODE_OFF.checked = True
+        on_button.image = pygame.image.load("on.png")
+        off_button.image = pygame.image.load("off_checked.png")
 
     if config['system']['SCREEN_WIDTH'] == "1920":
-        RESOLUTION_1920.checked = True
-        RESOLUTION_1280.checked = False
-        RESOLUTION_960.checked = False
+        button_1920.image = pygame.image.load("1920_checked.png")
+        button_1280.image = pygame.image.load("1280_button.png")
+        button_960.image = pygame.image.load("960_button.png")
     elif config['system']['SCREEN_WIDTH'] == "1280":
-        RESOLUTION_1920.checked = False
-        RESOLUTION_1280.checked = True
-        RESOLUTION_960.checked = False
+        button_1920.image = pygame.image.load("1920_button.png")
+        button_1280.image = pygame.image.load("1280_checked.png")
+        button_960.image = pygame.image.load("960_button.png")
     elif config['system']['SCREEN_WIDTH'] == "960":
-        RESOLUTION_1920.checked = False
-        RESOLUTION_1280.checked = False
-        RESOLUTION_960.checked = True
+        button_1920.image = pygame.image.load("1920_button.png")
+        button_1280.image = pygame.image.load("1280_button.png")
+        button_960.image = pygame.image.load("960_checked.png")
 
     while True:
         screen.fill("black")
         options_bg = init_bg("options_screen.png", screen_width, screen_height)
         screen.blit(options_bg, (0, 0))
 
-        # option screen에서 필요한 버튼 설정
-        x_pos = screen_width / 2 - button_width / 2
-        y_pos = screen_height / 2 - button_height / 2
-
-        back_button = Button(image=pygame.image.load("back_button.png"),
-                             pos=(30, 30),
-                             size=(50, 50))
-        save_button = Button(image=pygame.image.load("save_button.png"),
-                             pos=(x_pos, y_pos + 230),
-                             size=(button_width, button_height))
-        reset_button = Button(image=pygame.image.load("reset_button.png"),
-                              pos=(x_pos, y_pos + 300),
-                              size=(button_width, button_height))
-
         # 텍스트 설정
-        color_weakness_mode_text = Text(text_input="Color Weakness Mode",
-                                        font="notosanscjkkr",
-                                        color=(0, 0, 0),
-                                        pos=(screen.get_rect().centerx, screen.get_rect().top + 100),
-                                        size=50,
-                                        screen=screen)
         color_weakness_mode_text.init_text()
-        resolution_text = Text(text_input="Resolution",
-                               font="notosanscjkkr",
-                               color=(0, 0, 0),
-                               pos=(screen.get_rect().centerx, screen.get_rect().top + 240),
-                               size=50,
-                               screen=screen)
         resolution_text.init_text()
-
-        key_setting_text = Text(text_input="Key Setting",
-                                font="notosanscjkkr",
-                                color=(0, 0, 0),
-                                pos=(screen.get_rect().centerx, screen.get_rect().top + 380),
-                                size=50,
-                                screen=screen)
         key_setting_text.init_text()
-
-        init_view(screen, [back_button, save_button, reset_button])
+        init_view(screen,
+                  [back_button, save_button, reset_button, on_button, off_button, button_1920, button_1280, button_960])
 
         UNO = eval(f"{config['system']['UNO']}")
         SELECT = eval(f"{config['system']['SELECT']}")
@@ -373,7 +376,7 @@ def options():
         RIGHT = eval(f"{config['system']['RIGHT_MOVE']}")
 
         # 키 설정
-        key_setting_bg = pygame.image.load("green_button.png")
+        key_setting_bg = pygame.image.load("key_button.png")
         key_setting_bg = pygame.transform.scale(key_setting_bg, (80, 80))
         # 우노 버튼 설정
         Uno_button_rect = key_setting_bg.get_rect()
@@ -422,24 +425,14 @@ def options():
             if event.type == pygame.QUIT:
                 quit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                for box in color_weakness_boxes:
-                    box.update_checkbox(event)
-                    if box.checked is True:
-                        if box.idnum == 0:
-                            config['system']['COLOR_WEAKNESS_MODE'] = "True"
-                            print("ON")
-                        else:
-                            config['system']['COLOR_WEAKNESS_MODE'] = "False"
-                            print("off")
-                        for b in color_weakness_boxes:
-                            if b != box:
-                                b.checked = False
-
                 if back_button.rect.collidepoint(event.pos):
                     main_screen()
                 elif save_button.rect.collidepoint(event.pos):
                     save_config()
                     main_screen()
+                elif reset_button.rect.collidepoint(event.pos):
+                    on_button.image = "on.png"
+                    off_button.image = "off_checked.png"
                 elif Uno_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for Uno direction")
                     UNO = key_change()
@@ -454,7 +447,6 @@ def options():
                     save_config()
                 elif L_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for LEFT direction")
-
                     LEFT = key_change()
                     pygame.key.name(LEFT)
                     config['system']['LEFT_MOVE'] = 'pygame.K_' + pygame.key.name(LEFT)
@@ -465,8 +457,27 @@ def options():
                     pygame.key.name(RIGHT)
                     config['system']['RIGHT_MOVE'] = 'pygame.K_' + pygame.key.name(RIGHT)
                     save_config()
-        for box in color_weakness_boxes:
-            box.render_checkbox()
+                elif on_button.rect.collidepoint(event.pos):
+                    print("on")
+                    on_button.image = pygame.image.load("on_checked.png")
+                    off_button.image = pygame.image.load("off.png")
+                    config['system']['COLOR_WEAKNESS_MODE'] = "True"
+                elif off_button.rect.collidepoint(event.pos):
+                    on_button.image = pygame.image.load("on.png")
+                    off_button.image = pygame.image.load("off_checked.png")
+                    config['system']['COLOR_WEAKNESS_MODE'] = "False"
+                elif button_1920.rect.collidepoint(event.pos):
+                    button_1920.image = pygame.image.load("1920_checked.png")
+                    button_1280.image = pygame.image.load("1280_button.png")
+                    button_960.image = pygame.image.load("960_button.png")
+                elif button_1280.rect.collidepoint(event.pos):
+                    button_1920.image = pygame.image.load("1920_button.png")
+                    button_1280.image = pygame.image.load("1280_checked.png")
+                    button_960.image = pygame.image.load("960_button.png")
+                elif button_960.rect.collidepoint(event.pos):
+                    button_1920.image = pygame.image.load("1920_button.png")
+                    button_1280.image = pygame.image.load("1280_button.png")
+                    button_960.image = pygame.image.load("960_checked.png")
         pygame.display.flip()
 
 
