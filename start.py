@@ -70,12 +70,11 @@ def start(screen, screen_width, screen_height):
             pass
         
         
-        
-        
+
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                quit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 for i in range(0, len(userH)):
                     if userH[i].rect.collidepoint(event.pos):
