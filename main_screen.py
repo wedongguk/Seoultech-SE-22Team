@@ -64,7 +64,8 @@ def options():
     RESOLUTION_1280 = Checkbox(screen, screen.get_rect().centerx - 70, 280, 1, caption='1280 X 720')
     RESOLUTION_960 = Checkbox(screen, screen.get_rect().centerx + 80, 280, 1, caption='960 X 540')
 
-    boxes = [COLOR_WEAKNESS_MODE_ON, COLOR_WEAKNESS_MODE_OFF, RESOLUTION_1920, RESOLUTION_1280, RESOLUTION_960]
+    color_weakness_boxes = [COLOR_WEAKNESS_MODE_ON, COLOR_WEAKNESS_MODE_OFF]
+    resolution_boxes = [RESOLUTION_1920, RESOLUTION_1280, RESOLUTION_960]
 
     #
     if config['system']['COLOR_WEAKNESS_MODE'] == "True":
@@ -73,6 +74,19 @@ def options():
     else:
         COLOR_WEAKNESS_MODE_ON.checked = False
         COLOR_WEAKNESS_MODE_OFF.checked = True
+
+    if config['system']['SCREEN_WIDTH'] == "1920":
+        RESOLUTION_1920.checked = True
+        RESOLUTION_1280.checked = False
+        RESOLUTION_960.checked = False
+    elif config['system']['SCREEN_WIDTH'] == "1280":
+        RESOLUTION_1920.checked = False
+        RESOLUTION_1280.checked = True
+        RESOLUTION_960.checked = False
+    elif config['system']['SCREEN_WIDTH'] == "960":
+        RESOLUTION_1920.checked = False
+        RESOLUTION_1280.checked = False
+        RESOLUTION_960.checked = True
 
     while True:
         screen.fill("black")
@@ -174,14 +188,16 @@ def options():
             if event.type == pygame.QUIT:
                 quit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                for box in boxes:
+                for box in color_weakness_boxes:
                     box.update_checkbox(event)
                     if box.checked is True:
                         if box.idnum == 0:
                             config['system']['COLOR_WEAKNESS_MODE'] = "True"
+                            print("ON")
                         else:
                             config['system']['COLOR_WEAKNESS_MODE'] = "False"
-                        for b in boxes:
+                            print("off")
+                        for b in color_weakness_boxes:
                             if b != box:
                                 b.checked = False
 
@@ -189,6 +205,7 @@ def options():
                     main_screen()
                 elif save_button.rect.collidepoint(event.pos):
                     save_config()
+                    main_screen()
                 elif Uno_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for Uno direction")
                     UNO = key_change()
@@ -214,7 +231,7 @@ def options():
                     config['system']['RIGHT'] = 'pygame.K_' + pygame.key.name(RIGHT)
                     save_config()
 
-        for box in boxes:
+        for box in color_weakness_boxes:
             box.render_checkbox()
         pygame.display.flip()
 
