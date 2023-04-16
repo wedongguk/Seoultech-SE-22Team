@@ -11,6 +11,7 @@ YELLOW = 2
 BLUE = 3
 
 COLOR_TABLE = {NO_COLOR:'black', RED:'red', GREEN:'green', YELLOW:'yellow', BLUE:'blue'}
+COLOR_TABLE2 = {NO_COLOR:'back', RED:'red', GREEN:'green', YELLOW:'yellow', BLUE:'blue'}
 
 ## Number Const ##
 NO_NUMBER = -1
@@ -27,7 +28,7 @@ EFFECT_NUMBER = 0B100000
 ## Time ##
 FRAME_60 = 60
 USER_TIME = 15 * FRAME_60
-BOT_TIME = 10 * FRAME_60
+BOT_TIME = 3 * FRAME_60
 
 EFFECT_TIME = 10
 
