@@ -48,7 +48,7 @@ def start(screen, screen_width, screen_height, num, name):
         
 
         hand = g.userHand()  # 유저 핸드 부분
-        userH = createCards(hand, user_rect)
+        userH = createCards(hand, user_rect, screen_size)
         init_view(screen, userH)
 
         topCard = g.openCard.cardList[-1]  # openCard
@@ -100,7 +100,7 @@ def start(screen, screen_width, screen_height, num, name):
                         g.eventCardBtn(i)
                         print(g.openCard.cardList[-1].applyColor)
                 for i in range(0, len(cbtn)):
-                    if userH[i].rect.collidepoint(event.pos):
+                    if cbtn[i].rect.collidepoint(event.pos):
                         g.eventColorBtn(i)
                 if dbtn.rect.collidepoint(event.pos):
                     if actlist['drawBtn'] == True: # actList가 true인 경우에만 함수 실
@@ -122,12 +122,19 @@ def createIndicator(card_o, pos_o, size_o):
     btn = Button(image=pygame.image.load(c_img), pos=pos_o, size=size_o)
     return btn
 
-def createCards(card_lst, rect):
+def createCards(card_lst, rect, screen_size):
     temp = []
+    cnt = 0
+    cnt_x = 0
+    cnt_y = 0
     for i in range(0, len(card_lst)):
         x = rect[2]/8*0.8
         y = x*1.2
-        c_pos = (rect[0] +(x*1.1)*i, rect[1])
+        if ((rect[0] + (x*1.1)*(i - cnt_x + 1)) >= screen_size[0]*3/5) :
+            cnt_x = cnt
+            cnt_y = cnt_y + 1
+        c_pos = ((rect[0] + (x*1.1)*(i - cnt_x)), (rect[1] + (y*1.1)*(cnt_y)))
+        cnt = cnt + 1
         temp.append(createOneCard(card_lst[i], c_pos, (x, y)))
     return temp
 

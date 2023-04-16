@@ -198,9 +198,9 @@ def set_player_name(player_num):
 
     for i in range(1, player_num + 2):
         if i == 1:
-            input_boxes.append(InputBox(500, i * 150, 140, 32))
+            input_boxes.append(InputBox(500, i * 120, 140, 32))
         else:
-            input_boxes.append(InputBox(500, i * 100, 140, 32))
+            input_boxes.append(InputBox(500, i * 80, 140, 32))
 
     while True:
         for event in pygame.event.get():
@@ -235,7 +235,7 @@ def set_player_name(player_num):
                 text = Text(text_input="USER" + " : ",
                             font="notosanscjkkr",
                             color=(0, 0, 0),
-                            pos=(430, ((i + 1) * 150) + 15),
+                            pos=(430, ((i + 1) * 120) + 15),
                             size=30,
                             screen=screen)
                 text.init_text()
@@ -243,7 +243,7 @@ def set_player_name(player_num):
                 text = Text(text_input="Computer" + str(i) + " : ",
                             font="notosanscjkkr",
                             color=(0, 0, 0),
-                            pos=(430, ((i + 1) * 100) + 15),
+                            pos=(430, ((i + 1) * 80) + 15),
                             size=30,
                             screen=screen)
                 text.init_text()
