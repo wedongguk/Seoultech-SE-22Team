@@ -102,10 +102,10 @@ def options():
                              size=(50, 50))
         save_button = Button(image=pygame.image.load("save_button.png"),
                              pos=(x_pos, y_pos + 230),
-                             size=(button_width - 30, button_height + 5))
+                             size=(button_width, button_height))
         reset_button = Button(image=pygame.image.load("reset_button.png"),
                               pos=(x_pos, y_pos + 300),
-                              size=(button_width - 30, button_height + 5))
+                              size=(button_width, button_height))
 
         # 텍스트 설정
         color_weakness_mode_text = Text(text_input="Color Weakness Mode",
@@ -230,7 +230,6 @@ def options():
                     pygame.key.name(RIGHT)
                     config['system']['RIGHT'] = 'pygame.K_' + pygame.key.name(RIGHT)
                     save_config()
-
         for box in color_weakness_boxes:
             box.render_checkbox()
         pygame.display.flip()
