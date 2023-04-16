@@ -100,7 +100,7 @@ def start(screen, screen_width, screen_height, num, name):
                         g.eventCardBtn(i)
                         print(g.openCard.cardList[-1].applyColor)
                 for i in range(0, len(cbtn)):
-                    if userH[i].rect.collidepoint(event.pos):
+                    if cbtn[i].rect.collidepoint(event.pos):
                         g.eventColorBtn(i)
                 if dbtn.rect.collidepoint(event.pos):
                     if actlist['drawBtn'] == True: # actList가 true인 경우에만 함수 실
