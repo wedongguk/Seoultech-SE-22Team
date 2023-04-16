@@ -115,25 +115,29 @@ class Game: # game 클래스 생성
         return result
     
     def eventCardBtn(self, idx): # 카드 클릭시 이벤트
-        if self.playerList.turnPlayer().isUser == True:
-            if self.playerList.turnPlayer().handCardList[idx].canUse(self) == True:
-                useCard = self.playerList.turnPlayer().delCard(idx)
-                self.placeOpenCardZone(useCard)
-                
-                if len(self.playerList.turnPlayer().handCardList) == 0: # 카드를 내서 0장이 되면 게임이 끝난다.
-                    self.winner = self.playerList.turnPlayer()
+        if self.is_effctTime == False:
+            if self.playerList.turnPlayer().isUser == True:
+                if self.playerList.turnPlayer().handCardList[idx].canUse(self) == True:
+                    useCard = self.playerList.turnPlayer().delCard(idx)
+                    self.placeOpenCardZone(useCard)
                     
-                if len(self.playerList.turnPlayer().handCardList) == 1: # 카드를 내서 1장이 되면 우노 경쟁을 위한 처리를 시작한다.
-                    self.unoCompeteTable()
-                
-                print(self.playerList.turnPlayer().playerName + ": ", self.playerList.turnPlayer().allHand())
-                print('topCard: '+self.openCard.cardList[-1].info())
-                self.endPhase()
-            else:
-                print(self.playerList.turnPlayer().handCardList[idx].info()+"는 낼 수 없어요")
+                    if len(self.playerList.turnPlayer().handCardList) == 0: # 카드를 내서 0장이 되면 게임이 끝난다.
+                        self.winner = self.playerList.turnPlayer()
+                        
+                    if len(self.playerList.turnPlayer().handCardList) == 1: # 카드를 내서 1장이 되면 우노 경쟁을 위한 처리를 시작한다.
+                        self.unoCompeteTable()
+                    
+                    print(self.playerList.turnPlayer().playerName + ": ", self.playerList.turnPlayer().allHand())
+                    print('topCard: '+self.openCard.cardList[-1].info())
+                    self.endPhase()
+                    return True
+                else:
+                    print(self.playerList.turnPlayer().handCardList[idx].info()+"는 낼 수 없어요")
+                    return False
                 
         else:
             print("아직 당신의 턴이 아니에요")
+            return False
         
         
         
