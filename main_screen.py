@@ -52,6 +52,94 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 
 font = pygame.font.SysFont(None, 30)
 
+x_pos = screen_width / 2 - button_width / 2
+y_pos = screen_height / 2 - button_height / 2
+
+
+def play():
+    screen.fill("black")
+    play_bg = init_bg("start_screen.jpeg", screen_width, screen_height)
+    screen.blit(play_bg, (0, 0))
+    back_button = Button(image=pygame.image.load("back_button.png"),
+                         pos=(30, 30),
+                         size=(50, 50))
+
+    default_mode_button = Button(image=pygame.image.load("default_mode_button.png"),
+                                 pos=(x_pos, y_pos - 50),
+                                 size=(button_width, button_height))
+
+    story_mode_button = Button(image=pygame.image.load("story_mode_button.png"),
+                               pos=(x_pos, y_pos + 50),
+                               size=(button_width, button_height))
+
+    init_view(screen, [back_button, default_mode_button, story_mode_button])
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if default_mode_button.rect.collidepoint(event.pos):
+                    loby()
+                elif story_mode_button.rect.collidepoint(event.pos):
+                    print("1")
+                    story_mode()
+                elif back_button.rect.collidepoint(event.pos):
+                    main_screen()
+        pygame.display.flip()
+
+
+def loby():
+    screen.fill("white")
+    back_button = Button(image=pygame.image.load("back_button.png"),
+                         pos=(30, 30),
+                         size=(50, 50))
+
+    start_button = Button(image=pygame.image.load("start_button.png"),
+                          pos=(x_pos, y_pos + 260),
+                          size=(button_width, button_height))
+    init_view(screen, [back_button, start_button])
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+        pygame.display.flip()
+
+
+def story_mode():
+    screen.fill("white")
+    back_button = Button(image=pygame.image.load("back_button.png"),
+                         pos=(30, 30),
+                         size=(50, 50))
+
+    story_mode_1 = Button(image=pygame.image.load("story_mode_1.png"),
+                          pos=(screen.get_rect().centerx - 250, screen.get_rect().centery - 100),
+                          size=(150, 150))
+
+    story_mode_2 = Button(image=pygame.image.load("story_mode_2.png"),
+                          pos=(screen.get_rect().centerx, screen.get_rect().centery - 100),
+                          size=(150, 150))
+
+    story_mode_3 = Button(image=pygame.image.load("story_mode_3.png"),
+                          pos=(screen.get_rect().centerx - 250, screen.get_rect().centery + 150),
+                          size=(150, 150))
+
+    story_mode_4 = Button(image=pygame.image.load("story_mode_4.png"),
+                          pos=(screen.get_rect().centerx, screen.get_rect().centery + 150),
+                          size=(150, 150))
+
+    init_view(screen, [back_button, story_mode_1, story_mode_2, story_mode_3, story_mode_4])
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if back_button.rect.collidepoint(event.pos):
+                    play()
+        pygame.display.flip()
+
 
 def options():
     global UNO, SELECT, LEFT, RIGHT
@@ -139,7 +227,7 @@ def options():
         RIGHT = eval(f"{config['system']['RIGHT_MOVE']}")
 
         # 키 설정
-        key_setting_bg = pygame.image.load("gray_button.png")
+        key_setting_bg = pygame.image.load("green_button.png")
         key_setting_bg = pygame.transform.scale(key_setting_bg, (80, 80))
         # 우노 버튼 설정
         Uno_button_rect = key_setting_bg.get_rect()
@@ -222,13 +310,13 @@ def options():
                     print("Press the key for LEFT direction")
                     LEFT = key_change()
                     pygame.key.name(LEFT)
-                    config['system']['LEFT'] = 'pygame.K_' + pygame.key.name(LEFT)
+                    config['system']['LEFT_MOVE'] = 'pygame.K_' + pygame.key.name(LEFT)
                     save_config()
                 elif R_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for RIGHT direction")
                     RIGHT = key_change()
                     pygame.key.name(RIGHT)
-                    config['system']['RIGHT'] = 'pygame.K_' + pygame.key.name(RIGHT)
+                    config['system']['RIGHT_MOVE'] = 'pygame.K_' + pygame.key.name(RIGHT)
                     save_config()
         for box in color_weakness_boxes:
             box.render_checkbox()
@@ -257,8 +345,6 @@ def quit():
 # 메인 루프
 def main_screen():
     main_bg = init_bg("start_screen.jpeg", screen_width, screen_height)
-    x_pos = screen_width / 2 - button_width / 2
-    y_pos = screen_height / 2 - button_height / 2
 
     while True:
         screen.blit(main_bg, (0, 0))
@@ -282,7 +368,7 @@ def main_screen():
                 quit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.rect.collidepoint(event.pos):
-                    play(screen, screen_width, screen_height)
+                    play()
                 elif options_button.rect.collidepoint(event.pos):
                     options()
                 elif exit_button.rect.collidepoint(event.pos):
