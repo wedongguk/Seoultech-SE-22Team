@@ -8,7 +8,7 @@ from view import init_view
 from button import Button
 
 
-def start(screen, screen_width, screen_height, num):
+def start(screen, screen_width, screen_height, num, name):
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
 
@@ -17,11 +17,10 @@ def start(screen, screen_width, screen_height, num):
 
     screen.fill((0, 0, 0))
 
-    user1 = Player('USER', True)
-    gamePlayerList = []
-    gamePlayerList.append(user1)
+    user1 = Player(name[0], True)
+    gamePlayerList = [user1]
     for i in range(1, num+1):
-        gamePlayerList.append(Player('PC'+str(i), False))
+        gamePlayerList.append(Player(name[i], False))
     g = Game(gamePlayerList)
 
     screen = pygame.display.set_mode(screen_size)

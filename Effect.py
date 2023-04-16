@@ -16,7 +16,7 @@ def effect(card, game):  # 특수 카드의 효과를 처리하기 위한 메서
         effect_change_color(game)
 
     if eCode & EFFECT_NUMBER == EFFECT_NUMBER:  # 카드의 숫자를 바꾸는 효과
-        effect_change_number(card, game)
+        effect_change_number(card)
         
 
 def effect_draw(card, game):
