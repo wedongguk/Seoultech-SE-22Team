@@ -39,6 +39,12 @@ def start(screen, screen_width, screen_height, num, name):
         userH = createCards(hand, screen_size)
         init_view(screen, userH)
 
+        USERNAME_FONT = pygame.font.SysFont('Arial', 30)  # 타이머
+        username_text = USERNAME_FONT.render(name[0], True, (255, 255, 255))
+        username_rect = username_text.get_rect()
+        username_rect.center = (screen_size[0] / 12 , screen_size[1] * 4 / 5  - 50)
+        screen.blit(username_text, username_rect)
+        
         topCard = g.openCard.cardList[-1]  # openCard
         pos = (screen_size[0] / 12 + (screen_size[0] / 12.5), screen_size[1] * 1 / 5)
         topC = createOneCard(topCard, pos, (50, 70))
