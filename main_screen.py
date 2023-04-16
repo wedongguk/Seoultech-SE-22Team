@@ -3,7 +3,7 @@ import os
 import sys
 from button import Button
 from main import init_bg, init_pygame
-from play import play
+from start import start
 from view import init_view
 from text import Text
 import configparser
@@ -104,6 +104,9 @@ def loby():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if start_button.rect.collidepoint(event.pos):
+                    start(screen, screen_width, screen_height)
         pygame.display.flip()
 
 
