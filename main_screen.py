@@ -198,11 +198,21 @@ def options():
                 elif Select_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for Select direction")
                     SELECT = key_change()
+                    pygame.key.name(SELECT)
+                    config['system']['SELECT'] = 'pygame.K_' + pygame.key.name(SELECT)
+                    save_config()
                 elif L_button_rect.collidepoint(pygame.mouse.get_pos()):
+                    print("Press the key for LEFT direction")
                     LEFT = key_change()
+                    pygame.key.name(LEFT)
+                    config['system']['LEFT'] = 'pygame.K_' + pygame.key.name(LEFT)
+                    save_config()
                 elif R_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for RIGHT direction")
                     RIGHT = key_change()
+                    pygame.key.name(RIGHT)
+                    config['system']['RIGHT'] = 'pygame.K_' + pygame.key.name(RIGHT)
+                    save_config()
 
         for box in boxes:
             box.render_checkbox()
