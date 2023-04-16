@@ -203,15 +203,15 @@ def options():
                     save_config()
                 elif L_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for LEFT direction")
-                    LEFT = key_change()
-                    pygame.key.name(LEFT)
-                    config['system']['LEFT'] = 'pygame.K_' + pygame.key.name(LEFT)
+                    LEFT_key = key_change()
+                    pygame.key.name(LEFT_key)
+                    config['system']['LEFT_MOVE'] = 'pygame.K_' + pygame.key.name(LEFT_key)
                     save_config()
                 elif R_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for RIGHT direction")
-                    RIGHT = key_change()
-                    pygame.key.name(RIGHT)
-                    config['system']['RIGHT'] = 'pygame.K_' + pygame.key.name(RIGHT)
+                    RIGHT_key = key_change()
+                    pygame.key.name(RIGHT_key)
+                    config['system']['RIGHT_MOVE'] = 'pygame.K_' + pygame.key.name(RIGHT_key)
                     save_config()
 
         for box in boxes:
