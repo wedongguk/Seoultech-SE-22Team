@@ -40,7 +40,7 @@ class Game: # game 클래스 생성
         
         self.is_effctTime = False
         self.timer = Timer(15)
-        self.effectTimer = Timer(1000)
+        self.effectTimer = Timer(60*15)
         
     def __del__(self): # game class 소멸자
         del self.deckList
@@ -74,7 +74,6 @@ class Game: # game 클래스 생성
         self.openCard + lst
     
         # self.openCard.cardList.append(Card)
-        card.reset()
         card.cardEffect(self)
 
     def setDeck(self, screen_size): # 게임에 사용할 덱의 CardList를 반환합니다.
@@ -95,7 +94,7 @@ class Game: # game 클래스 생성
                 tempList.append(card)
 
         for _ in range(0, 2): # 색상이 불필요한 특수카드
-            for j in [0B10000, 0B100000]:
+            for j in [0B10000]:
                 card = Card(NO_COLOR, NO_NUMBER, j)
                 card.default_image = pygame.transform.smoothscale(pygame.image.load(f"images/{Card.imgColor(card)}_{Card.imgValue(card)}.png"), (screen_size[0] / 12.5, screen_size[0] / 8.333))
                 tempList.append(card)
@@ -127,9 +126,12 @@ class Game: # game 클래스 생성
                 if len(self.playerList.turnPlayer().handCardList) == 1: # 카드를 내서 1장이 되면 우노 경쟁을 위한 처리를 시작한다.
                     self.unoCompeteTable()
                 
+                print(self.playerList.turnPlayer().playerName + ": ", self.playerList.turnPlayer().allHand())
+                print('topCard: '+self.openCard.cardList[-1].info())
                 self.endPhase()
             else:
-                print("그 카드는 낼 수 없어요")
+                print(self.playerList.turnPlayer().handCardList[idx].info()+"는 낼 수 없어요")
+                
         else:
             print("아직 당신의 턴이 아니에요")
         
