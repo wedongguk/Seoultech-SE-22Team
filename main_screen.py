@@ -134,7 +134,7 @@ def loby():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.rect.collidepoint(event.pos):
                     print(AI_num)
-                    # start(screen, screen_width, screen_height)
+                    start(screen, screen_width, screen_height, AI_num)
                 elif back_button.rect.collidepoint(event.pos):
                     play()
                 elif AI_1.rect.collidepoint(event.pos):
