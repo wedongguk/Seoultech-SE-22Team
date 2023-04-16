@@ -311,6 +311,7 @@ def options():
                     save_config()
                 elif L_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for LEFT direction")
+
                     LEFT = key_change()
                     pygame.key.name(LEFT)
                     config['system']['LEFT_MOVE'] = 'pygame.K_' + pygame.key.name(LEFT)
