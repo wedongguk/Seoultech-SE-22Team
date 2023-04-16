@@ -1,6 +1,8 @@
 import pygame
 import os
 import sys
+
+from InputBox import InputBox
 from button import Button
 from main import init_bg, init_pygame
 from start import start
@@ -96,24 +98,24 @@ def loby():
     back_button = Button(image=pygame.image.load("back_button.png"),
                          pos=(30, 30),
                          size=(50, 50))
-    start_button = Button(image=pygame.image.load("start_button.png"),
+    next_button = Button(image=pygame.image.load("next_button.png"),
                           pos=(x_pos, y_pos + 260),
                           size=(button_width, button_height))
 
     AI_1 = Button(image=pygame.image.load("1_checked.png"),
-                  pos=(x_pos - 360, y_pos-30),
+                  pos=(x_pos - 360, y_pos - 30),
                   size=(100, 100))
     AI_2 = Button(image=pygame.image.load("2.png"),
-                  pos=(x_pos - 160, y_pos-30),
+                  pos=(x_pos - 160, y_pos - 30),
                   size=(100, 100))
     AI_3 = Button(image=pygame.image.load("3.png"),
-                  pos=(x_pos+40, y_pos-30),
+                  pos=(x_pos + 40, y_pos - 30),
                   size=(100, 100))
     AI_4 = Button(image=pygame.image.load("4.png"),
-                  pos=(x_pos + 240, y_pos-30),
+                  pos=(x_pos + 240, y_pos - 30),
                   size=(100, 100))
     AI_5 = Button(image=pygame.image.load("5.png"),
-                  pos=(x_pos + 440, y_pos-30),
+                  pos=(x_pos + 440, y_pos - 30),
                   size=(100, 100))
     AI_num = 1
 
@@ -125,16 +127,16 @@ def loby():
                       screen=screen)
     title_text.init_text()
 
-    init_view(screen, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
+    init_view(screen, [back_button, next_button, AI_1, AI_2, AI_3, AI_4, AI_5])
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if start_button.rect.collidepoint(event.pos):
+                if next_button.rect.collidepoint(event.pos):
                     print(AI_num)
-                    start(screen, screen_width, screen_height, AI_num)
+                    set_player_name(AI_num)
                 elif back_button.rect.collidepoint(event.pos):
                     play()
                 elif AI_1.rect.collidepoint(event.pos):
@@ -143,7 +145,7 @@ def loby():
                     AI_3.image = pygame.image.load("3.png")
                     AI_4.image = pygame.image.load("4.png")
                     AI_5.image = pygame.image.load("5.png")
-                    init_view(screen, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
+                    init_view(screen, [back_button, next_button, AI_1, AI_2, AI_3, AI_4, AI_5])
                     AI_num = 1
                 elif AI_2.rect.collidepoint(event.pos):
                     AI_1.image = pygame.image.load("1.png")
@@ -151,7 +153,7 @@ def loby():
                     AI_3.image = pygame.image.load("3.png")
                     AI_4.image = pygame.image.load("4.png")
                     AI_5.image = pygame.image.load("5.png")
-                    init_view(screen, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
+                    init_view(screen, [back_button, next_button, AI_1, AI_2, AI_3, AI_4, AI_5])
                     AI_num = 2
                 elif AI_3.rect.collidepoint(event.pos):
                     AI_1.image = pygame.image.load("1.png")
@@ -159,7 +161,7 @@ def loby():
                     AI_3.image = pygame.image.load("3_checked.png")
                     AI_4.image = pygame.image.load("4.png")
                     AI_5.image = pygame.image.load("5.png")
-                    init_view(screen, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
+                    init_view(screen, [back_button, next_button, AI_1, AI_2, AI_3, AI_4, AI_5])
                     AI_num = 3
                 elif AI_4.rect.collidepoint(event.pos):
                     AI_1.image = pygame.image.load("1.png")
@@ -167,7 +169,7 @@ def loby():
                     AI_3.image = pygame.image.load("3.png")
                     AI_4.image = pygame.image.load("4_checked.png")
                     AI_5.image = pygame.image.load("5.png")
-                    init_view(screen, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
+                    init_view(screen, [back_button, next_button, AI_1, AI_2, AI_3, AI_4, AI_5])
                     AI_num = 4
                 elif AI_5.rect.collidepoint(event.pos):
                     AI_1.image = pygame.image.load("1.png")
@@ -175,9 +177,80 @@ def loby():
                     AI_3.image = pygame.image.load("3.png")
                     AI_4.image = pygame.image.load("4.png")
                     AI_5.image = pygame.image.load("5_checked.png")
-                    init_view(screen, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
+                    init_view(screen, [back_button, next_button, AI_1, AI_2, AI_3, AI_4, AI_5])
                     AI_num = 5
         pygame.display.flip()
+
+
+def set_player_name(player_num):
+    screen.fill("black")
+    play_bg = init_bg("options_screen.png", screen_width, screen_height)
+    screen.blit(play_bg, (0, 0))
+    back_button = Button(image=pygame.image.load("back_button.png"),
+                         pos=(30, 30),
+                         size=(50, 50))
+    start_button = Button(image=pygame.image.load("start_button.png"),
+                          pos=(x_pos, y_pos + 260),
+                          size=(button_width, button_height))
+
+    input_boxes = []
+    clock = pygame.time.Clock()
+
+    for i in range(1, player_num + 2):
+        if i == 1:
+            input_boxes.append(InputBox(500, i * 150, 140, 32))
+        else:
+            input_boxes.append(InputBox(500, i * 100, 140, 32))
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if back_button.rect.collidepoint(event.pos):
+                    loby()
+                elif start_button.rect.collidepoint(event.pos):
+                    name_list = []
+                    for box in input_boxes:
+                        name_list.append(box.text)
+                    start(screen, screen_width, screen_height, player_num, name_list)
+            for box in input_boxes:
+                box.handle_event(event)
+        for box in input_boxes:
+            box.update()
+
+        screen.blit(play_bg, (0, 0))
+        init_view(screen, [back_button, start_button])
+        title_text = Text(text_input="SET NAME",
+                          font="notosanscjkkr",
+                          color=(0, 0, 0),
+                          pos=(screen.get_rect().centerx, screen.get_rect().top + 100),
+                          size=50,
+                          screen=screen)
+        title_text.init_text()
+        i = 0
+        for box in input_boxes:
+            box.draw(screen)
+            if i == 0:
+                text = Text(text_input="USER" + " : ",
+                            font="notosanscjkkr",
+                            color=(0, 0, 0),
+                            pos=(430, ((i + 1) * 150) + 15),
+                            size=30,
+                            screen=screen)
+                text.init_text()
+            else:
+                text = Text(text_input="Computer" + str(i) + " : ",
+                            font="notosanscjkkr",
+                            color=(0, 0, 0),
+                            pos=(430, ((i + 1) * 100) + 15),
+                            size=30,
+                            screen=screen)
+                text.init_text()
+            i += 1
+
+        pygame.display.flip()
+        clock.tick(30)
 
 
 def story_mode():

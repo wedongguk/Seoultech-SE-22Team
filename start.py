@@ -8,7 +8,7 @@ from view import init_view
 from button import Button
 
 
-def start(screen, screen_width, screen_height, num):
+def start(screen, screen_width, screen_height, num, name):
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
 
@@ -17,11 +17,10 @@ def start(screen, screen_width, screen_height, num):
 
     screen.fill((0, 0, 0))
 
-    user1 = Player('USER', True)
-    gamePlayerList = []
-    gamePlayerList.append(user1)
+    user1 = Player(name[0], True)
+    gamePlayerList = [user1]
     for i in range(1, num+1):
-        gamePlayerList.append(Player('PC'+str(i), False))
+        gamePlayerList.append(Player(name[i], False))
     g = Game(gamePlayerList)
 
     screen = pygame.display.set_mode(screen_size)
@@ -40,6 +39,12 @@ def start(screen, screen_width, screen_height, num):
         userH = createCards(hand, screen_size)
         init_view(screen, userH)
 
+        USERNAME_FONT = pygame.font.SysFont('Arial', 30)  # 타이머
+        username_text = USERNAME_FONT.render(name[0], True, (255, 255, 255))
+        username_rect = username_text.get_rect()
+        username_rect.center = (screen_size[0] / 12 , screen_size[1] * 4 / 5  - 50)
+        screen.blit(username_text, username_rect)
+        
         topCard = g.openCard.cardList[-1]  # openCard
         pos = (screen_size[0] / 12 + (screen_size[0] / 12.5), screen_size[1] * 1 / 5)
         topC = createOneCard(topCard, pos, (50, 70))
