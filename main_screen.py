@@ -94,11 +94,12 @@ def loby():
     back_button = Button(image=pygame.image.load("back_button.png"),
                          pos=(30, 30),
                          size=(50, 50))
-
     start_button = Button(image=pygame.image.load("start_button.png"),
                           pos=(x_pos, y_pos + 260),
                           size=(button_width, button_height))
+
     init_view(screen, [back_button, start_button])
+
 
     while True:
         for event in pygame.event.get():
@@ -107,6 +108,8 @@ def loby():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.rect.collidepoint(event.pos):
                     start(screen, screen_width, screen_height)
+                elif back_button.rect.collidepoint(event.pos):
+                    play()
         pygame.display.flip()
 
 
