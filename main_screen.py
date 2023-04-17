@@ -257,6 +257,14 @@ def story_mode():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.rect.collidepoint(event.pos):
                     play()
+                elif story_mode_1.rect.collidepoint(event.pos):
+                    loby()
+                elif story_mode_2.rect.collidepoint(event.pos):
+                    loby()
+                elif story_mode_3.rect.collidepoint(event.pos):
+                    loby()
+                elif story_mode_4.rect.collidepoint(event.pos):
+                    loby()
         pygame.display.flip()
 
 
