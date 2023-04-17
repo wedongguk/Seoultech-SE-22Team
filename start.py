@@ -39,11 +39,7 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
     global bgm
     bgm = pygame.mixer.Sound("bgm.mp3")
     bgm.play(-1)
-    bet_card = pygame.mixer.Sound("bet_card.wav")
-    cannot_bet = pygame.mixer.Sound("cannot_bet.wav")
-    card_draw = pygame.mixer.Sound("card_draw.mp3")
     while True:
-
         ##### 화면 초기화 #####
         screen.fill((0, 0, 0))
 
@@ -101,14 +97,11 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
 
         dbtn = createDrawBtn(screen, g, board_rect)  # draw 버튼
         ubtn = createUnoBtn(screen, g, board_rect)  # uno 버튼
-
-        TIMER_FONT = pygame.font.SysFont('Arial', 30)  # 타이머
-        timer_text = TIMER_FONT.render(str(g.timer.time // 60 + 1), True, (255, 255, 255))
-        timer_rect = timer_text.get_rect()
-        timer_rect.center = (screen_height // 2, 50)
-        button_rect = pygame.Rect(screen_width // 2 - 50, screen_height // 2 - 25, 100, 50)
-        pygame.draw.rect(screen, (0, 255, 0), button_rect)
-        screen.blit(timer_text, timer_rect)
+        
+        timerInd(screen, board_rect, g.timer.time)
+        eTimerInd(screen, board_rect, g.effectTimer.time)
+        
+        
         g.update()
 
         # botHand(screen, screen_size, pc1)
@@ -176,7 +169,6 @@ def pause(screen, screen_width, screen_height):
 
     x_pos = screen_width / 2 - button_width / 2
     y_pos = screen_height / 2 - button_height / 2
-
     back_button = Button(image=pygame.image.load("back_button.png"),
                          pos=(30, 30),
                          size=(50, 50))
@@ -342,7 +334,7 @@ def winner_screen(screen, screen_width, screen_height, winner):
     winnername_text = Text(text_input=winner + ' is winner!',
                            font=None,
                            color=(0, 0, 0),
-                           pos=(screen.get_rect().centerx, screen.get_rect().centery),
+                           pos=(screen.get_rect().centerx, screen.get_rect().top + 100),
                            size=screen_height // 5,
                            screen=screen)
     winnername_text.init_text()
@@ -527,6 +519,46 @@ def createUnoBtn(screen, game, rect):
 
     return btn
 
+
+def timerInd(screen, rect, time):
+    size_x = round(rect[2]/20)
+    size_y = size_x
+    
+    center = rectCenter(rect)
+    pos_x = center[0]-size_x*1.2
+    pos_y = (rect[1]+center[1])/2
+    
+    Area = (pos_x, pos_y, size_x, size_y)
+    pygame.draw.rect(screen, (255, 255, 255), Area)
+
+    font_size = size_y
+    font = pygame.font.Font(None, font_size)
+    
+    center = rectCenter(Area)
+    text = font.render(str(time//60), True, (0, 0, 0))
+    screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
+
+    return Area
+
+def eTimerInd(screen, rect, time):
+    size_x = round(rect[2]/20)
+    size_y = size_x
+    
+    center = rectCenter(rect)
+    pos_x = center[0]
+    pos_y = (rect[1]+center[1])/2
+    
+    Area = (pos_x, pos_y, size_x, size_y)
+    pygame.draw.rect(screen, (255, 255, 255), Area)
+
+    font_size = size_y
+    font = pygame.font.Font(None, font_size)
+    
+    center = rectCenter(Area)
+    text = font.render(str(time//60), True, (0, 0, 0))
+    screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
+
+    return Area
 
 ##### board space #####
 
