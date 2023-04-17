@@ -10,6 +10,7 @@ from view import init_view
 from text import Text
 from button import Button
 
+volume = 1
 
 def start(screen, screen_width, screen_height, num, name):
     screen_size = (screen_width, screen_height)
@@ -31,9 +32,11 @@ def start(screen, screen_width, screen_height, num, name):
     g.ready(screen_size)
 
     clock = pygame.time.Clock()
+    global bgm
+    bgm = pygame.mixer.Sound("bgm.mp3")
+    bgm.play(-1)
     while True:
         screen.fill((0, 0, 0))
-
         user_rect = (0, screen_height * 3 / 5, screen_width * 3 / 5, screen_height * 2 / 5)
         playerArea = pygame.draw.rect(screen, (120, 120, 120), user_rect)
 
@@ -69,7 +72,10 @@ def start(screen, screen_width, screen_height, num, name):
         screen.blit(timer_text, timer_rect)
         g.update()
         # botHand(screen, screen_size, pc1)
-
+        pause_button = Button(image=pygame.image.load("pause_button.png"),
+                              pos=(30, 30),
+                              size=(50, 50))
+        init_view(screen, [pause_button])
         cbtn = createColorBtn(board_rect)
 
         # colorChangebtn
@@ -98,17 +104,50 @@ def start(screen, screen_width, screen_height, num, name):
                 if dbtn.rect.collidepoint(event.pos):  # 드로우 버튼
                     if actlist['drawBtn']:  # actList가 true인 경우에만 함수 실행
                         g.eventDrawBtn()
-
-                if ubtn.rect.collidepoint(event.pos):  # 우노 버튼
+                elif ubtn.rect.collidepoint(event.pos):  # 우노 버튼
                     if actlist['unoBtn']:  # actList가 true인 경우에만 함수 실행
                         g.eventUnoBtn()
-
+                elif pause_button.rect.collidepoint(event.pos):
+                    pause(screen, screen_width, screen_height)
         pygame.display.flip()
 
         if g.winner != None:
             winner_screen(screen, screen_width, screen_height, g.winner.playerName)
 
         clock.tick(60)
+
+
+def pause(screen, screen_width, screen_height):
+    global volume
+    back_button = Button(image=pygame.image.load("back_button.png"),
+                         pos=(30, 30),
+                         size=(50, 50))
+    volume_up_button = Button(image=pygame.image.load("volume_up_button.png"),
+                       pos=(screen.get_rect().centerx - 150, screen.get_rect().centery - 230),
+                       size=(130, 60))
+    volume_down_button = Button(image=pygame.image.load("volume_down_button.png"),
+                        pos=(screen.get_rect().centerx + 50, screen.get_rect().centery - 230),
+                        size=(130, 60))
+    bool = True
+    while bool:
+        screen.fill("black")
+        options_bg = init_bg("options_screen.png", screen_width, screen_height)
+        screen.blit(options_bg, (0, 0))
+        init_view(screen, [back_button, volume_up_button, volume_down_button])
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if back_button.rect.collidepoint(event.pos):
+                    bool = False
+                elif volume_up_button.rect.collidepoint(event.pos):
+                    volume += 0.1
+                    bgm.set_volume(volume)
+                elif volume_down_button.rect.collidepoint(event.pos):
+                    volume -= 0.1
+                    bgm.set_volume(volume)
+        pygame.display.flip()
 
 
 def winner_screen(screen, screen_width, screen_height, winner):
@@ -329,7 +368,7 @@ def createColorBtn(rect):
     x = rect[2] * 0.05
     y = x * 1.2
     for i in range(0, 4):
-        pos_o = (rect[0] + i * x, rect[1] + y)
+        pos_o = (rect[0] + i * x, rect[1] + y+ 50)
         size_o = (x, y)
         img_o = f"images/" + COLOR_TABLE[i] + ".png"
         btn = Button(image=pygame.image.load(img_o), pos=pos_o, size=size_o)
