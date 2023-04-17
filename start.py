@@ -9,13 +9,24 @@ from main import init_bg
 from view import init_view
 from text import Text
 from button import Button
+import configparser
 
 master_volume = 1
 click_volume = 1
 
 check_os = True
+start_color_weakness_value = False
+
+config = configparser.ConfigParser()
+config.read('config.ini', encoding='utf-8')
+
+def save_config():
+    with open('config.ini', 'w', encoding='utf-8') as config_file:
+        config.write(config_file)
 
 def start(screen, screen_width, screen_height, num, name, color_weakness_value):
+    global start_color_weakness_value
+    start_color_weakness_value = color_weakness_value
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
 
@@ -82,15 +93,15 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
 
         ##### user_Area #####
 
-        userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, color_weakness_value)  # 유저 핸드
+        userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, start_color_weakness_value)  # 유저 핸드
         pageBtn = cardPageBtn(screen, user_lBtn_rect, user_rBtn_rect)  # 핸드 넘기는 버튼
 
         ##### user_Area #####
 
         ##### board_Area #####
 
-        openCardIndicator(screen, g, board_rect, color_weakness_value)  # openCard
-        createIndicator(screen, g.openCard.cardList[-1], board_rect, color_weakness_value)  # indicator
+        openCardIndicator(screen, g, board_rect, start_color_weakness_value)  # openCard
+        createIndicator(screen, g.openCard.cardList[-1], board_rect, start_color_weakness_value)  # indicator
         createDeck(screen, g, board_rect)  # deck
 
         actlist = g.actList()
@@ -111,7 +122,7 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
                               size=(50, 50))
         init_view(screen, [pause_button])
 
-        cbtn = createColorBtn(board_rect, color_weakness_value)
+        cbtn = createColorBtn(board_rect, start_color_weakness_value)
 
         # colorChangebtn
         if actlist['colorBtn']:
@@ -154,6 +165,9 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
                         g.eventUnoBtn()
                 elif pause_button.rect.collidepoint(event.pos):
                     pause(screen, screen_width, screen_height)
+                    userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, start_color_weakness_value)  # 유저 핸드
+                    openCardIndicator(screen, g, board_rect, start_color_weakness_value)  # openCard
+                    createIndicator(screen, g.openCard.cardList[-1], board_rect, start_color_weakness_value)  # indicator
 
         pygame.display.flip()
 
@@ -165,6 +179,8 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
 
 def pause(screen, screen_width, screen_height):
     global master_volume
+    global start_color_weakness_value
+    global check_os
     button_width = 220
     button_height = 50
 
@@ -249,7 +265,12 @@ def pause(screen, screen_width, screen_height):
                            pos=(screen.get_rect().centerx, screen.get_rect().top + 270),
                            size=30,
                            screen=screen)
-
+    if start_color_weakness_value == True:
+        on_button.image = pygame.image.load("on_checked.png")
+        off_button.image = pygame.image.load("off.png")
+    else:
+        on_button.image = pygame.image.load("on.png")
+        off_button.image = pygame.image.load("off_checked.png")
     if screen_width == 1920:
         button_1920.image = pygame.image.load("1920_checked.png")
         button_1280.image = pygame.image.load("1280_button.png")
@@ -294,9 +315,13 @@ def pause(screen, screen_width, screen_height):
                     bgm.set_volume(master_volume)
                 elif exit_button.rect.collidepoint(event.pos):
                     bgm.stop()
-                    file_path = os.getcwd()
-                    dir_path = os.path.dirname(file_path)
-                    os.chdir(dir_path)
+                    if check_os == True :
+                        file_path = os.getcwd()
+                        dir_path = os.path.dirname(file_path)
+                        os.chdir(dir_path)
+                        check_os = False
+                    else :
+                        check_os = True
                     from main_screen import main_screen
                     main_screen()
                 elif button_1920.rect.collidepoint(event.pos):
@@ -311,6 +336,20 @@ def pause(screen, screen_width, screen_height):
                     button_1920.image = pygame.image.load("1920_button.png")
                     button_1280.image = pygame.image.load("1280_button.png")
                     button_960.image = pygame.image.load("960_checked.png")
+                elif on_button.rect.collidepoint(event.pos):
+                    print("on")
+                    on_button.image = pygame.image.load("on_checked.png")
+                    off_button.image = pygame.image.load("off.png")
+                    config['system']['COLOR_WEAKNESS_MODE'] = "True"
+                    save_config()
+                    start_color_weakness_value = True
+                elif off_button.rect.collidepoint(event.pos):
+                    on_button.image = pygame.image.load("on.png")
+                    off_button.image = pygame.image.load("off_checked.png")
+                    config['system']['COLOR_WEAKNESS_MODE'] = "False"
+                    save_config()
+                    start_color_weakness_value = False
+                    
         pygame.display.flip()
 
 
@@ -363,11 +402,11 @@ def winner_screen(screen, screen_width, screen_height, winner) :
 
 ##### winner_sreen #####
 
-def createOneCard(card_o, pos_o, size_o, color_weakness_value):
+def createOneCard(card_o, pos_o, size_o, start_color_weakness_value):
     c = card_o
-    if color_weakness_value == False:
+    if start_color_weakness_value == False:
         c_img = f"images/" + c.imgName() + ".png"
-    elif color_weakness_value == True:
+    elif start_color_weakness_value == True:
         c_img = f"blind_images/" + c.imgName() + ".png"
     btn = Button(image=pygame.image.load(c_img), pos=pos_o, size=size_o)
     return btn
@@ -395,7 +434,7 @@ def createBackCards(card_lst, rect):
 
 ##### user space #####
 
-def createCards(screen, card_lst, game, rect, page, color_weakness_value):
+def createCards(screen, card_lst, game, rect, page, start_color_weakness_value):
     temp = []
 
     size_x = rect[2] / 8
@@ -412,7 +451,7 @@ def createCards(screen, card_lst, game, rect, page, color_weakness_value):
             size_o = (size_x, size_y)
             if card_lst[i].canUse(game):
                 pos_o = (pos_o[0], rect[1])
-            temp.append(createOneCard(card_lst[p + i], pos_o, size_o, color_weakness_value))
+            temp.append(createOneCard(card_lst[p + i], pos_o, size_o, start_color_weakness_value))
 
     init_view(screen, temp)
     return temp
@@ -467,22 +506,22 @@ def cardPageUpDown(card_lst, nowPage, upDown):
 
 ##### board space #####
 
-def openCardIndicator(screen, game, rect, color_weakness_value):
+def openCardIndicator(screen, game, rect, start_color_weakness_value):
     topCard = game.openCard.cardList[-1]  # openCard
 
     center = rectCenter(rect)
     pos_o = (center[0], center[1])
     size_o = (rect[2] * 0.1, rect[2] * 0.1 * 1.2)
-    topC = createOneCard(topCard, pos_o, size_o, color_weakness_value)
+    topC = createOneCard(topCard, pos_o, size_o, start_color_weakness_value)
     init_view(screen, [topC])
 
 
-def createIndicator(screen, card_o, rect, color_weakness_value):
+def createIndicator(screen, card_o, rect, start_color_weakness_value):
     c = card_o
     txt = COLOR_TABLE2[c.applyColor]
-    if color_weakness_value == False:
+    if start_color_weakness_value == False:
         c_img = f"images/" + txt + ".png"
-    elif color_weakness_value == True:
+    elif start_color_weakness_value == True:
         c_img = f"blind_images/" + txt + ".png"
 
     center = rectCenter(rect)
@@ -679,16 +718,16 @@ def turnArrow(screen, rect, direction):
 
 ##### near bot space #####
 
-def createColorBtn(rect, color_weakness_value):
+def createColorBtn(rect, start_color_weakness_value):
     lst = []
     x = rect[2] * 0.05
     y = x * 1.2
     for i in range(0, 4):
         pos_o = (rect[0] + i * x, rect[1] + y + 50)
         size_o = (x, y)
-        if color_weakness_value == False:
+        if start_color_weakness_value == False:
             img_o = f"images/" + COLOR_TABLE[i] + ".png"
-        elif color_weakness_value == True:
+        elif start_color_weakness_value == True:
             img_o = f"blind_images/" + COLOR_TABLE[i] + ".png"
         btn = Button(image=pygame.image.load(img_o), pos=pos_o, size=size_o)
         lst.append(btn)
