@@ -35,6 +35,7 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
     g.ready(screen_size)
     
     playerCardPage = 0
+    nowCardIdx = 0
 
     clock = pygame.time.Clock()
     global bgm
@@ -89,7 +90,7 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
 
         ##### user_Area #####
 
-        userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, color_weakness_value)  # 유저 핸드
+        userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, nowCardIdx ,color_weakness_value)  # 유저 핸드
         pageBtn = cardPageBtn(screen, user_lBtn_rect, user_rBtn_rect)  # 핸드 넘기는 버튼
 
         ##### user_Area #####
@@ -165,6 +166,30 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pause(screen, screen_width, screen_height)
+                elif event.key == pygame.K_LEFT:
+                    nowCardIdx, playerCardPage = CardMoveUsingKeyBoard(g.userHand(),nowCardIdx ,playerCardPage, 1)
+                    print(nowCardIdx)
+                    
+                elif event.key == pygame.K_RIGHT:
+                    nowCardIdx, playerCardPage = CardMoveUsingKeyBoard(g.userHand(),nowCardIdx ,playerCardPage, 0)
+                    print(nowCardIdx)
+                    
+                elif event.key == pygame.K_RETURN:
+                    played = g.eventCardBtn(nowCardIdx)
+                    if played:
+                        print("낼 수 있는 카드")
+                        bet_card.play(0)
+                    else:
+                        print("낼 수 없는 카드")
+                        cannot_bet.play(0)
+                    
+            
+            mouse_pos = pygame.mouse.get_pos()
+
+            # check if the mouse is over the fa_rect
+            for i in range(0, len(userH)):  # 색깔 바꾸는 버튼
+                if userH[i].rect.collidepoint(mouse_pos):
+                    nowCardIdx =  playerCardPage * 8+i
 
         pygame.display.flip()
 
@@ -330,9 +355,11 @@ def pause(screen, screen_width, screen_height):
                     cannot_bet.set_volume(click_volume)
                 elif exit_button.rect.collidepoint(event.pos):
                     bgm.stop()
-                    file_path = os.getcwd()
-                    dir_path = os.path.dirname(file_path)
-                    os.chdir(dir_path)
+                    if check_os == True :
+                        file_path = os.getcwd()
+                        dir_path = os.path.dirname(file_path)
+                        os.chdir(dir_path)
+                        check_os = False
                     from main_screen import main_screen
                     main_screen()
                 elif button_1920.rect.collidepoint(event.pos):
@@ -393,8 +420,6 @@ def winner_screen(screen, screen_width, screen_height, winner) :
                         dir_path = os.path.dirname(file_path)
                         os.chdir(dir_path)
                         check_os = False
-                    else :
-                        check_os = True
                     from main_screen import main_screen
                     main_screen()
         pygame.display.flip()
@@ -434,9 +459,9 @@ def createBackCards(card_lst, rect):
 
 ##### user space #####
 
-def createCards(screen, card_lst, game, rect, page, color_weakness_value):
+def createCards(screen, card_lst, game, rect, page, nowCard ,color_weakness_value):
     temp = []
-
+    btn = None
     size_x = rect[2] / 8
     size_y = size_x * 1.2
 
@@ -446,14 +471,19 @@ def createCards(screen, card_lst, game, rect, page, color_weakness_value):
     p = page * 8
 
     for i in range(0, 8):
+   
         if len(card_lst) > p + i:
             pos_o = (pos_x + size_x * i, pos_y)
             size_o = (size_x, size_y)
             if card_lst[p+i].canUse(game):
                 pos_o = (pos_o[0], rect[1])
             temp.append(createOneCard(card_lst[p + i], pos_o, size_o, color_weakness_value))
+            if i+p == nowCard:
+                btn = Button(image=pygame.image.load(f"select.png"), pos=pos_o, size=size_o)
 
     init_view(screen, temp)
+    if btn != None:    
+        init_view(screen, [btn])
     return temp
 
 
@@ -499,6 +529,29 @@ def cardPageUpDown(card_lst, nowPage, upDown):
         else:
             print('페이지를 감소 시킬 수 없다.')
             return nowPage
+        
+def CardMoveUsingKeyBoard(card_lst, nowIdx, nowPage, LR):
+    
+    n = len(card_lst)
+    
+    if LR == 0: # right
+        if n-1 > nowIdx:
+            if nowIdx%8 == 7:
+               return (nowIdx + 1, cardPageUpDown(card_lst, nowPage, LR)) 
+            else:
+                return (nowIdx + 1, nowPage)
+        else:
+            return (nowIdx, nowPage)
+    else: # left
+        if nowIdx > 0:
+            if nowIdx%8 == 0:
+               return (nowIdx - 1, cardPageUpDown(card_lst, nowPage, LR)) 
+            else:
+                return (nowIdx - 1, nowPage)
+        else:
+            return (nowIdx, nowPage)
+           
+    
 
 
 ##### user space #####

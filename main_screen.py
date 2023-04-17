@@ -46,7 +46,11 @@ except:
 screen_width = int(config['system']['SCREEN_WIDTH'])
 screen_height = int(config['system']['SCREEN_HEIGHT'])
 
-color_weakness_value = bool(config['system']['COLOR_WEAKNESS_MODE'])
+if config['system']['COLOR_WEAKNESS_MODE'] == "True":
+    color_weakness_value = True
+else:
+    color_weakness_value = False
+
 
 button_width = 220
 button_height = 50
@@ -253,6 +257,14 @@ def story_mode():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.rect.collidepoint(event.pos):
                     play()
+                elif story_mode_1.rect.collidepoint(event.pos):
+                    loby()
+                elif story_mode_2.rect.collidepoint(event.pos):
+                    loby()
+                elif story_mode_3.rect.collidepoint(event.pos):
+                    loby()
+                elif story_mode_4.rect.collidepoint(event.pos):
+                    loby()
         pygame.display.flip()
 
 
