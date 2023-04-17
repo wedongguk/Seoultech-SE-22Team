@@ -9,6 +9,7 @@ from view import init_view
 from button import Button
 
 
+
 def start(screen, screen_width, screen_height, num, name):
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
@@ -107,9 +108,43 @@ def start(screen, screen_width, screen_height, num, name):
         pygame.display.flip()
         
         if g.winner != None:
-            print(g.winner.playerName)
+            winner_screen()
         
         clock.tick(60)
+
+def winner_screen(screen, screen_width, screen_height, winner) :
+    from main_screen import main_screen
+    screen_size = (screen_width, screen_height)
+    screen = pygame.display.set_mode(screen_size)
+    screen.fill("black")
+    
+    winner_bg = init_bg("options_screen.png", screen_width, screen_height)
+    screen.blit(winner_bg, (0, 0))
+    
+    button_width = 220
+    button_height = 50
+
+    x_pos = screen_width / 2 - button_width / 2
+    y_pos = screen_height / 2 - button_height / 2
+    
+    font = pygame.font.Font(None, screen_height/5)
+    winnername_text = font.render(winner.playerName, True, (0, 0, 0))
+    screen.blit(winnername_text + 'is Winner!', (screen.get_rect().centerx, screen.get_rect().centery))
+    play_button = Button(image=pygame.image.load("play_button.png"),
+                             pos=(x_pos, y_pos + 200),
+                             size=(button_width, button_height))
+    
+    init_view(screen, [play_button, winnername_text])
+    
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if play_button.rect.collidepoint(event.pos):
+                    print("game start")
+                    main_screen()
+        pygame.display.flip()
 
 
 
@@ -318,7 +353,4 @@ def rectCenter(rect):
     y2 = rect[1] + rect[3]
     
     return ((x1+x2)/2, (y1+y2)/2)
-    
-    
-    
     
