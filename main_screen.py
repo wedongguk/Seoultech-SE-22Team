@@ -500,7 +500,15 @@ def main_screen():
                              pos=(x_pos, y_pos + 320),
                              size=(button_width, button_height))
 
+        title_text = Text(text_input="UNO GAME",
+                          font="notosanscjkkr",
+                          color=(0, 0, 0),
+                          pos=(screen.get_rect().centerx, screen.get_rect().top + 30),
+                          size=70,
+                          screen=screen)
+
         init_view(screen, [play_button, options_button, exit_button])
+        title_text.init_text()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
