@@ -438,25 +438,37 @@ def options():
                 elif Uno_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for Uno direction")
                     UNO = key_change()
-                    config['system']['UNO'] = 'pygame.K_' + pygame.key.name(UNO)
+                    if pygame.key.name(UNO) == 'up' or pygame.key.name(UNO) == 'right' or pygame.key.name(
+                            UNO) == 'left' or pygame.key.name(UNO) == 'return':
+                        config['system']['UNO'] = 'pygame.K_' + (pygame.key.name(UNO)).upper()
+                    else:
+                        config['system']['UNO'] = 'pygame.K_' + pygame.key.name(UNO)
                     save_config()
                 elif Select_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for Select direction")
                     SELECT = key_change()
                     pygame.key.name(SELECT)
-                    config['system']['SELECT'] = 'pygame.K_' + pygame.key.name(SELECT)
+                    if pygame.key.name(SELECT) == 'up' or pygame.key.name(SELECT) == 'right' or pygame.key.name(SELECT) == 'left' or pygame.key.name(SELECT) == 'return':
+                        config['system']['SELECT'] = 'pygame.K_' + (pygame.key.name(SELECT)).upper()
+                    else:
+                        config['system']['SELECT'] = 'pygame.K_' + pygame.key.name(SELECT)
                     save_config()
                 elif L_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for LEFT direction")
                     LEFT = key_change()
                     pygame.key.name(LEFT)
-                    config['system']['LEFT_MOVE'] = 'pygame.K_' + pygame.key.name(LEFT)
+                    if pygame.key.name(LEFT) == 'up' or pygame.key.name(LEFT) == 'right' or pygame.key.name(LEFT) == 'left' or pygame.key.name(LEFT) == 'return':
+                        config['system']['LEFT_MOVE'] = 'pygame.K_' + (pygame.key.name(LEFT)).upper()
+                    else:
+                        config['system']['LEFT_MOVE'] = 'pygame.K_' + pygame.key.name(LEFT)
                     save_config()
                 elif R_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for RIGHT direction")
                     RIGHT = key_change()
-                    pygame.key.name(RIGHT)
-                    config['system']['RIGHT_MOVE'] = 'pygame.K_' + pygame.key.name(RIGHT)
+                    if pygame.key.name(RIGHT)=='up' or pygame.key.name(RIGHT)=='right' or pygame.key.name(RIGHT)=='left' or pygame.key.name(RIGHT) == 'return':
+                        config['system']['RIGHT_MOVE'] = 'pygame.K_' + (pygame.key.name(RIGHT)).upper()
+                    else:
+                        config['system']['RIGHT_MOVE'] = 'pygame.K_' + pygame.key.name(RIGHT)
                     save_config()
                 elif on_button.rect.collidepoint(event.pos):
                     print("on")
