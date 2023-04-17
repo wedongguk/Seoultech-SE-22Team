@@ -11,7 +11,7 @@ from text import Text
 from button import Button
 import configparser
 
-master_volume = 1
+bgm_volume = 1
 click_volume = 1
 
 check_os = True
@@ -44,13 +44,20 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
     screen = pygame.display.set_mode(screen_size)
 
     g.ready(screen_size)
-
+    
     playerCardPage = 0
 
     clock = pygame.time.Clock()
     global bgm
+    global bet_card
+    global cannot_bet
+    global card_draw
     bgm = pygame.mixer.Sound("bgm.mp3")
     bgm.play(-1)
+    bet_card = pygame.mixer.Sound("bet_card.wav")
+    cannot_bet = pygame.mixer.Sound("cannot_bet.wav")
+    card_draw = pygame.mixer.Sound("card_draw.mp3")
+
     while True:
         ##### 화면 초기화 #####
         screen.fill((0, 0, 0))
@@ -178,6 +185,8 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
 
 
 def pause(screen, screen_width, screen_height):
+    global bgm_volume
+    global click_volume
     global master_volume
     global start_color_weakness_value
     global check_os
@@ -205,10 +214,10 @@ def pause(screen, screen_width, screen_height):
                                     size=(100, 46))
 
     click_volume_up_button = Button(image=pygame.image.load("volume_up_button.png"),
-                                    pos=(screen.get_rect().centerx + 400, screen.get_rect().centery - 280),
+                                    pos=(screen.get_rect().centerx + 250, screen.get_rect().centery - 280),
                                     size=(100, 46))
     click_volume_down_button = Button(image=pygame.image.load("volume_down_button.png"),
-                                      pos=(screen.get_rect().centerx + 250, screen.get_rect().centery - 280),
+                                      pos=(screen.get_rect().centerx + 400, screen.get_rect().centery - 280),
                                       size=(100, 46))
 
     on_button = Button(image=pygame.image.load("on.png"),
@@ -308,11 +317,35 @@ def pause(screen, screen_width, screen_height):
                 if back_button.rect.collidepoint(event.pos):
                     bool = False
                 elif master_volume_up_button.rect.collidepoint(event.pos):
-                    master_volume += 0.1
-                    bgm.set_volume(master_volume)
+                    bgm_volume += 0.1
+                    click_volume += 0.1
+                    bgm.set_volume(bgm_volume)
+                    bet_card.set_volume(click_volume)
+                    card_draw.set_volume(click_volume)
+                    cannot_bet.set_volume(click_volume)
                 elif master_volume_down_button.rect.collidepoint(event.pos):
-                    master_volume -= 0.1
-                    bgm.set_volume(master_volume)
+                    bgm_volume -= 0.1
+                    click_volume -= 0.1
+                    bgm.set_volume(bgm_volume)
+                    bet_card.set_volume(click_volume)
+                    card_draw.set_volume(click_volume)
+                    cannot_bet.set_volume(click_volume)
+                elif bgm_volume_up_button.rect.collidepoint(event.pos):
+                    bgm_volume += 0.1
+                    bgm.set_volume(bgm_volume)
+                elif bgm_volume_down_button.rect.collidepoint(event.pos):
+                    bgm_volume -= 0.1
+                    bgm.set_volume(bgm_volume)
+                elif click_volume_up_button.rect.collidepoint(event.pos):
+                    click_volume += 0.1
+                    bet_card.set_volume(click_volume)
+                    card_draw.set_volume(click_volume)
+                    cannot_bet.set_volume(click_volume)
+                elif click_volume_down_button.rect.collidepoint(event.pos):
+                    click_volume -= 0.1
+                    bet_card.set_volume(click_volume)
+                    card_draw.set_volume(click_volume)
+                    cannot_bet.set_volume(click_volume)
                 elif exit_button.rect.collidepoint(event.pos):
                     bgm.stop()
                     if check_os == True :
@@ -350,6 +383,9 @@ def pause(screen, screen_width, screen_height):
                     save_config()
                     start_color_weakness_value = False
                     
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    bool = False
         pygame.display.flip()
 
 
@@ -449,7 +485,7 @@ def createCards(screen, card_lst, game, rect, page, start_color_weakness_value):
         if len(card_lst) > p + i:
             pos_o = (pos_x + size_x * i, pos_y)
             size_o = (size_x, size_y)
-            if card_lst[i].canUse(game):
+            if card_lst[p+i].canUse(game):
                 pos_o = (pos_o[0], rect[1])
             temp.append(createOneCard(card_lst[p + i], pos_o, size_o, start_color_weakness_value))
 
