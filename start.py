@@ -1,4 +1,5 @@
 import pygame
+import os
 from uno_Player import *
 from unoCore import Game
 from uno_Card import *
@@ -6,6 +7,7 @@ from uno_Pile import *
 from uno_Const import *
 from main import init_bg
 from view import init_view
+from text import Text
 from button import Button
 
 
@@ -99,7 +101,8 @@ def start(screen, screen_width, screen_height, num, name):
                         
                 if dbtn.rect.collidepoint(event.pos): # 드로우 버튼
                     if actlist['drawBtn'] == True: # actList가 true인 경우에만 함수 실행
-                        g.eventDrawBtn()
+                        winner_screen(screen,screen_width,screen_height, 'sterafkl')
+                        #g.eventDrawBtn()
                     
                 if ubtn.rect.collidepoint(event.pos): # 우노 버튼
                     if actlist['unoBtn'] == True: # actList가 true인 경우에만 함수 실행
@@ -108,12 +111,11 @@ def start(screen, screen_width, screen_height, num, name):
         pygame.display.flip()
         
         if g.winner != None:
-            winner_screen()
+            winner_screen(screen,screen_width,screen_height, g.winner.playerName)
         
         clock.tick(60)
 
 def winner_screen(screen, screen_width, screen_height, winner) :
-    from main_screen import main_screen
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
     screen.fill("black")
@@ -127,14 +129,18 @@ def winner_screen(screen, screen_width, screen_height, winner) :
     x_pos = screen_width / 2 - button_width / 2
     y_pos = screen_height / 2 - button_height / 2
     
-    font = pygame.font.Font(None, screen_height/5)
-    winnername_text = font.render(winner.playerName, True, (0, 0, 0))
-    screen.blit(winnername_text + 'is Winner!', (screen.get_rect().centerx, screen.get_rect().centery))
+    
     play_button = Button(image=pygame.image.load("play_button.png"),
                              pos=(x_pos, y_pos + 200),
                              size=(button_width, button_height))
-    
-    init_view(screen, [play_button, winnername_text])
+    winnername_text = Text(text_input = winner + ' is winner!',
+                      font = None,
+                      color = (0, 0, 0),
+                      pos = (screen.get_rect().centerx, screen.get_rect().top + 100),
+                      size = screen_height//5,
+                      screen=screen)
+    winnername_text.init_text()
+    init_view(screen, [play_button])
     
     while True:
         for event in pygame.event.get():
@@ -143,6 +149,10 @@ def winner_screen(screen, screen_width, screen_height, winner) :
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.rect.collidepoint(event.pos):
                     print("game start")
+                    file_path = os.getcwd()
+                    dir_path = os.path.dirname(file_path)
+                    os.chdir(dir_path)
+                    from main_screen import main_screen
                     main_screen()
         pygame.display.flip()
 
