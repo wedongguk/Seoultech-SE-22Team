@@ -11,7 +11,6 @@ from text import Text
 from button import Button
 
 
-
 def start(screen, screen_width, screen_height, num, name):
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
@@ -30,29 +29,65 @@ def start(screen, screen_width, screen_height, num, name):
     screen = pygame.display.set_mode(screen_size)
 
     g.ready(screen_size)
+    
+    playerCardPage = 0
 
     clock = pygame.time.Clock()
     while True:
+        
+        ##### 화면 초기화 #####
         screen.fill((0, 0, 0))
         
         user_rect = (0, screen_height*3/5 ,screen_width*3/5, screen_height*2/5)
-        playerArea = pygame.draw.rect(screen, (120,120,120), user_rect)
+        pygame.draw.rect(screen, (120,120,120), user_rect)
+        
+        user_rect_u = (user_rect[0], user_rect[1] ,user_rect[2], user_rect[3]/2)
+        user_rect_d = (user_rect[0], user_rect[1]+user_rect_u[3] ,user_rect[2], user_rect[3]/2)
+        pygame.draw.rect(screen, (120,200,100),  user_rect_u)
+        
+        user_lBtn_rect = (user_rect_d[0], user_rect_d[1] ,user_rect_d[2]/10, user_rect_d[3])
+        user_cardZone_rect = (user_lBtn_rect[0]+user_lBtn_rect[2], user_rect_d[1] ,user_rect_d[2]*8/10, user_rect_d[3])
+        user_rBtn_rect = (user_cardZone_rect[0]+user_cardZone_rect[2], user_rect_d[1] ,user_rect_d[2]/10, user_rect_d[3])
+        
+        pygame.draw.rect(screen, (0,0,255),  user_lBtn_rect)
+        pygame.draw.rect(screen, (0,170,255),  user_cardZone_rect)
+        pygame.draw.rect(screen, (0,0,255),  user_rBtn_rect)
         
         bot_rect = (screen_width*3/5, 0 ,screen_width*2/5, screen_height)
-        playerArea = pygame.draw.rect(screen, (120,120,0), bot_rect)
+        pygame.draw.rect(screen, (120,120,0), bot_rect)
         
         board_rect = (0, 0 ,screen_width*3/5, screen_height*3/5)
-        playerArea = pygame.draw.rect(screen, (25,150,75), board_rect)
+        pygame.draw.rect(screen, (25,150,75), board_rect)
+        
+        ##### 화면 초기화 #####
         
         
-        for i in range(g.playerList.size()):
-            playerSlot(screen, i, g.playerList.idxPlayer(i), bot_rect)
         
-
-        hand = g.userHand()  # 유저 핸드 부분
-        userH = createCards(hand, user_rect)
-        init_view(screen, userH)
-
+        ##### slot_Area #####
+        
+        pSlotList = []
+        
+        for i in range(g.playerList.size()): # player Slot
+            ps = playerSlot(screen, i, g.playerList.idxPlayer(i), bot_rect)
+            pSlotList.append(ps)
+    
+        turnIdx = g.playerList.turnIdx
+        turnArrow(screen, pSlotList[turnIdx], g.playerList.direction) # 턴 방향 표시
+        
+        ##### slot_Area #####
+        
+        
+        
+        ##### user_Area #####
+    
+        userH = createCards(screen, g.userHand(), g ,user_cardZone_rect, playerCardPage) # 유저 핸드
+        pageBtn = cardPageBtn(screen, user_lBtn_rect, user_rBtn_rect) # 핸드 넘기는 버튼
+        
+        ##### user_Area #####
+        
+        
+        
+        ##### board_Area #####
         
         openCardIndicator(screen, g, board_rect) # openCard
         createIndicator(screen, g.openCard.cardList[-1], board_rect) # indicator
@@ -72,7 +107,7 @@ def start(screen, screen_width, screen_height, num, name):
         pygame.draw.rect(screen, (0, 255, 0), button_rect)
         screen.blit(timer_text, timer_rect)
         g.update()
-        # botHand(screen, screen_size, pc1)
+        
 
         cbtn = createColorBtn(board_rect)
         
@@ -82,31 +117,41 @@ def start(screen, screen_width, screen_height, num, name):
         # numberChangebtn
         if actlist['numberBtn'] == True:
             pass
+        
+        ##### board_Area #####
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                quit()
+                pygame.quit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 for i in range(0, len(userH)):
                     if userH[i].rect.collidepoint(event.pos): # 카드 버튼
-                        played = g.eventCardBtn(i)
+                        played = g.eventCardBtn(playerCardPage*8+i)
                         if played == True:
                             pass ## 카드 냈을 때 소리
                         else:
                             pass ## 카드 못냈을 때 소리
+                
+                if pageBtn[0].rect.collidepoint(event.pos): # 페이지-1
+                    playerCardPage = cardPageUpDown(g.userHand(), playerCardPage, 1)
+                    
+                if pageBtn[1].rect.collidepoint(event.pos): # 페이지+1
+                    playerCardPage = cardPageUpDown(g.userHand(), playerCardPage, 0)
+                    
             
-                for i in range(0, len(cbtn)): # 색깔 바꾸는 버
+                for i in range(0, len(cbtn)): # 색깔 바꾸는 버튼
                     if cbtn[i].rect.collidepoint(event.pos):
                         g.eventColorBtn(i)
                         
                 if dbtn.rect.collidepoint(event.pos): # 드로우 버튼
                     if actlist['drawBtn'] == True: # actList가 true인 경우에만 함수 실행
-                        winner_screen(screen,screen_width,screen_height, 'sterafkl')
-                        #g.eventDrawBtn()
+                        g.eventDrawBtn()
                     
                 if ubtn.rect.collidepoint(event.pos): # 우노 버튼
                     if actlist['unoBtn'] == True: # actList가 true인 경우에만 함수 실행
                         g.eventUnoBtn()
+                        
+            
                     
         pygame.display.flip()
         
@@ -115,6 +160,7 @@ def start(screen, screen_width, screen_height, num, name):
         
         clock.tick(60)
 
+##### winner_sreen #####
 def winner_screen(screen, screen_width, screen_height, winner) :
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
@@ -155,7 +201,8 @@ def winner_screen(screen, screen_width, screen_height, winner) :
                     from main_screen import main_screen
                     main_screen()
         pygame.display.flip()
-
+        
+##### winner_sreen #####
 
 
 def createOneCard(card_o, pos_o, size_o):
@@ -173,22 +220,6 @@ def createBackCard(pos_o, size_o):
 ##### card generator #####
 
 
-def createCards(card_lst, rect):
-    temp = []
-    cnt = 0
-    cnt_x = 0
-    cnt_y = 0
-    for i in range(0, len(card_lst)):
-        x = rect[2]/8*0.8
-        y = x*1.2
-        if ((rect[0] + (x*1.1)*(i - cnt_x + 1)) >= rect[0]+rect[2]) :
-            cnt_x = cnt
-            cnt_y = cnt_y + 1
-        c_pos = ((rect[0] + (x*1.1)*(i - cnt_x)), (rect[1] + (y*1.1)*(cnt_y)))
-        cnt = cnt + 1
-        temp.append(createOneCard(card_lst[i], c_pos, (x, y)))
-    return temp
-
 def createBackCards(card_lst, rect):
     temp = []
     for i in range(0, len(card_lst)):
@@ -200,6 +231,80 @@ def createBackCards(card_lst, rect):
 
 ##### card generator #####
 
+
+
+##### user space #####
+
+def createCards(screen, card_lst, game ,rect, page):
+    temp = []
+    
+    size_x = rect[2]/8
+    size_y = size_x * 1.2
+    
+    pos_x = rect[0]
+    pos_y = rect[1]+size_y/4
+    
+    p = page * 8
+    
+    for i in range(0, 8):
+        if len(card_lst) > p+i:
+            pos_o = (pos_x+ size_x*i, pos_y)
+            size_o = (size_x, size_y)
+            if card_lst[i].canUse(game):
+                pos_o = (pos_o[0], rect[1])
+            temp.append(createOneCard(card_lst[p+i], pos_o, size_o))
+                        
+    init_view(screen, temp)
+    return temp
+
+def cardPageBtn(screen, lrect, rrect):
+    
+    centerL = rectCenter(lrect)
+    centerR = rectCenter(rrect)
+    
+    size_lx = lrect[2]
+    size_ly = lrect[2]
+    
+    size_rx = rrect[2]
+    size_ry = rrect[2]
+    
+    pos_lx = lrect[0]
+    pos_ly = centerL[1] - lrect[2]/2
+    
+    pos_rx = rrect[0]
+    pos_ry = centerR[1] - rrect[2]/2
+    
+    
+    rectL = (pos_lx, pos_ly, size_lx, size_ly)
+    rectR = (pos_rx, pos_ry, size_rx, size_ry)
+    
+    pygame.draw.rect(screen, (255,255,255), rectL)
+    pygame.draw.rect(screen, (255,255,255), rectR)
+    
+    lbtn = Button(image=pygame.image.load(f"leftArrow.png"), pos=(rectL[0], rectL[1]), size=(rectL[2], rectL[3]))
+    rbtn = Button(image=pygame.image.load(f"rightArrow.png"), pos=(rectR[0], rectR[1]), size=(rectR[2], rectR[3]))
+    init_view(screen, [lbtn, rbtn])
+    
+    return [lbtn, rbtn]
+
+def cardPageUpDown(card_lst, nowPage, upDown):
+    
+    if upDown == 0: # right
+        if len(card_lst) - (nowPage+1)*8 > 0:
+            return nowPage + 1
+        else:
+            print('페이지를 증가시킬 수 없다.')
+            return nowPage
+    else: # left
+        if nowPage != 0:
+            return nowPage - 1
+        else:  
+            print('페이지를 감소 시킬 수 없다.')
+            return nowPage
+
+    
+
+##### user space #####
 
 
 ##### board space #####
@@ -278,11 +383,11 @@ def playerSlotBG(screen, offset, player, rect):
     return bgArea
 
 def nameSlot(screen, rect, player):
-    pos_x = rect[0]
-    pos_y = rect[1]
-    
     size_x = round(rect[2]/5)
     size_y = round(rect[3]*1/5)
+    
+    pos_x = rect[0]
+    pos_y = rect[1] + rect[3] - size_y
     
     nameArea = (pos_x, pos_y, size_x, size_y)
     pygame.draw.rect(screen, (255,255,255), nameArea)
@@ -295,28 +400,43 @@ def nameSlot(screen, rect, player):
     screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
     
     return nameArea
+
+def effectSlot(screen, rect, player):
+    pos_x = rect[0]
+    pos_y = rect[1]
+    
+    size_x = round(rect[2]/5)
+    size_y = round(rect[3]*4/5)
+    
+    effectArea = (pos_x, pos_y, size_x, size_y)
+    pygame.draw.rect(screen, (200,200,200), effectArea)
+    
+    return effectArea
     
 
 def playerSlot(screen ,idx, player, rect):
     
     slotBg = playerSlotBG(screen, idx, player, rect)
     slotName = nameSlot(screen, slotBg, player)
+    slotEffect = effectSlot(screen, slotBg, player)
     
-    card_anchor = (slotName[0],slotName[1]+slotName[3]*1.5, slotBg[2],slotBg[3])
-    if len(player.handCardList) > 9:
-        
+    card_anchor = (slotEffect[0]+slotEffect[2],slotEffect[1]+slotEffect[3]//3, slotBg[2],slotBg[3])
+    
+    numOfCard = len(player.handCardList)
+    capacity = int((slotBg[2] - slotEffect[2]) / (slotBg[2]/8*0.8))-1
+    if numOfCard > capacity:
         temp = []
-        for i in range(9):
+        for i in range(capacity):
             temp.append(Card(0, 0, NO_EFFECT))
         card_s = createBackCards(temp, card_anchor)
         init_view(screen, card_s)
         
-        card_9 = card_s[8].rect
-        font_size = card_9[3] * 2 // 3 
+        card_c = card_s[capacity-1].rect
+        font_size = card_c[3] * 2 // 3 
         font = pygame.font.Font(None, font_size)
         
-        center = rectCenter(card_9)
-        text = font.render('+'+str(len(player.handCardList)-9), True, (255, 255, 255))
+        center = rectCenter(card_c)
+        text = font.render('+'+str(numOfCard-capacity+1), True, (255, 255, 255))
         screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
         
         
@@ -324,7 +444,38 @@ def playerSlot(screen ,idx, player, rect):
         card_s = createBackCards(player.handCardList, card_anchor)
         init_view(screen, card_s)
     
+    return slotBg
+    
 ##### bot space #####
+
+##### near bot space #####
+
+
+def turnArrow(screen, rect, direction):
+    
+    size_x = round(rect[3]/2)
+    size_y = size_x
+    
+    
+    pos_x = rect[0] - size_x
+    pos_y = rect[1]
+    img_o = ''
+    
+    if direction == 1:
+        img_o = f"downArrow.png"
+        pos_y = rect[1] + size_y
+    else:
+        img_o = f"upArrow.png"
+        
+    size_o = (size_x, size_y)
+    pos_o = (pos_x, pos_y)
+    
+    btn = Button(image=pygame.image.load(img_o), pos=pos_o, size=size_o)
+    init_view(screen, [btn])
+
+
+
+##### near bot space #####
 
 def createColorBtn(rect):
     lst = []
@@ -363,4 +514,7 @@ def rectCenter(rect):
     y2 = rect[1] + rect[3]
     
     return ((x1+x2)/2, (y1+y2)/2)
+    
+    
+    
     
