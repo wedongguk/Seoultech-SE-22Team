@@ -15,14 +15,26 @@ click_volume = 1
 
 check_os = True
 
+start_color_weakness_value = False
+
+config = configparser.ConfigParser()
+config.read('config.ini', encoding='utf-8')
+
+
+def save_config():
+    with open('config.ini', 'w', encoding='utf-8') as config_file:
+        config.write(config_file)
+
+
+
 def start(screen, screen_width, screen_height, num, name, color_weakness_value):
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
-
     x_pos = screen_width / 2
     y_pos = screen_height / 2
 
     screen.fill((0, 0, 0))
+    screen = pygame.display.set_mode(screen_size)
 
     user1 = Player(name[0], True)
     gamePlayerList = [user1]
@@ -30,10 +42,9 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
         gamePlayerList.append(Player(name[i], False))
     g = Game(gamePlayerList)
 
-    screen = pygame.display.set_mode(screen_size)
 
     g.ready(screen_size)
-    
+
     playerCardPage = 0
     nowCardIdx = 0
 
@@ -90,7 +101,9 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
 
         ##### user_Area #####
 
+
         userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, nowCardIdx ,color_weakness_value)  # 유저 핸드
+
         pageBtn = cardPageBtn(screen, user_lBtn_rect, user_rBtn_rect)  # 핸드 넘기는 버튼
 
         ##### user_Area #####
@@ -106,11 +119,10 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
 
         dbtn = createDrawBtn(screen, g, board_rect)  # draw 버튼
         ubtn = createUnoBtn(screen, g, board_rect)  # uno 버튼
-        
+
         timerInd(screen, board_rect, g.timer.time)
         eTimerInd(screen, board_rect, g.effectTimer.time)
-        
-        
+
         g.update()
 
         # botHand(screen, screen_size, pc1)
@@ -161,8 +173,16 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
                     if actlist['unoBtn']:  # actList가 true인 경우에만 함수 실행
                         g.eventUnoBtn()
                 elif pause_button.rect.collidepoint(event.pos):
+                    resolution = pause(screen, 1280, 720, screen_width, screen_height)
+                    screen_width = resolution[0]
+                    screen_height = resolution[1]
+                    pygame.display.set_mode((screen_width, screen_height))
+                    userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage,
+                                        start_color_weakness_value)  # 유저 핸드
+                    openCardIndicator(screen, g, board_rect, start_color_weakness_value)  # openCard
+                    createIndicator(screen, g.openCard.cardList[-1], board_rect,
+                                    start_color_weakness_value)  # indicator
                     pause(screen, screen_width, screen_height)
-                    
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pause(screen, screen_width, screen_height)
@@ -199,11 +219,13 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
         clock.tick(60)
 
 
-def pause(screen, screen_width, screen_height):
+def pause(screen, screen_width, screen_height, width, height):
     global bgm_volume
     global click_volume
     button_width = 220
     button_height = 50
+    pygame.display.set_mode((screen_width, screen_height))
+    resolution = int(config['system']['SCREEN_WIDTH'])
 
     x_pos = screen_width / 2 - button_width / 2
     y_pos = screen_height / 2 - button_height / 2
@@ -262,14 +284,14 @@ def pause(screen, screen_width, screen_height):
     bgm_volume_set_text = Text(text_input="Set BGM volume",
                                font="notosanscjkkr",
                                color=(0, 0, 0),
-                               pos=(screen.get_rect().centerx-350, screen.get_rect().top + 50),
+                               pos=(screen.get_rect().centerx - 350, screen.get_rect().top + 50),
                                size=30,
                                screen=screen)
 
     click_volume_set_text = Text(text_input="Set click volume",
                                  font="notosanscjkkr",
                                  color=(0, 0, 0),
-                                 pos=(screen.get_rect().centerx+370, screen.get_rect().top + 50),
+                                 pos=(screen.get_rect().centerx + 370, screen.get_rect().top + 50),
                                  size=30,
                                  screen=screen)
 
@@ -287,23 +309,29 @@ def pause(screen, screen_width, screen_height):
                            size=30,
                            screen=screen)
 
-    if screen_width == 1920:
+    if start_color_weakness_value:
+        on_button.image = pygame.image.load("on_checked.png")
+        off_button.image = pygame.image.load("off.png")
+    else:
+        on_button.image = pygame.image.load("on.png")
+        off_button.image = pygame.image.load("off_checked.png")
+    if width == 1920:
         button_1920.image = pygame.image.load("1920_checked.png")
         button_1280.image = pygame.image.load("1280_button.png")
         button_960.image = pygame.image.load("960_button.png")
-    elif screen_width == 1280:
+    elif width == 1280:
         button_1920.image = pygame.image.load("1920_button.png")
         button_1280.image = pygame.image.load("1280_checked.png")
         button_960.image = pygame.image.load("960_button.png")
-    elif screen_width == 960:
+    elif width == 960:
         button_1920.image = pygame.image.load("1920_button.png")
         button_1280.image = pygame.image.load("1280_button.png")
         button_960.image = pygame.image.load("960_checked.png")
 
     bool = True
+    screen.fill("black")
+    options_bg = init_bg("options_screen.png", 1280, 720)
     while bool:
-        screen.fill("black")
-        options_bg = init_bg("options_screen.png", screen_width, screen_height)
         screen.blit(options_bg, (0, 0))
         init_view(screen, [back_button, exit_button,
                            master_volume_up_button, master_volume_down_button,
@@ -322,7 +350,12 @@ def pause(screen, screen_width, screen_height):
                 quit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.rect.collidepoint(event.pos):
-                    bool = False
+                    if resolution == 1920:
+                        return [1920, 1080]
+                    elif resolution == 1280:
+                        return [1280, 720]
+                    elif resolution == 960:
+                        return [960, 540]
                 elif master_volume_up_button.rect.collidepoint(event.pos):
                     bgm_volume += 0.1
                     click_volume += 0.1
@@ -355,7 +388,7 @@ def pause(screen, screen_width, screen_height):
                     cannot_bet.set_volume(click_volume)
                 elif exit_button.rect.collidepoint(event.pos):
                     bgm.stop()
-                    if check_os == True :
+                    if check_os == True:
                         file_path = os.getcwd()
                         dir_path = os.path.dirname(file_path)
                         os.chdir(dir_path)
@@ -363,17 +396,33 @@ def pause(screen, screen_width, screen_height):
                     from main_screen import main_screen
                     main_screen()
                 elif button_1920.rect.collidepoint(event.pos):
+                    resolution = 1920
                     button_1920.image = pygame.image.load("1920_checked.png")
                     button_1280.image = pygame.image.load("1280_button.png")
                     button_960.image = pygame.image.load("960_button.png")
                 elif button_1280.rect.collidepoint(event.pos):
+                    resolution = 1280
                     button_1920.image = pygame.image.load("1920_button.png")
                     button_1280.image = pygame.image.load("1280_checked.png")
                     button_960.image = pygame.image.load("960_button.png")
                 elif button_960.rect.collidepoint(event.pos):
+                    resolution = 960
                     button_1920.image = pygame.image.load("1920_button.png")
                     button_1280.image = pygame.image.load("1280_button.png")
                     button_960.image = pygame.image.load("960_checked.png")
+                elif on_button.rect.collidepoint(event.pos):
+                    print("on")
+                    on_button.image = pygame.image.load("on_checked.png")
+                    off_button.image = pygame.image.load("off.png")
+                    config['system']['COLOR_WEAKNESS_MODE'] = "True"
+                    save_config()
+                    start_color_weakness_value = True
+                elif off_button.rect.collidepoint(event.pos):
+                    on_button.image = pygame.image.load("on.png")
+                    off_button.image = pygame.image.load("off_checked.png")
+                    config['system']['COLOR_WEAKNESS_MODE'] = "False"
+                    save_config()
+                    start_color_weakness_value = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     bool = False
@@ -381,7 +430,7 @@ def pause(screen, screen_width, screen_height):
 
 
 ##### winner_sreen #####
-def winner_screen(screen, screen_width, screen_height, winner) :
+def winner_screen(screen, screen_width, screen_height, winner):
     global check_os
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
@@ -415,7 +464,7 @@ def winner_screen(screen, screen_width, screen_height, winner) :
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.rect.collidepoint(event.pos):
                     print("game start")
-                    if check_os == True :
+                    if check_os == True:
                         file_path = os.getcwd()
                         dir_path = os.path.dirname(file_path)
                         os.chdir(dir_path)
@@ -475,7 +524,7 @@ def createCards(screen, card_lst, game, rect, page, nowCard ,color_weakness_valu
         if len(card_lst) > p + i:
             pos_o = (pos_x + size_x * i, pos_y)
             size_o = (size_x, size_y)
-            if card_lst[p+i].canUse(game):
+            if card_lst[p + i].canUse(game):
                 pos_o = (pos_o[0], rect[1])
             temp.append(createOneCard(card_lst[p + i], pos_o, size_o, color_weakness_value))
             if i+p == nowCard:
@@ -619,44 +668,46 @@ def createUnoBtn(screen, game, rect):
 
 
 def timerInd(screen, rect, time):
-    size_x = round(rect[2]/20)
+    size_x = round(rect[2] / 20)
     size_y = size_x
-    
+
     center = rectCenter(rect)
-    pos_x = center[0]-size_x*1.2
-    pos_y = (rect[1]+center[1])/2
-    
+    pos_x = center[0] - size_x * 1.2
+    pos_y = (rect[1] + center[1]) / 2
+
     Area = (pos_x, pos_y, size_x, size_y)
     pygame.draw.rect(screen, (255, 255, 255), Area)
 
     font_size = size_y
     font = pygame.font.Font(None, font_size)
-    
+
     center = rectCenter(Area)
-    text = font.render(str(time//60), True, (0, 0, 0))
+    text = font.render(str(time // 60), True, (0, 0, 0))
     screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
 
     return Area
+
 
 def eTimerInd(screen, rect, time):
-    size_x = round(rect[2]/20)
+    size_x = round(rect[2] / 20)
     size_y = size_x
-    
+
     center = rectCenter(rect)
     pos_x = center[0]
-    pos_y = (rect[1]+center[1])/2
-    
+    pos_y = (rect[1] + center[1]) / 2
+
     Area = (pos_x, pos_y, size_x, size_y)
     pygame.draw.rect(screen, (255, 255, 255), Area)
 
     font_size = size_y
     font = pygame.font.Font(None, font_size)
-    
+
     center = rectCenter(Area)
-    text = font.render(str(time//60), True, (0, 0, 0))
+    text = font.render(str(time // 60), True, (0, 0, 0))
     screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
 
     return Area
+
 
 ##### board space #####
 
