@@ -9,7 +9,6 @@ from start import start
 from view import init_view
 from text import Text
 import configparser
-from checkbox import Checkbox
 
 os.chdir(os.getcwd() + "/img")
 
@@ -74,6 +73,13 @@ def play():
                                pos=(x_pos, y_pos + 50),
                                size=(button_width, button_height))
 
+    title_text = Text(text_input="Select game mode",
+                      font="notosanscjkkr",
+                      color=(0, 0, 0),
+                      pos=(screen.get_rect().centerx, screen.get_rect().top + 100),
+                      size=50,
+                      screen=screen)
+    title_text.init_text()
     init_view(screen, [back_button, default_mode_button, story_mode_button])
 
     while True:
@@ -98,182 +104,143 @@ def loby():
     back_button = Button(image=pygame.image.load("back_button.png"),
                          pos=(30, 30),
                          size=(50, 50))
-    next_button = Button(image=pygame.image.load("next_button.png"),
-                         pos=(x_pos, y_pos + 260),
-                         size=(button_width, button_height))
+    start_button = Button(image=pygame.image.load("start_button.png"),
+                          pos=(x_pos, y_pos + 260),
+                          size=(button_width, button_height))
 
     AI_1 = Button(image=pygame.image.load("1_checked.png"),
-                  pos=(x_pos - 360, y_pos - 30),
+                  pos=(x_pos - 360, y_pos - 120),
                   size=(100, 100))
-    AI_2 = Button(image=pygame.image.load("2.png"),
-                  pos=(x_pos - 160, y_pos - 30),
+    AI_2 = Button(image=pygame.image.load("empty.png"),
+                  pos=(x_pos - 160, y_pos - 120),
                   size=(100, 100))
-    AI_3 = Button(image=pygame.image.load("3.png"),
-                  pos=(x_pos + 40, y_pos - 30),
+    AI_3 = Button(image=pygame.image.load("empty.png"),
+                  pos=(x_pos + 40, y_pos - 120),
                   size=(100, 100))
-    AI_4 = Button(image=pygame.image.load("4.png"),
-                  pos=(x_pos + 240, y_pos - 30),
+    AI_4 = Button(image=pygame.image.load("empty.png"),
+                  pos=(x_pos + 240, y_pos - 120),
                   size=(100, 100))
-    AI_5 = Button(image=pygame.image.load("5.png"),
-                  pos=(x_pos + 440, y_pos - 30),
+    AI_5 = Button(image=pygame.image.load("empty.png"),
+                  pos=(x_pos + 440, y_pos - 120),
                   size=(100, 100))
-    AI_num = 1
 
-    title_text = Text(text_input="Select number of computer that will play with you",
+    title_text = Text(text_input="Set computer that will play with you",
                       font="notosanscjkkr",
                       color=(0, 0, 0),
                       pos=(screen.get_rect().centerx, screen.get_rect().top + 100),
                       size=50,
                       screen=screen)
+    subtitle_text = Text(text_input="Set your name",
+                         font="notosanscjkkr",
+                         color=(0, 0, 0),
+                         pos=(screen.get_rect().centerx, screen.get_rect().top + 450),
+                         size=50,
+                         screen=screen)
     title_text.init_text()
+    subtitle_text.init_text()
 
-    init_view(screen, [back_button, next_button, AI_1, AI_2, AI_3, AI_4, AI_5])
+    input_boxes = [InputBox(screen.get_rect().left + 520, 500, 80, 32),
+                   InputBox(screen.get_rect().left + 120, 350, 80, 32),
+                   InputBox(screen.get_rect().left + 320, 350, 80, 32),
+                   InputBox(screen.get_rect().left + 520, 350, 80, 32),
+                   InputBox(screen.get_rect().left + 720, 350, 80, 32),
+                   InputBox(screen.get_rect().left + 920, 350, 80, 32)]
+
+    init_view(screen, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
+    bool_list = [True, False, False, False, False]
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if next_button.rect.collidepoint(event.pos):
-                    print(AI_num)
-                    set_player_name(AI_num)
+                if start_button.rect.collidepoint(event.pos):
+                    AI_num = 0
+                    name_list = []
+                    temp = 1
+                    if input_boxes[0].text == '':
+                        name_list.append("USER")
+                    else:
+                        name_list.append(input_boxes[0].text)
+                    for i in bool_list:
+                        if i:
+                            AI_num += 1
+                            if input_boxes[temp].text == '':
+                                name_list.append("Computer" + str(temp))
+                            else:
+                                name_list.append(input_boxes[temp].text)
+                        temp += 1
+                    start(screen, screen_width, screen_height, AI_num, name_list)
                 elif back_button.rect.collidepoint(event.pos):
                     play()
-                elif AI_1.rect.collidepoint(event.pos):
-                    AI_1.image = pygame.image.load("1_checked.png")
-                    AI_2.image = pygame.image.load("2.png")
-                    AI_3.image = pygame.image.load("3.png")
-                    AI_4.image = pygame.image.load("4.png")
-                    AI_5.image = pygame.image.load("5.png")
-                    init_view(screen, [back_button, next_button, AI_1, AI_2, AI_3, AI_4, AI_5])
-                    AI_num = 1
                 elif AI_2.rect.collidepoint(event.pos):
-                    AI_1.image = pygame.image.load("1.png")
-                    AI_2.image = pygame.image.load("2_checked.png")
-                    AI_3.image = pygame.image.load("3.png")
-                    AI_4.image = pygame.image.load("4.png")
-                    AI_5.image = pygame.image.load("5.png")
-                    init_view(screen, [back_button, next_button, AI_1, AI_2, AI_3, AI_4, AI_5])
-                    AI_num = 2
+                    if bool_list[1]:
+                        AI_2.image = pygame.image.load("empty.png")
+                        bool_list[1] = False
+                    else:
+                        AI_2.image = pygame.image.load("2_checked.png")
+                        bool_list[1] = True
+                    init_view(screen, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
                 elif AI_3.rect.collidepoint(event.pos):
-                    AI_1.image = pygame.image.load("1.png")
-                    AI_2.image = pygame.image.load("2.png")
-                    AI_3.image = pygame.image.load("3_checked.png")
-                    AI_4.image = pygame.image.load("4.png")
-                    AI_5.image = pygame.image.load("5.png")
-                    init_view(screen, [back_button, next_button, AI_1, AI_2, AI_3, AI_4, AI_5])
-                    AI_num = 3
+                    if bool_list[2]:
+                        AI_3.image = pygame.image.load("empty.png")
+                        bool_list[2] = False
+                    else:
+                        AI_3.image = pygame.image.load("3_checked.png")
+                        bool_list[2] = True
+                    init_view(screen, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
                 elif AI_4.rect.collidepoint(event.pos):
-                    AI_1.image = pygame.image.load("1.png")
-                    AI_2.image = pygame.image.load("2.png")
-                    AI_3.image = pygame.image.load("3.png")
-                    AI_4.image = pygame.image.load("4_checked.png")
-                    AI_5.image = pygame.image.load("5.png")
-                    init_view(screen, [back_button, next_button, AI_1, AI_2, AI_3, AI_4, AI_5])
-                    AI_num = 4
+                    if bool_list[3]:
+                        AI_4.image = pygame.image.load("empty.png")
+                        bool_list[3] = False
+                    else:
+                        AI_4.image = pygame.image.load("4_checked.png")
+                        bool_list[3] = True
+                    init_view(screen, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
                 elif AI_5.rect.collidepoint(event.pos):
-                    AI_1.image = pygame.image.load("1.png")
-                    AI_2.image = pygame.image.load("2.png")
-                    AI_3.image = pygame.image.load("3.png")
-                    AI_4.image = pygame.image.load("4.png")
-                    AI_5.image = pygame.image.load("5_checked.png")
-                    init_view(screen, [back_button, next_button, AI_1, AI_2, AI_3, AI_4, AI_5])
-                    AI_num = 5
-        pygame.display.flip()
-
-
-def set_player_name(player_num):
-    screen.fill("black")
-    play_bg = init_bg("options_screen.png", screen_width, screen_height)
-    screen.blit(play_bg, (0, 0))
-    back_button = Button(image=pygame.image.load("back_button.png"),
-                         pos=(30, 30),
-                         size=(50, 50))
-    start_button = Button(image=pygame.image.load("start_button.png"),
-                          pos=(x_pos, y_pos + 260),
-                          size=(button_width, button_height))
-
-    input_boxes = []
-    clock = pygame.time.Clock()
-
-    for i in range(1, player_num + 2):
-        if i == 1:
-            input_boxes.append(InputBox(500, i * 120, 140, 32))
-        else:
-            input_boxes.append(InputBox(500, i * 80, 140, 32))
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if back_button.rect.collidepoint(event.pos):
-                    loby()
-                elif start_button.rect.collidepoint(event.pos):
-                    name_list = []
-                    for box in input_boxes:
-                        name_list.append(box.text)
-                    start(screen, screen_width, screen_height, player_num, name_list)
+                    if bool_list[4]:
+                        AI_5.image = pygame.image.load("empty.png")
+                        bool_list[4] = False
+                    else:
+                        AI_5.image = pygame.image.load("5_checked.png")
+                        bool_list[4] = True
+                    init_view(screen, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
             for box in input_boxes:
                 box.handle_event(event)
         for box in input_boxes:
             box.update()
-
         screen.blit(play_bg, (0, 0))
-        init_view(screen, [back_button, start_button])
-        title_text = Text(text_input="SET NAME",
-                          font="notosanscjkkr",
-                          color=(0, 0, 0),
-                          pos=(screen.get_rect().centerx, screen.get_rect().top + 100),
-                          size=50,
-                          screen=screen)
+        init_view(screen, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
         title_text.init_text()
-        i = 0
+        subtitle_text.init_text()
         for box in input_boxes:
             box.draw(screen)
-            if i == 0:
-                text = Text(text_input="USER" + " : ",
-                            font="notosanscjkkr",
-                            color=(0, 0, 0),
-                            pos=(430, ((i + 1) * 120) + 15),
-                            size=30,
-                            screen=screen)
-                text.init_text()
-            else:
-                text = Text(text_input="Computer" + str(i) + " : ",
-                            font="notosanscjkkr",
-                            color=(0, 0, 0),
-                            pos=(430, ((i + 1) * 80) + 15),
-                            size=30,
-                            screen=screen)
-                text.init_text()
-            i += 1
-
         pygame.display.flip()
-        clock.tick(30)
 
 
 def story_mode():
     screen.fill("white")
+    bg = init_bg("story_mode_map.png", screen_width, screen_height)
+    screen.blit(bg, (0, 0))
     back_button = Button(image=pygame.image.load("back_button.png"),
                          pos=(30, 30),
                          size=(50, 50))
 
     story_mode_1 = Button(image=pygame.image.load("story_mode_1.png"),
-                          pos=(screen.get_rect().centerx - 250, screen.get_rect().centery - 100),
-                          size=(150, 150))
+                          pos=(screen.get_rect().centerx - 420, screen.get_rect().centery - 200),
+                          size=(70, 70))
 
     story_mode_2 = Button(image=pygame.image.load("story_mode_2.png"),
-                          pos=(screen.get_rect().centerx, screen.get_rect().centery - 100),
-                          size=(150, 150))
+                          pos=(screen.get_rect().centerx - 400, screen.get_rect().centery + 100),
+                          size=(70, 70))
 
     story_mode_3 = Button(image=pygame.image.load("story_mode_3.png"),
-                          pos=(screen.get_rect().centerx - 250, screen.get_rect().centery + 150),
-                          size=(150, 150))
+                          pos=(screen.get_rect().centerx + 150, screen.get_rect().centery - 180),
+                          size=(70, 70))
 
     story_mode_4 = Button(image=pygame.image.load("story_mode_4.png"),
-                          pos=(screen.get_rect().centerx, screen.get_rect().centery + 150),
-                          size=(150, 150))
+                          pos=(screen.get_rect().centerx + 390, screen.get_rect().centery + 110),
+                          size=(70, 70))
 
     init_view(screen, [back_button, story_mode_1, story_mode_2, story_mode_3, story_mode_4])
 
