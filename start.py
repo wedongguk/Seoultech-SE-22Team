@@ -353,8 +353,6 @@ def pause(screen, screen_width, screen_height):
                         dir_path = os.path.dirname(file_path)
                         os.chdir(dir_path)
                         check_os = False
-                    else :
-                        check_os = True
                     from main_screen import main_screen
                     main_screen()
                 elif button_1920.rect.collidepoint(event.pos):
@@ -429,8 +427,6 @@ def winner_screen(screen, screen_width, screen_height, winner) :
                         dir_path = os.path.dirname(file_path)
                         os.chdir(dir_path)
                         check_os = False
-                    else :
-                        check_os = True
                     from main_screen import main_screen
                     main_screen()
         pygame.display.flip()
