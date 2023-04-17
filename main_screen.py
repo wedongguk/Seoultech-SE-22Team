@@ -172,7 +172,7 @@ def loby():
                             else:
                                 name_list.append(input_boxes[temp].text)
                         temp += 1
-                    start(screen, screen_width, screen_height, AI_num, name_list)
+                    start(screen, screen_width, screen_height, AI_num, name_list, color_weakness_value)
                 elif back_button.rect.collidepoint(event.pos):
                     play()
                 elif AI_2.rect.collidepoint(event.pos):
