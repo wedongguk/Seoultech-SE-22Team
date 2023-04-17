@@ -408,8 +408,8 @@ def options():
                 if back_button.rect.collidepoint(event.pos):
                     main_screen()
                 elif save_button.rect.collidepoint(event.pos):
-                    config['system']['SCREEN_WIDTH'] = width
-                    config['system']['SCREEN_HEIGHT'] = height
+                    config['system']['SCREEN_WIDTH'] = str(width)
+                    config['system']['SCREEN_HEIGHT'] = str(height)
                     save_config()
                     main_screen()
                 elif reset_button.rect.collidepoint(event.pos):
@@ -504,10 +504,8 @@ def quit():
 # 메인 루프
 def main_screen():
     main_bg = init_bg("start_screen.jpeg", 1280, 720)
-
     while True:
         screen.blit(main_bg, (0, 0))
-
         play_button = Button(image=pygame.image.load("play_button.png"),
                              pos=(x_pos, y_pos + 200),
                              size=(button_width, button_height))
