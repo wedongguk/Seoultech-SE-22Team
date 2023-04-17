@@ -13,6 +13,7 @@ from button import Button
 master_volume = 1
 click_volume = 1
 
+check_os = True
 
 def start(screen, screen_width, screen_height, num, name, color_weakness_value):
     screen_size = (screen_width, screen_height)
@@ -314,7 +315,8 @@ def pause(screen, screen_width, screen_height):
 
 
 ##### winner_sreen #####
-def winner_screen(screen, screen_width, screen_height, winner):
+def winner_screen(screen, screen_width, screen_height, winner) :
+    global check_os
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
     screen.fill("black")
@@ -347,9 +349,13 @@ def winner_screen(screen, screen_width, screen_height, winner):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.rect.collidepoint(event.pos):
                     print("game start")
-                    file_path = os.getcwd()
-                    dir_path = os.path.dirname(file_path)
-                    os.chdir(dir_path)
+                    if check_os == True :
+                        file_path = os.getcwd()
+                        dir_path = os.path.dirname(file_path)
+                        os.chdir(dir_path)
+                        check_os = False
+                    else :
+                        check_os = True
                     from main_screen import main_screen
                     main_screen()
         pygame.display.flip()
