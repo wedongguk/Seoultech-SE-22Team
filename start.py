@@ -243,8 +243,16 @@ def winner_screen(screen, screen_width, screen_height, winner) :
 ##### winner_sreen #####
 
 def createOneCard(card_o, pos_o, size_o):
+    file_path = os.getcwd()
+    dir_path = os.path.dirname(file_path)
+    os.chdir(dir_path)
+    from main_screen import color_weakness_value
+    os.chdir(os.getcwd() + "/img")
     c = card_o
-    c_img = f"images/" + c.imgName() + ".png"
+    if color_weakness_value == False :
+        c_img = f"images/" + c.imgName() + ".png"
+    elif color_weakness_value == True : 
+        c_img = f"blind_images/" + c.imgName() + ".png"   
     btn = Button(image=pygame.image.load(c_img), pos=pos_o, size=size_o)
     return btn
 
