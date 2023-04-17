@@ -175,6 +175,12 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
 
 def pause(screen, screen_width, screen_height):
     global master_volume
+    button_width = 220
+    button_height = 50
+
+    x_pos = screen_width / 2 - button_width / 2
+    y_pos = screen_height / 2 - button_height / 2
+
     back_button = Button(image=pygame.image.load("back_button.png"),
                          pos=(30, 30),
                          size=(50, 50))
@@ -184,12 +190,15 @@ def pause(screen, screen_width, screen_height):
     volume_down_button = Button(image=pygame.image.load("volume_down_button.png"),
                         pos=(screen.get_rect().centerx + 50, screen.get_rect().centery - 230),
                         size=(130, 60))
+    exit_button = Button(image=pygame.image.load("exit_button.png"),
+                         pos=(x_pos, y_pos + 320),
+                         size=(button_width, button_height))
     bool = True
     while bool:
         screen.fill("black")
         options_bg = init_bg("options_screen.png", screen_width, screen_height)
         screen.blit(options_bg, (0, 0))
-        init_view(screen, [back_button, volume_up_button, volume_down_button])
+        init_view(screen, [back_button, volume_up_button, volume_down_button, exit_button])
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -203,6 +212,13 @@ def pause(screen, screen_width, screen_height):
                 elif volume_down_button.rect.collidepoint(event.pos):
                     master_volume -= 0.1
                     bgm.set_volume(master_volume)
+                elif exit_button.rect.collidepoint(event.pos):
+                    bgm.stop()
+                    file_path = os.getcwd()
+                    dir_path = os.path.dirname(file_path)
+                    os.chdir(dir_path)
+                    from main_screen import main_screen
+                    main_screen()
         pygame.display.flip()
 
 ##### winner_sreen #####
