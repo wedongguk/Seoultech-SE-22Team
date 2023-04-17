@@ -43,7 +43,15 @@ class Player: # player 클래스 생성
         else:
             return 0
     
-     
+    def UnoAndWinnerChecker(self, game):
+        if len(self.handCardList) == 0: # 카드를 내서 0장이 되면 게임이 끝난다.
+            game.winner = self
+                        
+        if len(self.handCardList) == 1: # 카드를 내서 1장이 되면 우노 경쟁을 위한 처리를 시작한다.
+            game.unoCompeteTable()
+        
+        print(self.playerName + ": ", self.allHand())
+        print('topCard: '+game.openCard.cardList[-1].info())
         
 
     def allHand(self): # hand의 모든 카드에 대한 텍스트를 반환합니다.

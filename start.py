@@ -55,8 +55,11 @@ def start(screen, screen_width, screen_height, num, name):
         createIndicator(screen, g.openCard.cardList[-1], board_rect) # indicator
         createDeck(screen, g, board_rect) # deck
         
-        dbtn = createDrawBtn(screen, g, board_rect) # draw 버튼
+        actlist = g.actList()
+        # drawbtn
         
+        dbtn = createDrawBtn(screen, g, board_rect) # draw 버튼
+        ubtn = createUnoBtn(screen, g, board_rect) # uno 버튼
 
         TIMER_FONT = pygame.font.SysFont('Arial', 30)  # 타이머
         timer_text = TIMER_FONT.render(str(g.timer.time // 60 + 1), True, (255, 255, 255))
@@ -68,20 +71,8 @@ def start(screen, screen_width, screen_height, num, name):
         g.update()
         # botHand(screen, screen_size, pc1)
 
-        actlist = g.actList()
-        # drawbtn
-        
-        
-        
-        ubtn = createUnoBtn(board_rect)
         cbtn = createColorBtn(board_rect)
-       
         
-        if actlist['drawBtn'] == True:
-            init_view(screen, [dbtn])
-        # unobtn
-        if actlist['unoBtn'] == True:
-            init_view(screen, [ubtn])
         # colorChangebtn
         if actlist['colorBtn'] == True:
             init_view(screen, cbtn)
@@ -94,21 +85,30 @@ def start(screen, screen_width, screen_height, num, name):
                 quit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 for i in range(0, len(userH)):
-                    if userH[i].rect.collidepoint(event.pos):
+                    if userH[i].rect.collidepoint(event.pos): # 카드 버튼
                         played = g.eventCardBtn(i)
                         if played == True:
                             pass ## 카드 냈을 때 소리
                         else:
                             pass ## 카드 못냈을 때 소리
-                        
-                        print(g.openCard.cardList[-1].applyColor)
-                for i in range(0, len(cbtn)):
+            
+                for i in range(0, len(cbtn)): # 색깔 바꾸는 버
                     if cbtn[i].rect.collidepoint(event.pos):
                         g.eventColorBtn(i)
-                if dbtn.rect.collidepoint(event.pos):
-                    if actlist['drawBtn'] == True: # actList가 true인 경우에만 함수 실
+                        
+                if dbtn.rect.collidepoint(event.pos): # 드로우 버튼
+                    if actlist['drawBtn'] == True: # actList가 true인 경우에만 함수 실행
                         g.eventDrawBtn()
+                    
+                if ubtn.rect.collidepoint(event.pos): # 우노 버튼
+                    if actlist['unoBtn'] == True: # actList가 true인 경우에만 함수 실행
+                        g.eventUnoBtn()
+                    
         pygame.display.flip()
+        
+        if g.winner != None:
+            print(g.winner.playerName)
+        
         clock.tick(60)
 
 
@@ -190,7 +190,6 @@ def createDeck(screen, game, rect):
         btn = createBackCard(pos_o, size_o)
         init_view(screen, [btn])
         
-  
         
 def createDrawBtn(screen, game, rect):
     center = rectCenter(rect)
@@ -198,6 +197,16 @@ def createDrawBtn(screen, game, rect):
     size_o = (rect[2]*0.1, rect[2]*0.1*1.2)
     btn = createBackCard(pos_o, size_o)
     if game.actList()['drawBtn'] == True:
+        init_view(screen, [btn])
+    
+    return btn
+
+def createUnoBtn(screen, game, rect):
+    center = rectCenter(rect)
+    pos_o = (center[0]-rect[2]*0.1, center[1]-rect[2]*0.1)
+    size_o = (rect[2]*0.1, rect[2]*0.1)
+    btn = Button(image=pygame.image.load(f"UNO.png"), pos=pos_o, size=size_o)
+    if game.actList()['unoBtn'] == True:
         init_view(screen, [btn])
     
     return btn
@@ -233,13 +242,12 @@ def nameSlot(screen, rect, player):
     nameArea = (pos_x, pos_y, size_x, size_y)
     pygame.draw.rect(screen, (255,255,255), nameArea)
     
+    font_size = size_y
+    font = pygame.font.Font(None, font_size)
     
-    TIMER_FONT = pygame.font.SysFont('Arial', 20)
-    text = TIMER_FONT.render(player.playerName, True, (0, 0, 0))
-    text_rect = text.get_rect()
-    center = rectCenter(rect)
-    text_rect.center = (center[0], center[1])
-    screen.blit(text, text_rect)
+    center = rectCenter(nameArea)
+    text = font.render(player.playerName, True, (0, 0, 0))
+    screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
     
     return nameArea
     
@@ -249,21 +257,29 @@ def playerSlot(screen ,idx, player, rect):
     slotBg = playerSlotBG(screen, idx, player, rect)
     slotName = nameSlot(screen, slotBg, player)
     
-    card_Achor = (slotName[0],slotName[1]+slotName[3]*1.5, slotBg[2],slotBg[3])
-    card_s = createBackCards(player.handCardList, card_Achor)
-    init_view(screen, card_s)
+    card_anchor = (slotName[0],slotName[1]+slotName[3]*1.5, slotBg[2],slotBg[3])
+    if len(player.handCardList) > 9:
+        
+        temp = []
+        for i in range(9):
+            temp.append(Card(0, 0, NO_EFFECT))
+        card_s = createBackCards(temp, card_anchor)
+        init_view(screen, card_s)
+        
+        card_9 = card_s[8].rect
+        font_size = card_9[3] * 2 // 3 
+        font = pygame.font.Font(None, font_size)
+        
+        center = rectCenter(card_9)
+        text = font.render('+'+str(len(player.handCardList)-9), True, (255, 255, 255))
+        screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
+        
+        
+    else:
+        card_s = createBackCards(player.handCardList, card_anchor)
+        init_view(screen, card_s)
     
 ##### bot space #####
-
-
-def createUnoBtn(rect):
-    x = rect[2]*0.05
-    y = x*1.2
-    pos_o = (rect[0]+rect[2]*0.05+10, rect[1])
-    
-    size_o = (x,y)
-    btn = Button(image=pygame.image.load(f"images/back.png"), pos=pos_o, size=size_o)
-    return btn
 
 def createColorBtn(rect):
     lst = []

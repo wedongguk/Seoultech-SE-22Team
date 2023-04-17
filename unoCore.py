@@ -85,16 +85,20 @@ class Game: # game 클래스 생성
                 tempList.append(card)
 
         for i in range(0, 4): # 색상이 필요한 특수 카드
-            for j in [0B10, 0B100, 0B1000]:
+            for j in [EFFECT_DRAW, EFFECT_SKIP, EFFECT_REVERSE]:
                 if j == 0B10 :
                     card = Card(i, NO_NUMBER, j , attackNumber=2)
                 else :
                     card = Card(i, NO_NUMBER, j)
                 card.default_image = pygame.transform.smoothscale(pygame.image.load(f"images/{Card.imgColor(card)}_{Card.imgValue(card)}.png"), (screen_size[0] / 12.5, screen_size[0] / 8.333))
                 tempList.append(card)
+        
+        for i in range(4): #+4 드로우 카드
+            card = Card(NO_COLOR, NO_NUMBER, EFFECT_DRAW+EFFECT_COLOR , attackNumber=4)
+            tempList.append(card)
 
         for _ in range(0, 2): # 색상이 불필요한 특수카드
-            for j in [0B10000]:
+            for j in [EFFECT_COLOR]:
                 card = Card(NO_COLOR, NO_NUMBER, j)
                 card.default_image = pygame.transform.smoothscale(pygame.image.load(f"images/{Card.imgColor(card)}_{Card.imgValue(card)}.png"), (screen_size[0] / 12.5, screen_size[0] / 8.333))
                 tempList.append(card)
@@ -121,14 +125,8 @@ class Game: # game 클래스 생성
                     useCard = self.playerList.turnPlayer().delCard(idx)
                     self.placeOpenCardZone(useCard)
                     
-                    if len(self.playerList.turnPlayer().handCardList) == 0: # 카드를 내서 0장이 되면 게임이 끝난다.
-                        self.winner = self.playerList.turnPlayer()
-                        
-                    if len(self.playerList.turnPlayer().handCardList) == 1: # 카드를 내서 1장이 되면 우노 경쟁을 위한 처리를 시작한다.
-                        self.unoCompeteTable()
+                    self.playerList.turnPlayer().UnoAndWinnerChecker(self)
                     
-                    print(self.playerList.turnPlayer().playerName + ": ", self.playerList.turnPlayer().allHand())
-                    print('topCard: '+self.openCard.cardList[-1].info())
                     self.endPhase()
                     return True
                 else:
@@ -138,7 +136,6 @@ class Game: # game 클래스 생성
         else:
             print("아직 당신의 턴이 아니에요")
             return False
-        
         
         
     
@@ -211,11 +208,11 @@ class Game: # game 클래스 생성
     def processUno(self, idx): # 누군가 우노를 외쳤을 때, 게임에서 실질적으로 바뀌는 부분에 대한 처리
         if self.state == UNO:
             self.state = NORM
-            
-            if self.playerList.prevIdx == idx:
-                print(self.playerList.prevPlayer().playerName,'가 UNO 우노를 외쳤습니다.')
+            idx_ = idx%self.playerList.size()
+            if self.playerList.prevIdx == idx_:
+                print(self.playerList.prevPlayer().playerName,'가 UNO 우노를 외쳤습니다.(이전 턴에 카드를 내서 1개가 되었습니다.)')
             else: # 그 외의 플레이어
-                print(self.playerList.idxPlayer(idx),'가', self.playerList.prevPlayer().playerName,' 의 UNO 우노를 저지했습니다.')
+                print(self.playerList.idxPlayer(idx).playerName,'가', self.playerList.prevPlayer().playerName,' 의 UNO 우노를 저지했습니다.')
                 self.playerList.prevPlayer().draw(self, 1)
         else:
             print('state == UNO에서만 이 메서드가 동작합니다.')
@@ -250,7 +247,7 @@ class Game: # game 클래스 생성
         if self.playerList.turnPlayer().isUser == True:
             time = USER_TIME
         else:
-            time = bot_TIME
+            time = BOT_TIME
             
         for i in plst:
             if i.isUser == False:
