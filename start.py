@@ -9,7 +9,7 @@ from main import init_bg
 from view import init_view
 from text import Text
 from button import Button
-
+import configparser
 
 
 def start(screen, screen_width, screen_height, num, name):
@@ -135,7 +135,7 @@ def winner_screen(screen, screen_width, screen_height, winner) :
     winnername_text = Text(text_input = winner + ' is winner!',
                       font = None,
                       color = (0, 0, 0),
-                      pos = (screen.get_rect().centerx, screen.get_rect().top + 100),
+                      pos = (screen.get_rect().centerx, screen.get_rect().centery),
                       size = screen_height//5,
                       screen=screen)
     winnername_text.init_text()
@@ -158,8 +158,16 @@ def winner_screen(screen, screen_width, screen_height, winner) :
 
 
 def createOneCard(card_o, pos_o, size_o):
+    file_path = os.getcwd()
+    dir_path = os.path.dirname(file_path)
+    os.chdir(dir_path)
+    from main_screen import color_weakness_value
+    os.chdir(os.getcwd() + "/img")
     c = card_o
-    c_img = f"images/" + c.imgName() + ".png"
+    if color_weakness_value == False :
+        c_img = f"images/" + c.imgName() + ".png"
+    elif color_weakness_value == True : 
+        c_img = f"blind_images/" + c.imgName() + ".png"   
     btn = Button(image=pygame.image.load(c_img), pos=pos_o, size=size_o)
     return btn
 
