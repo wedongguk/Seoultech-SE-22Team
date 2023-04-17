@@ -13,6 +13,7 @@ def strategy(game, mode): # 봇이 선택하는 전략
         pass
     else:
         strategy_random(game)
+    game.playerList.turnPlayer().UnoAndWinnerChecker(game)
 
 def endEvent(game, mode): # 엔드 페이즈에 일어나는 이벤트
     if mode == MODE_CHANGECOLOR:
