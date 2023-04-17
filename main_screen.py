@@ -46,6 +46,8 @@ except:
 screen_width = int(config['system']['SCREEN_WIDTH'])
 screen_height = int(config['system']['SCREEN_HEIGHT'])
 
+color_weakness_value = bool(config['system']['COLOR_WEAKNESS_MODE'])
+
 button_width = 220
 button_height = 50
 
@@ -170,7 +172,7 @@ def loby():
                             else:
                                 name_list.append(input_boxes[temp].text)
                         temp += 1
-                    start(screen, screen_width, screen_height, AI_num, name_list)
+                    start(screen, screen_width, screen_height, AI_num, name_list, color_weakness_value)
                 elif back_button.rect.collidepoint(event.pos):
                     play()
                 elif AI_2.rect.collidepoint(event.pos):
@@ -256,6 +258,7 @@ def story_mode():
 
 def options():
     global UNO, SELECT, LEFT, RIGHT
+    global color_weakness_value
 
     # option screen에서 필요한 버튼 설정
     back_button = Button(image=pygame.image.load("back_button.png"),
@@ -428,10 +431,12 @@ def options():
                     on_button.image = pygame.image.load("on_checked.png")
                     off_button.image = pygame.image.load("off.png")
                     config['system']['COLOR_WEAKNESS_MODE'] = "True"
+                    color_weakness_value = True
                 elif off_button.rect.collidepoint(event.pos):
                     on_button.image = pygame.image.load("on.png")
                     off_button.image = pygame.image.load("off_checked.png")
                     config['system']['COLOR_WEAKNESS_MODE'] = "False"
+                    color_weakness_value = False
                 elif button_1920.rect.collidepoint(event.pos):
                     button_1920.image = pygame.image.load("1920_checked.png")
                     button_1280.image = pygame.image.load("1280_button.png")
