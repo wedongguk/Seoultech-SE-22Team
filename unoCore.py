@@ -24,7 +24,7 @@ class Game: # game 클래스 생성
     # timer #
     is_effctTime = False
     timer = Timer(15)
-    effectTimer = Timer(10)
+    effectTimer = Timer(0)
 
     def __init__(self, player_list, mode = MODE_NORMAL): # game 클래스 생성자
         self.playerList = PlayerList(player_list)
@@ -40,7 +40,7 @@ class Game: # game 클래스 생성
         
         self.is_effctTime = False
         self.timer = Timer(15)
-        self.effectTimer = Timer(60*15)
+        self.effectTimer = Timer(0)
         
     def __del__(self): # game class 소멸자
         del self.deckList
@@ -113,6 +113,9 @@ class Game: # game 클래스 생성
         if (self.state == NORM):
             result['unoBtn'] = False
         
+        if (self.is_effctTime == True):
+            result['unoBtn'] = False
+        
         result['colorBtn'] = self.is_selectColor
         result['numberBtn'] = self.is_selectNumber
             
@@ -152,8 +155,8 @@ class Game: # game 클래스 생성
             self.state = NORM
             
     def eventColorBtn(self, color): # 색상 변경 버튼
+        self.effectTimer.reset(1)
         self.openCard.cardList[-1].applyColor = color
-        self.effectTimer.reset(EFFECT_TIME)
     
     def eventNumberBtn(self, number): # 숫자 변경 버튼
         self.openCard.cardList[-1].applyNumber = number
@@ -197,7 +200,10 @@ class Game: # game 클래스 생성
                  
     def effectTimeEvent(self):
         if self.effectTimer.time <= 0:
-            self.is_selectColor = False
+            if self.is_selectColor:
+                self.is_selectColor = False
+                self.eventColorBtn(random.randrange(0,4))
+                
             self.is_selectNumber = False
             self.is_effctTime = False          
                 

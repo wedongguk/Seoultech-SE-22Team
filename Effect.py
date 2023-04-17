@@ -29,6 +29,13 @@ def effect_reverse(game):
     game.playerList.reverse()
 
 def effect_change_color(game):
+    time = None
+    if game.playerList.turnPlayer().isUser == True:
+        time = EFFECT_TIME
+    else:
+        time = BOT_EFFECT_TIME
+        
+    game.effectTimer.reset(time)
     game.is_selectColor = True
     game.is_effctTime = True
 
