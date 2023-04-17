@@ -15,7 +15,6 @@ click_volume = 1
 
 check_os = True
 
-
 def start(screen, screen_width, screen_height, num, name, color_weakness_value):
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
@@ -34,7 +33,7 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
     screen = pygame.display.set_mode(screen_size)
 
     g.ready(screen_size)
-
+    
     playerCardPage = 0
 
     clock = pygame.time.Clock()
@@ -106,10 +105,11 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
 
         dbtn = createDrawBtn(screen, g, board_rect)  # draw 버튼
         ubtn = createUnoBtn(screen, g, board_rect)  # uno 버튼
-
+        
         timerInd(screen, board_rect, g.timer.time)
         eTimerInd(screen, board_rect, g.effectTimer.time)
-
+        
+        
         g.update()
 
         # botHand(screen, screen_size, pc1)
@@ -161,6 +161,7 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
                         g.eventUnoBtn()
                 elif pause_button.rect.collidepoint(event.pos):
                     pause(screen, screen_width, screen_height)
+                    
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pause(screen, screen_width, screen_height)
@@ -236,14 +237,14 @@ def pause(screen, screen_width, screen_height):
     bgm_volume_set_text = Text(text_input="Set BGM volume",
                                font="notosanscjkkr",
                                color=(0, 0, 0),
-                               pos=(screen.get_rect().centerx - 350, screen.get_rect().top + 50),
+                               pos=(screen.get_rect().centerx-350, screen.get_rect().top + 50),
                                size=30,
                                screen=screen)
 
     click_volume_set_text = Text(text_input="Set click volume",
                                  font="notosanscjkkr",
                                  color=(0, 0, 0),
-                                 pos=(screen.get_rect().centerx + 370, screen.get_rect().top + 50),
+                                 pos=(screen.get_rect().centerx+370, screen.get_rect().top + 50),
                                  size=30,
                                  screen=screen)
 
@@ -349,12 +350,11 @@ def pause(screen, screen_width, screen_height):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     bool = False
-
         pygame.display.flip()
 
 
 ##### winner_sreen #####
-def winner_screen(screen, screen_width, screen_height, winner):
+def winner_screen(screen, screen_width, screen_height, winner) :
     global check_os
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
@@ -388,12 +388,12 @@ def winner_screen(screen, screen_width, screen_height, winner):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.rect.collidepoint(event.pos):
                     print("game start")
-                    if check_os == True:
+                    if check_os == True :
                         file_path = os.getcwd()
                         dir_path = os.path.dirname(file_path)
                         os.chdir(dir_path)
                         check_os = False
-                    else:
+                    else :
                         check_os = True
                     from main_screen import main_screen
                     main_screen()
@@ -449,7 +449,7 @@ def createCards(screen, card_lst, game, rect, page, color_weakness_value):
         if len(card_lst) > p + i:
             pos_o = (pos_x + size_x * i, pos_y)
             size_o = (size_x, size_y)
-            if card_lst[i].canUse(game):
+            if card_lst[p+i].canUse(game):
                 pos_o = (pos_o[0], rect[1])
             temp.append(createOneCard(card_lst[p + i], pos_o, size_o, color_weakness_value))
 
@@ -566,46 +566,44 @@ def createUnoBtn(screen, game, rect):
 
 
 def timerInd(screen, rect, time):
-    size_x = round(rect[2] / 20)
+    size_x = round(rect[2]/20)
     size_y = size_x
-
+    
     center = rectCenter(rect)
-    pos_x = center[0] - size_x * 1.2
-    pos_y = (rect[1] + center[1]) / 2
-
+    pos_x = center[0]-size_x*1.2
+    pos_y = (rect[1]+center[1])/2
+    
     Area = (pos_x, pos_y, size_x, size_y)
     pygame.draw.rect(screen, (255, 255, 255), Area)
 
     font_size = size_y
     font = pygame.font.Font(None, font_size)
-
+    
     center = rectCenter(Area)
-    text = font.render(str(time // 60), True, (0, 0, 0))
+    text = font.render(str(time//60), True, (0, 0, 0))
     screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
 
     return Area
-
 
 def eTimerInd(screen, rect, time):
-    size_x = round(rect[2] / 20)
+    size_x = round(rect[2]/20)
     size_y = size_x
-
+    
     center = rectCenter(rect)
     pos_x = center[0]
-    pos_y = (rect[1] + center[1]) / 2
-
+    pos_y = (rect[1]+center[1])/2
+    
     Area = (pos_x, pos_y, size_x, size_y)
     pygame.draw.rect(screen, (255, 255, 255), Area)
 
     font_size = size_y
     font = pygame.font.Font(None, font_size)
-
+    
     center = rectCenter(Area)
-    text = font.render(str(time // 60), True, (0, 0, 0))
+    text = font.render(str(time//60), True, (0, 0, 0))
     screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
 
     return Area
-
 
 ##### board space #####
 
