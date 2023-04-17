@@ -21,24 +21,25 @@ def endEvent(game, mode): # 엔드 페이즈에 일어나는 이벤트
     elif mode == MODE_OPENSHUFFLE:
         event_shuffleOpen(game)
     else:
-        print('엔드 페이즈 이벤트가 존재하지 않습니다.')
+        pass
+        #print('엔드 페이즈 이벤트가 존재하지 않습니다.')
 
 
 def strategy_random(game): # 전략 - 무작위 선택
     chkList = game.playerList.turnPlayer().canUseIdx(game)
-    print("무작위 전략")
+    #print("무작위 전략")
     if chkList != []: # 낼 수 있는 카드가 있다면
         randIdx = random.choice(chkList) # 무작위의 카드를 내고
         useCard = game.playerList.turnPlayer().delCard(randIdx)
         game.placeOpenCardZone(useCard)
-        print( useCard.info() + "를 냅니다.")
+        #print( useCard.info() + "를 냅니다.")
     else:             # 낼 수 있는 카드가 없다면
         game.playerList.turnPlayer().draw(game, 1) # 카드를 뽑고
-        print("낼 카드가 없어서 1장 뽑습니다.")
+        #print("낼 카드가 없어서 1장 뽑습니다.")
     
-    print(game.playerList.turnPlayer().playerName + ": ", game.playerList.turnPlayer().allHand())
-    print()
-    print()
+    #print(game.playerList.turnPlayer().playerName + ": ", game.playerList.turnPlayer().allHand())
+    #print()
+    #print()
 
 def strategy_combo(): # 전략 - 콤보
     pass
