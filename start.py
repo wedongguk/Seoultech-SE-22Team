@@ -11,7 +11,8 @@ from text import Text
 from button import Button
 
 
-volume = 1
+master_volume = 1
+click_volume = 1
 
 def start(screen, screen_width, screen_height, num, name, color_weakness_value):
     screen_size = (screen_width, screen_height)
@@ -38,6 +39,9 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
     global bgm
     bgm = pygame.mixer.Sound("bgm.mp3")
     bgm.play(-1)
+    bet_card = pygame.mixer.Sound("bet_card.wav")
+    cannot_bet = pygame.mixer.Sound("cannot_bet.wav")
+    card_draw = pygame.mixer.Sound("card_draw.mp3")
     while True:
         
         ##### 화면 초기화 #####
@@ -133,11 +137,13 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 for i in range(0, len(userH)):
                     if userH[i].rect.collidepoint(event.pos): # 카드 버튼
-                        played = g.eventCardBtn(playerCardPage*8+i)
-                        if played == True:
-                            pass ## 카드 냈을 때 소리
+                        played = g.eventCardBtn(playerCardPage * 8 + i)
+                        if played:
+                            print("낼 수 있는 카드")
+                            bet_card.play(0)
                         else:
-                            pass ## 카드 못냈을 때 소리
+                            print("낼 수 없는 카드")
+                            cannot_bet.play(0)
                 
                 if pageBtn[0].rect.collidepoint(event.pos): # 페이지-1
                     playerCardPage = cardPageUpDown(g.userHand(), playerCardPage, 1)
@@ -168,7 +174,7 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
 
 
 def pause(screen, screen_width, screen_height):
-    global volume
+    global master_volume
     back_button = Button(image=pygame.image.load("back_button.png"),
                          pos=(30, 30),
                          size=(50, 50))
@@ -192,11 +198,11 @@ def pause(screen, screen_width, screen_height):
                 if back_button.rect.collidepoint(event.pos):
                     bool = False
                 elif volume_up_button.rect.collidepoint(event.pos):
-                    volume += 0.1
-                    bgm.set_volume(volume)
+                    master_volume += 0.1
+                    bgm.set_volume(master_volume)
                 elif volume_down_button.rect.collidepoint(event.pos):
-                    volume -= 0.1
-                    bgm.set_volume(volume)
+                    master_volume -= 0.1
+                    bgm.set_volume(master_volume)
         pygame.display.flip()
 
 ##### winner_sreen #####
