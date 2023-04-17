@@ -43,8 +43,8 @@ except:
     config['system']['SELECT'] = 'pygame.K_RETURN'
     save_config()
 
-screen_width = int(config['system']['SCREEN_WIDTH'])
-screen_height = int(config['system']['SCREEN_HEIGHT'])
+screen_width = 1280
+screen_height = 720
 
 if config['system']['COLOR_WEAKNESS_MODE'] == "True":
     color_weakness_value = True
@@ -176,7 +176,7 @@ def loby():
                             else:
                                 name_list.append(input_boxes[temp].text)
                         temp += 1
-                    start(screen, screen_width, screen_height, AI_num, name_list, color_weakness_value)
+                    start(screen, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']), AI_num, name_list, color_weakness_value)
                 elif back_button.rect.collidepoint(event.pos):
                     play()
                 elif AI_2.rect.collidepoint(event.pos):
@@ -261,7 +261,7 @@ def story_mode():
 
 
 def options():
-    global UNO, SELECT, LEFT, RIGHT
+    global UNO, SELECT, LEFT, RIGHT, width, height
     global color_weakness_value
 
     # option screen에서 필요한 버튼 설정
@@ -320,14 +320,20 @@ def options():
         off_button.image = pygame.image.load("off_checked.png")
 
     if config['system']['SCREEN_WIDTH'] == "1920":
+        width = "1920"
+        height = "1080"
         button_1920.image = pygame.image.load("1920_checked.png")
         button_1280.image = pygame.image.load("1280_button.png")
         button_960.image = pygame.image.load("960_button.png")
     elif config['system']['SCREEN_WIDTH'] == "1280":
+        width = "1280"
+        height = "720"
         button_1920.image = pygame.image.load("1920_button.png")
         button_1280.image = pygame.image.load("1280_checked.png")
         button_960.image = pygame.image.load("960_button.png")
     elif config['system']['SCREEN_WIDTH'] == "960":
+        width = "960"
+        height = "540"
         button_1920.image = pygame.image.load("1920_button.png")
         button_1280.image = pygame.image.load("1280_button.png")
         button_960.image = pygame.image.load("960_checked.png")
@@ -402,6 +408,8 @@ def options():
                 if back_button.rect.collidepoint(event.pos):
                     main_screen()
                 elif save_button.rect.collidepoint(event.pos):
+                    config['system']['SCREEN_WIDTH'] = width
+                    config['system']['SCREEN_HEIGHT'] = height
                     save_config()
                     main_screen()
                 elif reset_button.rect.collidepoint(event.pos):
@@ -410,6 +418,8 @@ def options():
                     button_1920.image = pygame.image.load("1920_button.png")
                     button_1280.image = pygame.image.load("1280_checked.png")
                     button_960.image = pygame.image.load("960_button.png")
+                    width = "1280"
+                    height = "720"
                     config['system']['COLOR_WEAKNESS_MODE'] = "FALSE"
                     config['system']['SCREEN_WIDTH'] = "1280"
                     config['system']['SCREEN_HEIGHT'] = "720"
@@ -455,14 +465,20 @@ def options():
                     button_1920.image = pygame.image.load("1920_checked.png")
                     button_1280.image = pygame.image.load("1280_button.png")
                     button_960.image = pygame.image.load("960_button.png")
+                    width = "1920"
+                    height = "1080"
                 elif button_1280.rect.collidepoint(event.pos):
                     button_1920.image = pygame.image.load("1920_button.png")
                     button_1280.image = pygame.image.load("1280_checked.png")
                     button_960.image = pygame.image.load("960_button.png")
+                    width = "1280"
+                    height = "720"
                 elif button_960.rect.collidepoint(event.pos):
                     button_1920.image = pygame.image.load("1920_button.png")
                     button_1280.image = pygame.image.load("1280_button.png")
                     button_960.image = pygame.image.load("960_checked.png")
+                    width = "960"
+                    height = "540"
         pygame.display.flip()
 
 
@@ -487,7 +503,7 @@ def quit():
 
 # 메인 루프
 def main_screen():
-    main_bg = init_bg("start_screen.jpeg", screen_width, screen_height)
+    main_bg = init_bg("start_screen.jpeg", 1280, 720)
 
     while True:
         screen.blit(main_bg, (0, 0))
