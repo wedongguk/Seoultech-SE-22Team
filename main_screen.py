@@ -267,9 +267,9 @@ def options():
     save_button = Button(image=pygame.image.load("save_button.png"),
                          pos=(x_pos, y_pos + 230),
                          size=(button_width, button_height))
-    reset_button = Button(image=pygame.image.load("reset_button.png"),
-                          pos=(x_pos, y_pos + 300),
-                          size=(button_width, button_height))
+    reset_button = Button(image = pygame.image.load("reset_button.png"),
+                       pos = (x_pos, y_pos+300),
+                       size = (button_width, button_height))
 
     on_button = Button(image=pygame.image.load("on.png"),
                        pos=(screen.get_rect().centerx - 150, screen.get_rect().centery - 230),
@@ -338,7 +338,7 @@ def options():
         resolution_text.init_text()
         key_setting_text.init_text()
         init_view(screen,
-                  [back_button, save_button, reset_button, on_button, off_button, button_1920, button_1280, button_960])
+                  [back_button, save_button, on_button, off_button, button_1920, button_1280, button_960, reset_button])
 
         UNO = eval(f"{config['system']['UNO']}")
         SELECT = eval(f"{config['system']['SELECT']}")
@@ -401,8 +401,18 @@ def options():
                     save_config()
                     main_screen()
                 elif reset_button.rect.collidepoint(event.pos):
-                    on_button.image = "on.png"
-                    off_button.image = "off_checked.png"
+                    on_button.image = pygame.image.load("on.png")
+                    off_button.image = pygame.image.load("off_checked.png")
+                    button_1920.image = pygame.image.load("1920_button.png")
+                    button_1280.image = pygame.image.load("1280_checked.png")
+                    button_960.image = pygame.image.load("960_button.png")
+                    config['system']['COLOR_WEAKNESS_MODE'] = "FALSE"
+                    config['system']['SCREEN_WIDTH'] = "1280"
+                    config['system']['SCREEN_HEIGHT'] = "720"
+                    config['system']['UNO'] = 'pygame.K_u'
+                    config['system']['LEFT_MOVE'] = 'pygame.K_RIGHT'
+                    config['system']['RIGHT_MOVE'] = 'pygame.K_LEFT'
+                    config['system']['SELECT'] = 'pygame.K_RETURN'
                 elif Uno_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for Uno direction")
                     UNO = key_change()
