@@ -101,8 +101,7 @@ def start(screen, screen_width, screen_height, num, name):
                         
                 if dbtn.rect.collidepoint(event.pos): # 드로우 버튼
                     if actlist['drawBtn'] == True: # actList가 true인 경우에만 함수 실행
-                        winner_screen(screen,screen_width,screen_height, 'sterafkl')
-                        #g.eventDrawBtn()
+                        g.eventDrawBtn()
                     
                 if ubtn.rect.collidepoint(event.pos): # 우노 버튼
                     if actlist['unoBtn'] == True: # actList가 true인 경우에만 함수 실행
