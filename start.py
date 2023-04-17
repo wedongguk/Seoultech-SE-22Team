@@ -226,7 +226,7 @@ def winner_screen(screen, screen_width, screen_height, winner) :
     winnername_text = Text(text_input=winner + ' is winner!',
                            font=None,
                            color=(0, 0, 0),
-                           pos=(screen.get_rect().centerx, screen.get_rect().top + 100),
+                           pos=(screen.get_rect().centerx, screen.get_rect().centery),
                            size=screen_height // 5,
                            screen=screen)
     winnername_text.init_text()
