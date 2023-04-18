@@ -45,7 +45,7 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
     gamePlayerList = [user1]
     for i in range(1, num + 1):
         gamePlayerList.append(Player(name[i], False))
-    g = Game(gamePlayerList, mode=MODE_OPENSHUFFLE)
+    g = Game(gamePlayerList, mode=mode)
 
     g.ready(screen_size)
 
@@ -122,9 +122,12 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
 
         dbtn = createDrawBtn(screen, g, board_rect)  # draw 버튼
         ubtn = createUnoBtn(screen, g, board_rect)  # uno 버튼
-
-        timerInd(screen, board_rect, g.timer.time)
-        eTimerInd(screen, board_rect, g.effectTimer.time)
+        
+        if g.is_effctTime == False:    
+            timerInd(screen, board_rect, g.timer.time)
+        else:
+            eTimerInd(screen, board_rect, g.effectTimer.time)
+        turnInd(screen, board_rect, g.turn)
 
         g.update()
 
@@ -858,16 +861,14 @@ def timerInd(screen, rect, time):
     center = rectCenter(Area)
     text = font.render(str(time // 60), True, (0, 0, 0))
     screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
-
-    return Area
-
-def turnInd(screen, rect, time):
+    
+def turnInd(screen, rect, turn):
     size_x = round(rect[2] / 20)
     size_y = size_x
 
     center = rectCenter(rect)
     pos_x = center[0] - size_x * 1.2
-    pos_y = (rect[1] + center[1]) / 2
+    pos_y = (rect[1] + center[1]) / 2 - size_x * 1.2
 
     Area = (pos_x, pos_y, size_x, size_y)
     pygame.draw.rect(screen, (255, 255, 255), Area)
@@ -876,7 +877,7 @@ def turnInd(screen, rect, time):
     font = pygame.font.Font(None, font_size)
 
     center = rectCenter(Area)
-    text = font.render(str(time // 60), True, (0, 0, 0))
+    text = font.render(str(turn+1), True, (0, 0, 0))
     screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
 
     return Area
