@@ -31,6 +31,7 @@ def save_config():
 
 
 def start(screen, screen_width, screen_height, num, name, color_weakness_value):
+    global start_color_weakness_value
     start_color_weakness_value = color_weakness_value
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
