@@ -71,5 +71,3 @@ def event_changeColor(game): # 엔드 이벤트 - 오픈 카드의 색이 바뀜
     if game.turn%5 == 0:
         game.openCard.cardList[-1].applyColor = random.randrange(0,4)
 
-def event_shuffleOpen(game): # 엔드 이벤트 - openCard가 섞이고, 맨 위의 카드가 기술 카드라면 실행함
-    pass

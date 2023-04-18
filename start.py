@@ -30,7 +30,7 @@ def save_config():
         config.write(config_file)
 
 
-def start(screen, screen_width, screen_height, num, name, color_weakness_value, mode):
+def start(screen, screen_width, screen_height, num, name, color_weakness_value):
     global start_color_weakness_value
     start_color_weakness_value = color_weakness_value
     screen_size = (screen_width, screen_height)
@@ -45,7 +45,7 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
     gamePlayerList = [user1]
     for i in range(1, num + 1):
         gamePlayerList.append(Player(name[i], False))
-    g = Game(gamePlayerList, mode=mode)
+    g = Game(gamePlayerList, mode=MODE_OPENSHUFFLE)
 
     g.ready(screen_size)
 
@@ -842,6 +842,26 @@ def createUnoBtn(screen, game, rect):
 
 
 def timerInd(screen, rect, time):
+    size_x = round(rect[2] / 20)
+    size_y = size_x
+
+    center = rectCenter(rect)
+    pos_x = center[0] - size_x * 1.2
+    pos_y = (rect[1] + center[1]) / 2
+
+    Area = (pos_x, pos_y, size_x, size_y)
+    pygame.draw.rect(screen, (255, 255, 255), Area)
+
+    font_size = size_y
+    font = pygame.font.Font(None, font_size)
+
+    center = rectCenter(Area)
+    text = font.render(str(time // 60), True, (0, 0, 0))
+    screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
+
+    return Area
+
+def turnInd(screen, rect, time):
     size_x = round(rect[2] / 20)
     size_y = size_x
 
