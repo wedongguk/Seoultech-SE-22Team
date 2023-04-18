@@ -26,7 +26,7 @@ class Game: # game 클래스 생성
     timer = Timer(15)
     effectTimer = Timer(0)
 
-    def __init__(self, player_list, mode = MODE_NORMAL): # game 클래스 생성자
+    def __init__(self, player_list, mode): # game 클래스 생성자
         self.playerList = PlayerList(player_list)
         self.deckList = Pile()
         self.openCard = Pile()
