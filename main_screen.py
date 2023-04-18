@@ -6,6 +6,7 @@ from InputBox import InputBox
 from button import Button
 from main import init_bg, init_pygame
 from start import start
+from uno_Const import MODE_NORMAL, MODE_ALLCARD, MODE_CHANGECOLOR
 from view import init_view
 from text import Text
 import configparser
@@ -177,7 +178,7 @@ def loby():
                                 name_list.append(input_boxes[temp].text)
                         temp += 1
                     start(screen, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']), AI_num,
-                          name_list, color_weakness_value)
+                          name_list, color_weakness_value, MODE_NORMAL)
                 elif back_button.rect.collidepoint(event.pos):
                     play()
                 elif AI_2.rect.collidepoint(event.pos):
@@ -261,9 +262,13 @@ def story_mode():
                 elif story_mode_1.rect.collidepoint(event.pos):
                     loby()
                 elif story_mode_2.rect.collidepoint(event.pos):
-                    loby()
+                    start(screen, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']), 3,
+                          ["USER", "COMPUTER1", "COMPUTER2", "COMPUTER3", "COMPUTER4"], color_weakness_value,
+                          MODE_ALLCARD)
                 elif story_mode_3.rect.collidepoint(event.pos):
-                    loby()
+                    start(screen, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']), 2,
+                          ["USER", "COMPUTER1", "COMPUTER2"], color_weakness_value,
+                          MODE_CHANGECOLOR)
                 elif story_mode_4.rect.collidepoint(event.pos):
                     loby()
         pygame.display.flip()

@@ -26,7 +26,7 @@ class Game: # game 클래스 생성
     timer = Timer(15)
     effectTimer = Timer(0)
 
-    def __init__(self, player_list, mode = MODE_NORMAL): # game 클래스 생성자
+    def __init__(self, player_list, mode): # game 클래스 생성자
         self.playerList = PlayerList(player_list)
         self.deckList = Pile()
         self.openCard = Pile()
@@ -41,6 +41,8 @@ class Game: # game 클래스 생성
         self.is_effctTime = False
         self.timer = Timer(15)
         self.effectTimer = Timer(0)
+        
+        self.turn = 0
         
     def __del__(self): # game class 소멸자
         del self.deckList
@@ -169,6 +171,7 @@ class Game: # game 클래스 생성
         self.effectTimer.reset(EFFECT_TIME)
 
     def endPhase(self): # endPhase를 실행
+        self.turn += 1
         self.playerList.nextTurn()
         
         endEvent(self, self.GameMode)
