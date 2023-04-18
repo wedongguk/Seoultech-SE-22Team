@@ -186,25 +186,24 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     resolution = pause(screen, 1280, 720, screen_width)
-                    screen_width = resolution[0]
-                    screen_height = resolution[1]
-                    pygame.display.set_mode((screen_width, screen_height))
-                    userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, nowCardIdx,
-                                        start_color_weakness_value)
-                    openCardIndicator(screen, g, board_rect, start_color_weakness_value)  # openCard
-                    createIndicator(screen, g.openCard.cardList[-1], board_rect,
-                                    start_color_weakness_value)  # indicator
-                elif "pygame.K_"+pygame.key.name(event.key) == config['system']['LEFT_MOVE']:
+                    # print(resolution[0])
+                    # print(resolution[1])
+                    # userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, nowCardIdx,
+                    #                     start_color_weakness_value)
+                    # openCardIndicator(screen, g, board_rect, start_color_weakness_value)  # openCard
+                    # createIndicator(screen, g.openCard.cardList[-1], board_rect,
+                    #                 start_color_weakness_value)  # indicator
+                elif ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['LEFT_MOVE']).upper():
                     print(config['system']['left_move'])
                     nowCardIdx, playerCardPage = CardMoveUsingKeyBoard(g.userHand(), nowCardIdx, playerCardPage, 1)
                     print(nowCardIdx)
 
-                elif "pygame.K_"+pygame.key.name(event.key) == config['system']['RIGHT_MOVE']:
+                elif ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['RIGHT_MOVE']).upper():
                     print(config['system']['RIGHT_MOVE'])
                     nowCardIdx, playerCardPage = CardMoveUsingKeyBoard(g.userHand(), nowCardIdx, playerCardPage, 0)
                     print(nowCardIdx)
 
-                elif "pygame.K_"+pygame.key.name(event.key) == config['system']['SELECT']:
+                elif ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['SELECT']).upper():
                     played = g.eventCardBtn(nowCardIdx)
                     if played:
                         print("낼 수 있는 카드")
