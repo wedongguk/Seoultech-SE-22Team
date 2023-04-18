@@ -11,6 +11,7 @@ from main import init_bg
 from view import init_view
 from text import Text
 from button import Button
+from screenSupporter import sliceRect
 import configparser
 
 bgm_volume = 1
@@ -66,28 +67,33 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
     while True:
         ##### 화면 초기화 #####
         screen.fill((0, 0, 0))
-
-        user_rect = (0, screen_height * 3 / 5, screen_width * 3 / 5, screen_height * 2 / 5)
+        screen_rect = (0, 0, screen_width, screen_height)
+        
+        slice_screen = sliceRect(screen_rect, [3, 2], 'vertical')
+        bot_rect = slice_screen[1]
+        pygame.draw.rect(screen, (120, 120, 0), bot_rect)
+        
+        
+        slice_leftover = sliceRect(slice_screen[0], [3, 2], 'horizontal')
+        user_rect = slice_leftover[1]
         pygame.draw.rect(screen, (120, 120, 120), user_rect)
-
-        user_rect_u = (user_rect[0], user_rect[1], user_rect[2], user_rect[3] / 2)
-        user_rect_d = (user_rect[0], user_rect[1] + user_rect_u[3], user_rect[2], user_rect[3] / 2)
+        
+        slice_userSpace = sliceRect(user_rect, [1, 1], 'horizontal')
+        user_rect_u = slice_userSpace[0]
         pygame.draw.rect(screen, (120, 200, 100), user_rect_u)
-
-        user_lBtn_rect = (user_rect_d[0], user_rect_d[1], user_rect_d[2] / 10, user_rect_d[3])
-        user_cardZone_rect = (
-            user_lBtn_rect[0] + user_lBtn_rect[2], user_rect_d[1], user_rect_d[2] * 8 / 10, user_rect_d[3])
-        user_rBtn_rect = (
-            user_cardZone_rect[0] + user_cardZone_rect[2], user_rect_d[1], user_rect_d[2] / 10, user_rect_d[3])
+        
+        slice_cardSlot = sliceRect(slice_userSpace[1], [1, 8, 1], 'vertical')
+        user_lBtn_rect = slice_cardSlot[0]
+        user_cardZone_rect = slice_cardSlot[1]
+        user_rBtn_rect = slice_cardSlot[2]
 
         pygame.draw.rect(screen, (0, 0, 255), user_lBtn_rect)
         pygame.draw.rect(screen, (0, 170, 255), user_cardZone_rect)
         pygame.draw.rect(screen, (0, 0, 255), user_rBtn_rect)
 
-        bot_rect = (screen_width * 3 / 5, 0, screen_width * 2 / 5, screen_height)
-        pygame.draw.rect(screen, (120, 120, 0), bot_rect)
+       
 
-        board_rect = (0, 0, screen_width * 3 / 5, screen_height * 3 / 5)
+        board_rect = slice_leftover[0]
         pygame.draw.rect(screen, (25, 150, 75), board_rect)
 
         ##### slot_Area #####
