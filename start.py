@@ -211,6 +211,9 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value):
                     else:
                         print("낼 수 없는 카드")
                         cannot_bet.play(0)
+                elif ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['DRAW']).upper():
+                    if actlist['drawBtn']:  # actList가 true인 경우에만 함수 실행
+                        g.eventDrawBtn()
 
             mouse_pos = pygame.mouse.get_pos()
 
@@ -231,7 +234,7 @@ def pause(screen, screen_width, screen_height, width):
     global bgm_volume, check_os
     global click_volume
     global start_color_weakness_value
-    global UNO, SELECT, LEFT, RIGHT, height
+    global UNO, SELECT, LEFT, RIGHT, DRAW, height
     button_width = 220
     button_height = 50
     pygame.display.set_mode((screen_width, screen_height))
@@ -366,13 +369,14 @@ def pause(screen, screen_width, screen_height, width):
         SELECT = eval(f"{config['system']['SELECT']}")
         LEFT = eval(f"{config['system']['LEFT_MOVE']}")
         RIGHT = eval(f"{config['system']['RIGHT_MOVE']}")
+        DRAW = eval(f"{config['system']['DRAW']}")
 
         # 키 설정
         key_setting_bg = pygame.image.load("key_button.png")
         key_setting_bg = pygame.transform.scale(key_setting_bg, (80, 80))
         # 우노 버튼 설정
         Uno_button_rect = key_setting_bg.get_rect()
-        Uno_button_rect.centerx = screen.get_rect().centerx - 150
+        Uno_button_rect.centerx = screen.get_rect().centerx - 200
         Uno_button_rect.centery = screen.get_rect().top + 480
         Uno_text = font.render(pygame.key.name(UNO), True, (0, 0, 0))
         Uno_rect = Uno_text.get_rect()
@@ -380,7 +384,7 @@ def pause(screen, screen_width, screen_height, width):
         Uno_rect.centery = Uno_button_rect.centery
         # 선택 버튼 설정
         Select_button_rect = key_setting_bg.get_rect()
-        Select_button_rect.centerx = screen.get_rect().centerx - 50
+        Select_button_rect.centerx = screen.get_rect().centerx - 100
         Select_button_rect.centery = screen.get_rect().top + 480
         Select_text = font.render(pygame.key.name(SELECT), True, (0, 0, 0))
         Select_rect = Select_text.get_rect()
@@ -388,7 +392,7 @@ def pause(screen, screen_width, screen_height, width):
         Select_rect.centery = Select_button_rect.centery
         # 왼쪽 이동 버튼 설정
         L_button_rect = key_setting_bg.get_rect()
-        L_button_rect.centerx = screen.get_rect().centerx + 50
+        L_button_rect.centerx = screen.get_rect().centerx
         L_button_rect.centery = screen.get_rect().top + 480
         L_text = font.render(pygame.key.name(LEFT), True, (0, 0, 0))
         L_rect = L_text.get_rect()
@@ -396,12 +400,20 @@ def pause(screen, screen_width, screen_height, width):
         L_rect.centery = L_button_rect.centery
         # 오른쪽 이동 버튼 설정
         R_button_rect = key_setting_bg.get_rect()
-        R_button_rect.centerx = screen.get_rect().centerx + 150
+        R_button_rect.centerx = screen.get_rect().centerx + 100
         R_button_rect.centery = screen.get_rect().top + 480
         R_text = font.render(pygame.key.name(RIGHT), True, (0, 0, 0))
         R_rect = R_text.get_rect()
         R_rect.centerx = R_button_rect.centerx
         R_rect.centery = R_button_rect.centery
+        # 드로우 버튼 설정
+        Draw_button_rect = key_setting_bg.get_rect()
+        Draw_button_rect.centerx = screen.get_rect().centerx + 200
+        Draw_button_rect.centery = screen.get_rect().top + 480
+        Draw_text = font.render(pygame.key.name(DRAW), True, (0, 0, 0))
+        Draw_rect = Draw_text.get_rect()
+        Draw_rect.centerx = Draw_button_rect.centerx
+        Draw_rect.centery = Draw_button_rect.centery
 
         screen.blit(key_setting_bg, Uno_button_rect)
         screen.blit(Uno_text, Uno_rect)
@@ -411,36 +423,46 @@ def pause(screen, screen_width, screen_height, width):
         screen.blit(L_text, L_rect)
         screen.blit(key_setting_bg, R_button_rect)
         screen.blit(R_text, R_rect)
+        screen.blit(key_setting_bg, Draw_button_rect)
+        screen.blit(Draw_text, Draw_rect)
 
         uno_text = Text(text_input="UNO",
                         font="notosanscjkkr",
                         color=(0, 0, 0),
-                        pos=(screen.get_rect().centerx - 150, screen.get_rect().top + 420),
+                        pos=(screen.get_rect().centerx - 200, screen.get_rect().top + 420),
                         size=25,
                         screen=screen)
         return_text = Text(text_input="RETURN",
                            font="notosanscjkkr",
                            color=(0, 0, 0),
-                           pos=(screen.get_rect().centerx - 50, screen.get_rect().top + 420),
+                           pos=(screen.get_rect().centerx - 100, screen.get_rect().top + 420),
                            size=25,
                            screen=screen)
 
         left_move_text = Text(text_input="LEFT",
                               font="notosanscjkkr",
                               color=(0, 0, 0),
-                              pos=(screen.get_rect().centerx + 50, screen.get_rect().top + 420),
+                              pos=(screen.get_rect().centerx, screen.get_rect().top + 420),
                               size=25,
                               screen=screen)
         right_move_text = Text(text_input="RIGHT",
                                font="notosanscjkkr",
                                color=(0, 0, 0),
-                               pos=(screen.get_rect().centerx + 150, screen.get_rect().top + 420),
+                               pos=(screen.get_rect().centerx + 100, screen.get_rect().top + 420),
                                size=25,
                                screen=screen)
+        draw_text = Text(text_input="DRAW",
+                               font="notosanscjkkr",
+                               color=(0, 0, 0),
+                               pos=(screen.get_rect().centerx + 200, screen.get_rect().top + 420),
+                               size=25,
+                               screen=screen)
+
         uno_text.init_text()
         return_text.init_text()
         left_move_text.init_text()
         right_move_text.init_text()
+        draw_text.init_text()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -555,6 +577,15 @@ def pause(screen, screen_width, screen_height, width):
                     else:
                         config['system']['RIGHT_MOVE'] = 'pygame.K_' + pygame.key.name(RIGHT)
                     save_config()
+                elif Draw_rect.collidepoint(pygame.mouse.get_pos()):
+                    print("Press the key for DRAW")
+                    DRAW = key_change()
+                    if pygame.key.name(DRAW) == 'up' or pygame.key.name(DRAW) == 'right' or pygame.key.name(
+                            DRAW) == 'left' or pygame.key.name(DRAW) == 'return':
+                        config['system']['DRAW'] = 'pygame.K_' + (pygame.key.name(DRAW)).upper()
+                    else:
+                        config['system']['DRAW'] = 'pygame.K_' + pygame.key.name(DRAW)
+                    save_config()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     bool = False
@@ -567,7 +598,7 @@ def key_change():
         event = pygame.event.wait()
         if event.type == pygame.KEYDOWN:
             tmp = event.key
-            if tmp == UNO or tmp == SELECT or tmp == LEFT or tmp == RIGHT:
+            if tmp == UNO or tmp == SELECT or tmp == LEFT or tmp == RIGHT or tmp == DRAW:
                 print("used key")
             else:
                 break
