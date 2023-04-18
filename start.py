@@ -30,7 +30,7 @@ def save_config():
         config.write(config_file)
 
 
-def start(screen, screen_width, screen_height, num, name, color_weakness_value):
+def start(screen, screen_width, screen_height, num, name, color_weakness_value, mode):
     global start_color_weakness_value
     start_color_weakness_value = color_weakness_value
     screen_size = (screen_width, screen_height)
