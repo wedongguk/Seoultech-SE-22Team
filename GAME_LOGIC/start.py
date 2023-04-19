@@ -1,17 +1,13 @@
-import configparser
-
-import pygame
-import os
 from GAME_LOGIC.uno_Player import *
 from GAME_LOGIC.unoCore import Game
-from GAME_LOGIC.uno_Card import *
 from GAME_LOGIC.uno_Pile import *
 from GAME_LOGIC.uno_Const import *
-from main import init_bg
 from GAME_VIEW.view import init_view
 from GAME_VIEW.text import Text
 from GAME_VIEW.button import Button
 import configparser
+from util import *
+
 
 bgm_volume = 1
 click_volume = 1
@@ -21,16 +17,14 @@ check_os = True
 start_color_weakness_value = False
 
 config = configparser.ConfigParser()
-config.read(os.getcwd() + "/img/" + 'config.ini', encoding='utf-8')
+config.read('config.ini', encoding='utf-8')
 
 font = pygame.font.SysFont(None, 30)
 
-def save_config():
-    with open('config.ini', 'w', encoding='utf-8') as config_file:
-        config.write(config_file)
 
 
-def start(screen, screen_width, screen_height, num, name, color_weakness_value, mode):
+
+def start_game(screen, screen_width, screen_height, num, name, color_weakness_value, mode):
     global start_color_weakness_value
     start_color_weakness_value = color_weakness_value
     screen_size = (screen_width, screen_height)
@@ -57,12 +51,11 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
     global bet_card
     global cannot_bet
     global card_draw
-    bgm = pygame.mixer.Sound("bgm.mp3")
+    bgm = pygame.mixer.Sound(SOUND_PATH + "bgm.mp3")
     bgm.play(-1)
-    bet_card = pygame.mixer.Sound("bet_card.wav")
-    cannot_bet = pygame.mixer.Sound("cannot_bet.wav")
-    card_draw = pygame.mixer.Sound("card_draw.mp3")
-
+    bet_card = pygame.mixer.Sound(SOUND_PATH + "bet_card.wav")
+    cannot_bet = pygame.mixer.Sound(SOUND_PATH + "cannot_bet.wav")
+    card_draw = pygame.mixer.Sound(SOUND_PATH + "card_draw.mp3")
     while True:
         ##### 화면 초기화 #####
         screen.fill((0, 0, 0))
@@ -89,7 +82,6 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
 
         board_rect = (0, 0, screen_width * 3 / 5, screen_height * 3 / 5)
         pygame.draw.rect(screen, (25, 150, 75), board_rect)
-
         ##### slot_Area #####
 
         pSlotList = []
@@ -105,7 +97,8 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
 
         ##### user_Area #####
 
-        userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, nowCardIdx ,start_color_weakness_value)  # 유저 핸드
+        userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, nowCardIdx,
+                            start_color_weakness_value)  # 유저 핸드
 
         pageBtn = cardPageBtn(screen, user_lBtn_rect, user_rBtn_rect)  # 핸드 넘기는 버튼
 
@@ -122,8 +115,8 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
 
         dbtn = createDrawBtn(screen, g, board_rect)  # draw 버튼
         ubtn = createUnoBtn(screen, g, board_rect)  # uno 버튼
-        
-        if g.is_effctTime == False:    
+
+        if g.is_effctTime == False:
             timerInd(screen, board_rect, g.timer.time)
         else:
             eTimerInd(screen, board_rect, g.effectTimer.time)
@@ -132,7 +125,7 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
         g.update()
 
         # botHand(screen, screen_size, pc1)
-        pause_button = Button(image=pygame.image.load("pause_button.png"),
+        pause_button = Button(image=pygame.image.load(BUTTON_PATH + "pause_button.png"),
                               pos=(30, 30),
                               size=(50, 50))
         init_view(screen, [pause_button])
@@ -183,38 +176,31 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
                     screen_width = resolution[0]
                     screen_height = resolution[1]
                     pygame.display.set_mode((screen_width, screen_height))
-                    userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, nowCardIdx ,start_color_weakness_value)  # 유저 핸드
+                    userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, nowCardIdx,
+                                        start_color_weakness_value)  # 유저 핸드
                     openCardIndicator(screen, g, board_rect, start_color_weakness_value)  # openCard
-                    createIndicator(screen, g.openCard.cardList[-1], board_rect, start_color_weakness_value)  # indicator
+                    createIndicator(screen, g.openCard.cardList[-1], board_rect,
+                                    start_color_weakness_value)  # indicator
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     resolution = pause(screen, 1280, 720, screen_width)
-                    # print(resolution[0])
-                    # print(resolution[1])
-                    # userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, nowCardIdx,
-                    #                     start_color_weakness_value)
-                    # openCardIndicator(screen, g, board_rect, start_color_weakness_value)  # openCard
-                    # createIndicator(screen, g.openCard.cardList[-1], board_rect,
-                    #                 start_color_weakness_value)  # indicator
-                elif ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['LEFT_MOVE']).upper():
+                elif ("pygame.K_" + pygame.key.name(event.key)).upper() == (config['system']['LEFT_MOVE']).upper():
                     print(config['system']['left_move'])
                     nowCardIdx, playerCardPage = CardMoveUsingKeyBoard(g.userHand(), nowCardIdx, playerCardPage, 1)
                     print(nowCardIdx)
 
-                elif ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['RIGHT_MOVE']).upper():
+                elif ("pygame.K_" + pygame.key.name(event.key)).upper() == (config['system']['RIGHT_MOVE']).upper():
                     print(config['system']['RIGHT_MOVE'])
                     nowCardIdx, playerCardPage = CardMoveUsingKeyBoard(g.userHand(), nowCardIdx, playerCardPage, 0)
                     print(nowCardIdx)
 
-                elif ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['SELECT']).upper():
+                elif ("pygame.K_" + pygame.key.name(event.key)).upper() == (config['system']['SELECT']).upper():
                     played = g.eventCardBtn(nowCardIdx)
                     if played:
-                        print("낼 수 있는 카드")
                         bet_card.play(0)
                     else:
-                        print("낼 수 없는 카드")
                         cannot_bet.play(0)
-                elif ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['DRAW']).upper():
+                elif ("pygame.K_" + pygame.key.name(event.key)).upper() == (config['system']['DRAW']).upper():
                     if actlist['drawBtn']:  # actList가 true인 경우에만 함수 실행
                         g.eventDrawBtn()
 
@@ -227,7 +213,7 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
 
         pygame.display.flip()
 
-        if g.winner != None:
+        if g.winner is not None:
             winner_screen(screen, screen_width, screen_height, g.winner.playerName)
 
         clock.tick(60)
@@ -245,49 +231,49 @@ def pause(screen, screen_width, screen_height, width):
 
     x_pos = screen_width / 2 - button_width / 2
     y_pos = screen_height / 2 - button_height / 2
-    back_button = Button(image=pygame.image.load("back_button.png"),
+    back_button = Button(image=pygame.image.load(BUTTON_PATH + "back_button.png"),
                          pos=(30, 30),
                          size=(50, 50))
 
-    master_volume_up_button = Button(image=pygame.image.load("volume_up_button.png"),
+    master_volume_up_button = Button(image=pygame.image.load(BUTTON_PATH + "volume_up_button.png"),
                                      pos=(screen.get_rect().centerx - 120, screen.get_rect().centery - 280),
                                      size=(100, 46))
-    master_volume_down_button = Button(image=pygame.image.load("volume_down_button.png"),
+    master_volume_down_button = Button(image=pygame.image.load(BUTTON_PATH + "volume_down_button.png"),
                                        pos=(screen.get_rect().centerx + 30, screen.get_rect().centery - 280),
                                        size=(100, 46))
 
-    bgm_volume_up_button = Button(image=pygame.image.load("volume_up_button.png"),
+    bgm_volume_up_button = Button(image=pygame.image.load(BUTTON_PATH + "volume_up_button.png"),
                                   pos=(screen.get_rect().centerx - 480, screen.get_rect().centery - 280),
                                   size=(100, 46))
-    bgm_volume_down_button = Button(image=pygame.image.load("volume_down_button.png"),
+    bgm_volume_down_button = Button(image=pygame.image.load(BUTTON_PATH + "volume_down_button.png"),
                                     pos=(screen.get_rect().centerx - 330, screen.get_rect().centery - 280),
                                     size=(100, 46))
 
-    click_volume_up_button = Button(image=pygame.image.load("volume_up_button.png"),
+    click_volume_up_button = Button(image=pygame.image.load(BUTTON_PATH + "volume_up_button.png"),
                                     pos=(screen.get_rect().centerx + 250, screen.get_rect().centery - 280),
                                     size=(100, 46))
-    click_volume_down_button = Button(image=pygame.image.load("volume_down_button.png"),
+    click_volume_down_button = Button(image=pygame.image.load(BUTTON_PATH + "volume_down_button.png"),
                                       pos=(screen.get_rect().centerx + 400, screen.get_rect().centery - 280),
                                       size=(100, 46))
 
-    on_button = Button(image=pygame.image.load("on.png"),
+    on_button = Button(image=pygame.image.load(BUTTON_PATH + "on.png"),
                        pos=(screen.get_rect().centerx - 150, screen.get_rect().centery - 170),
                        size=(100, 46))
-    off_button = Button(image=pygame.image.load("off.png"),
+    off_button = Button(image=pygame.image.load(BUTTON_PATH + "off.png"),
                         pos=(screen.get_rect().centerx + 50, screen.get_rect().centery - 170),
                         size=(100, 46))
 
-    exit_button = Button(image=pygame.image.load("exit_button.png"),
+    exit_button = Button(image=pygame.image.load(BUTTON_PATH + "exit_button.png"),
                          pos=(x_pos, y_pos + 320),
                          size=(button_width, button_height))
 
-    button_1920 = Button(image=pygame.image.load("1920_button.png"),
+    button_1920 = Button(image=pygame.image.load(BUTTON_PATH + "1920_button.png"),
                          pos=(screen.get_rect().centerx - 250, screen.get_rect().centery - 60),
                          size=(100, 46))
-    button_1280 = Button(image=pygame.image.load("1280_button.png"),
+    button_1280 = Button(image=pygame.image.load(BUTTON_PATH + "1280_button.png"),
                          pos=(screen.get_rect().centerx - 50, screen.get_rect().centery - 60),
                          size=(100, 46))
-    button_960 = Button(image=pygame.image.load("960_button.png"),
+    button_960 = Button(image=pygame.image.load(BUTTON_PATH + "960_button.png"),
                         pos=(screen.get_rect().centerx + 110, screen.get_rect().centery - 60),
                         size=(100, 46))
 
@@ -331,30 +317,28 @@ def pause(screen, screen_width, screen_height, width):
                             size=30,
                             screen=screen)
 
-    if start_color_weakness_value == True: 
-        on_button.image = pygame.image.load("on_checked.png")
-        off_button.image = pygame.image.load("off.png")
+    if start_color_weakness_value == True:
+        on_button.image = pygame.image.load(BUTTON_PATH + "on_checked.png")
+        off_button.image = pygame.image.load(BUTTON_PATH + "off.png")
     else:
-        on_button.image = pygame.image.load("on.png")
-        off_button.image = pygame.image.load("off_checked.png")
+        on_button.image = pygame.image.load(BUTTON_PATH + "on.png")
+        off_button.image = pygame.image.load(BUTTON_PATH + "off_checked.png")
     if width == 1920:
-        button_1920.image = pygame.image.load("1920_checked.png")
-        button_1280.image = pygame.image.load("1280_button.png")
-        button_960.image = pygame.image.load("960_button.png")
+        button_1920.image = pygame.image.load(BUTTON_PATH + "1920_checked.png")
+        button_1280.image = pygame.image.load(BUTTON_PATH + "1280_button.png")
+        button_960.image = pygame.image.load(BUTTON_PATH + "960_button.png")
     elif width == 1280:
-        button_1920.image = pygame.image.load("1920_button.png")
-        button_1280.image = pygame.image.load("1280_checked.png")
-        button_960.image = pygame.image.load("960_button.png")
+        button_1920.image = pygame.image.load(BUTTON_PATH + "1920_button.png")
+        button_1280.image = pygame.image.load(BUTTON_PATH + "1280_checked.png")
+        button_960.image = pygame.image.load(BUTTON_PATH + "960_button.png")
     elif width == 960:
-        button_1920.image = pygame.image.load("1920_button.png")
-        button_1280.image = pygame.image.load("1280_button.png")
-        button_960.image = pygame.image.load("960_checked.png")
+        button_1920.image = pygame.image.load(BUTTON_PATH + "1920_button.png")
+        button_1280.image = pygame.image.load(BUTTON_PATH + "1280_button.png")
+        button_960.image = pygame.image.load(BUTTON_PATH + "960_checked.png")
 
     bool = True
-    screen.fill("black")
-    options_bg = init_bg("options_screen.png", 1280, 720)
+    init_bg(screen, SCREEN_PATH + "options_screen.png", 1280, 720)
     while bool:
-        screen.blit(options_bg, (0, 0))
         init_view(screen, [back_button, exit_button,
                            master_volume_up_button, master_volume_down_button,
                            bgm_volume_up_button, bgm_volume_down_button,
@@ -375,7 +359,7 @@ def pause(screen, screen_width, screen_height, width):
         DRAW = eval(f"{config['system']['DRAW']}")
 
         # 키 설정
-        key_setting_bg = pygame.image.load("key_button.png")
+        key_setting_bg = pygame.image.load(BUTTON_PATH + "key_button.png")
         key_setting_bg = pygame.transform.scale(key_setting_bg, (80, 80))
         # 우노 버튼 설정
         Uno_button_rect = key_setting_bg.get_rect()
@@ -455,11 +439,11 @@ def pause(screen, screen_width, screen_height, width):
                                size=25,
                                screen=screen)
         draw_text = Text(text_input="DRAW",
-                               font="notosanscjkkr",
-                               color=(0, 0, 0),
-                               pos=(screen.get_rect().centerx + 200, screen.get_rect().top + 420),
-                               size=25,
-                               screen=screen)
+                         font="notosanscjkkr",
+                         color=(0, 0, 0),
+                         pos=(screen.get_rect().centerx + 200, screen.get_rect().top + 420),
+                         size=25,
+                         screen=screen)
 
         uno_text.init_text()
         return_text.init_text()
@@ -472,7 +456,7 @@ def pause(screen, screen_width, screen_height, width):
                 quit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.rect.collidepoint(event.pos):
-                    if resolution==1920:
+                    if resolution == 1920:
                         return [1920, 1080]
                     elif resolution == 1280:
                         return [1280, 720]
@@ -510,40 +494,35 @@ def pause(screen, screen_width, screen_height, width):
                     cannot_bet.set_volume(click_volume)
                 elif exit_button.rect.collidepoint(event.pos):
                     bgm.stop()
-                    if check_os == True:
-                        file_path = os.getcwd()
-                        dir_path = os.path.dirname(file_path)
-                        os.chdir(dir_path)
-                        check_os = False
-                    from main_screen import main_screen
+                    from UNO_RUN import main_screen
                     main_screen()
                 elif button_1920.rect.collidepoint(event.pos):
                     resolution = 1920
-                    button_1920.image = pygame.image.load("1920_checked.png")
-                    button_1280.image = pygame.image.load("1280_button.png")
-                    button_960.image = pygame.image.load("960_button.png")
+                    button_1920.image = pygame.image.load(BUTTON_PATH + "1920_checked.png")
+                    button_1280.image = pygame.image.load(BUTTON_PATH + "1280_button.png")
+                    button_960.image = pygame.image.load(BUTTON_PATH + "960_button.png")
                 elif button_1280.rect.collidepoint(event.pos):
                     resolution = 1280
-                    button_1920.image = pygame.image.load("1920_button.png")
-                    button_1280.image = pygame.image.load("1280_checked.png")
-                    button_960.image = pygame.image.load("960_button.png")
+                    button_1920.image = pygame.image.load(BUTTON_PATH + "1920_button.png")
+                    button_1280.image = pygame.image.load(BUTTON_PATH + "1280_checked.png")
+                    button_960.image = pygame.image.load(BUTTON_PATH + "960_button.png")
                 elif button_960.rect.collidepoint(event.pos):
                     resolution = 960
-                    button_1920.image = pygame.image.load("1920_button.png")
-                    button_1280.image = pygame.image.load("1280_button.png")
-                    button_960.image = pygame.image.load("960_checked.png")
+                    button_1920.image = pygame.image.load(BUTTON_PATH + "1920_button.png")
+                    button_1280.image = pygame.image.load(BUTTON_PATH + "1280_button.png")
+                    button_960.image = pygame.image.load(BUTTON_PATH + "960_checked.png")
                 elif on_button.rect.collidepoint(event.pos):
                     print("on")
-                    on_button.image = pygame.image.load("on_checked.png")
-                    off_button.image = pygame.image.load("off.png")
+                    on_button.image = pygame.image.load(BUTTON_PATH + "on_checked.png")
+                    off_button.image = pygame.image.load(BUTTON_PATH + "off.png")
                     config['system']['COLOR_WEAKNESS_MODE'] = "True"
-                    save_config()
+                    save_config(config)
                     start_color_weakness_value = True
                 elif off_button.rect.collidepoint(event.pos):
-                    on_button.image = pygame.image.load("on.png")
-                    off_button.image = pygame.image.load("off_checked.png")
+                    on_button.image = pygame.image.load(BUTTON_PATH + "on.png")
+                    off_button.image = pygame.image.load(BUTTON_PATH + "off_checked.png")
                     config['system']['COLOR_WEAKNESS_MODE'] = "False"
-                    save_config()
+                    save_config(config)
                     start_color_weakness_value = False
                 elif Uno_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for Uno direction")
@@ -553,33 +532,36 @@ def pause(screen, screen_width, screen_height, width):
                         config['system']['UNO'] = 'pygame.K_' + (pygame.key.name(UNO)).upper()
                     else:
                         config['system']['UNO'] = 'pygame.K_' + pygame.key.name(UNO)
-                    save_config()
+                    save_config(config)
                 elif Select_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for Select direction")
                     SELECT = key_change()
                     pygame.key.name(SELECT)
-                    if pygame.key.name(SELECT) == 'up' or pygame.key.name(SELECT) == 'right' or pygame.key.name(SELECT) == 'left' or pygame.key.name(SELECT) == 'return':
+                    if pygame.key.name(SELECT) == 'up' or pygame.key.name(SELECT) == 'right' or pygame.key.name(
+                            SELECT) == 'left' or pygame.key.name(SELECT) == 'return':
                         config['system']['SELECT'] = 'pygame.K_' + (pygame.key.name(SELECT)).upper()
                     else:
                         config['system']['SELECT'] = 'pygame.K_' + pygame.key.name(SELECT)
-                    save_config()
+                    save_config(config)
                 elif L_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for LEFT direction")
                     LEFT = key_change()
                     pygame.key.name(LEFT)
-                    if pygame.key.name(LEFT) == 'up' or pygame.key.name(LEFT) == 'right' or pygame.key.name(LEFT) == 'left' or pygame.key.name(LEFT) == 'return':
+                    if pygame.key.name(LEFT) == 'up' or pygame.key.name(LEFT) == 'right' or pygame.key.name(
+                            LEFT) == 'left' or pygame.key.name(LEFT) == 'return':
                         config['system']['LEFT_MOVE'] = 'pygame.K_' + (pygame.key.name(LEFT)).upper()
                     else:
                         config['system']['LEFT_MOVE'] = 'pygame.K_' + pygame.key.name(LEFT)
-                    save_config()
+                    save_config(config)
                 elif R_button_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for RIGHT direction")
                     RIGHT = key_change()
-                    if pygame.key.name(RIGHT)=='up' or pygame.key.name(RIGHT)=='right' or pygame.key.name(RIGHT)=='left' or pygame.key.name(RIGHT) == 'return':
+                    if pygame.key.name(RIGHT) == 'up' or pygame.key.name(RIGHT) == 'right' or pygame.key.name(
+                            RIGHT) == 'left' or pygame.key.name(RIGHT) == 'return':
                         config['system']['RIGHT_MOVE'] = 'pygame.K_' + (pygame.key.name(RIGHT)).upper()
                     else:
                         config['system']['RIGHT_MOVE'] = 'pygame.K_' + pygame.key.name(RIGHT)
-                    save_config()
+                    save_config(config)
                 elif Draw_rect.collidepoint(pygame.mouse.get_pos()):
                     print("Press the key for DRAW")
                     DRAW = key_change()
@@ -588,11 +570,12 @@ def pause(screen, screen_width, screen_height, width):
                         config['system']['DRAW'] = 'pygame.K_' + (pygame.key.name(DRAW)).upper()
                     else:
                         config['system']['DRAW'] = 'pygame.K_' + pygame.key.name(DRAW)
-                    save_config()
+                    save_config(config)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     bool = False
         pygame.display.flip()
+
 
 def key_change():
     tmp = 0
@@ -642,31 +625,23 @@ def winner_screen(screen, screen_width, screen_height, winner):
                 quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.rect.collidepoint(event.pos):
-                    print("game start")
-                    if check_os == True:
-                        file_path = os.getcwd()
-                        dir_path = os.path.dirname(file_path)
-                        os.chdir(dir_path)
-                        check_os = False
-                    from main_screen import main_screen
+                    from UNO_RUN import main_screen
                     main_screen()
         pygame.display.flip()
 
 
-##### winner_sreen #####
-
 def createOneCard(card_o, pos_o, size_o, start_color_weakness_value):
     c = card_o
-    if start_color_weakness_value == False:
-        c_img = f"images/" + c.imgName() + ".png"
-    elif start_color_weakness_value == True:
-        c_img = f"blind_images/" + c.imgName() + ".png"
+    if not start_color_weakness_value:
+        c_img = CARD_PATH + c.imgName() + ".png"
+    elif start_color_weakness_value:
+        c_img = CARD_PATH + c.imgName() + ".png"
     btn = Button(image=pygame.image.load(c_img), pos=pos_o, size=size_o)
     return btn
 
 
 def createBackCard(pos_o, size_o, ):
-    c_img = f"images/back.png"
+    c_img = CARD_PATH + "back.png"
     btn = Button(image=pygame.image.load(c_img), pos=pos_o, size=size_o)
     return btn
 
@@ -687,7 +662,7 @@ def createBackCards(card_lst, rect):
 
 ##### user space #####
 
-def createCards(screen, card_lst, game, rect, page, nowCard , start_color_weakness_value):
+def createCards(screen, card_lst, game, rect, page, nowCard, start_color_weakness_value):
     temp = []
     btn = None
     size_x = rect[2] / 8
@@ -706,8 +681,8 @@ def createCards(screen, card_lst, game, rect, page, nowCard , start_color_weakne
             if card_lst[p + i].canUse(game):
                 pos_o = (pos_o[0], rect[1])
             temp.append(createOneCard(card_lst[p + i], pos_o, size_o, start_color_weakness_value))
-            if i+p == nowCard:
-                btn = Button(image=pygame.image.load(f"select.png"), pos=pos_o, size=size_o)
+            if i + p == nowCard:
+                btn = Button(image=pygame.image.load(ASSET_PATH + "select.png"), pos=pos_o, size=size_o)
 
     init_view(screen, temp)
     if btn != None:
@@ -737,8 +712,8 @@ def cardPageBtn(screen, lrect, rrect):
     pygame.draw.rect(screen, (255, 255, 255), rectL)
     pygame.draw.rect(screen, (255, 255, 255), rectR)
 
-    lbtn = Button(image=pygame.image.load(f"leftArrow.png"), pos=(rectL[0], rectL[1]), size=(rectL[2], rectL[3]))
-    rbtn = Button(image=pygame.image.load(f"rightArrow.png"), pos=(rectR[0], rectR[1]), size=(rectR[2], rectR[3]))
+    lbtn = Button(image=pygame.image.load(ASSET_PATH + "leftArrow.png"), pos=(rectL[0], rectL[1]), size=(rectL[2], rectL[3]))
+    rbtn = Button(image=pygame.image.load(ASSET_PATH + "rightArrow.png"), pos=(rectR[0], rectR[1]), size=(rectR[2], rectR[3]))
     init_view(screen, [lbtn, rbtn])
 
     return [lbtn, rbtn]
@@ -765,25 +740,21 @@ def CardMoveUsingKeyBoard(card_lst, nowIdx, nowPage, LR):
     if LR == 0:  # right
         if n - 1 > nowIdx:
             if nowIdx % 8 == 7:
-                return (nowIdx + 1, cardPageUpDown(card_lst, nowPage, LR))
+                return nowIdx + 1, cardPageUpDown(card_lst, nowPage, LR)
             else:
-                return (nowIdx + 1, nowPage)
+                return nowIdx + 1, nowPage
         else:
-            return (nowIdx, nowPage)
+            return nowIdx, nowPage
     else:  # left
         if nowIdx > 0:
             if nowIdx % 8 == 0:
-                return (nowIdx - 1, cardPageUpDown(card_lst, nowPage, LR))
+                return nowIdx - 1, cardPageUpDown(card_lst, nowPage, LR)
             else:
-                return (nowIdx - 1, nowPage)
+                return nowIdx - 1, nowPage
         else:
-            return (nowIdx, nowPage)
+            return nowIdx, nowPage
 
 
-##### user space #####
-
-
-##### board space #####
 
 def openCardIndicator(screen, game, rect, start_color_weakness_value):
     topCard = game.openCard.cardList[-1]  # openCard
@@ -799,9 +770,9 @@ def createIndicator(screen, card_o, rect, start_color_weakness_value):
     c = card_o
     txt = COLOR_TABLE2[c.applyColor]
     if start_color_weakness_value == False:
-        c_img = f"images/" + txt + ".png"
+        c_img = CARD_PATH + txt + ".png"
     elif start_color_weakness_value == True:
-        c_img = f"blind_images/" + txt + ".png"
+        c_img = BLIND_CARD_PATH + txt + ".png"
 
     center = rectCenter(rect)
     pos_o = (center[0] + rect[2] * 0.1, center[1])
@@ -837,7 +808,7 @@ def createUnoBtn(screen, game, rect):
     center = rectCenter(rect)
     pos_o = (center[0] - rect[2] * 0.1, center[1] - rect[2] * 0.1)
     size_o = (rect[2] * 0.1, rect[2] * 0.1)
-    btn = Button(image=pygame.image.load(f"UNO.png"), pos=pos_o, size=size_o)
+    btn = Button(image=pygame.image.load(BUTTON_PATH + "UNO.png"), pos=pos_o, size=size_o)
     if game.actList()['unoBtn']:
         init_view(screen, [btn])
 
@@ -861,7 +832,8 @@ def timerInd(screen, rect, time):
     center = rectCenter(Area)
     text = font.render(str(time // 60), True, (0, 0, 0))
     screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
-    
+
+
 def turnInd(screen, rect, turn):
     size_x = round(rect[2] / 20)
     size_y = size_x
@@ -877,7 +849,7 @@ def turnInd(screen, rect, turn):
     font = pygame.font.Font(None, font_size)
 
     center = rectCenter(Area)
-    text = font.render(str(turn+1), True, (0, 0, 0))
+    text = font.render(str(turn + 1), True, (0, 0, 0))
     screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
 
     return Area
@@ -1003,10 +975,10 @@ def turnArrow(screen, rect, direction):
     img_o = ''
 
     if direction == 1:
-        img_o = f"downArrow.png"
+        img_o = ASSET_PATH + "downArrow.png"
         pos_y = rect[1] + size_y
     else:
-        img_o = f"upArrow.png"
+        img_o = ASSET_PATH + "upArrow.png"
 
     size_o = (size_x, size_y)
     pos_o = (pos_x, pos_y)
@@ -1025,9 +997,9 @@ def createColorBtn(rect, start_color_weakness_value):
         pos_o = (rect[0] + i * x, rect[1] + y + 50)
         size_o = (x, y)
         if start_color_weakness_value == False:
-            img_o = f"images/" + COLOR_TABLE[i] + ".png"
+            img_o = CARD_PATH + COLOR_TABLE[i] + ".png"
         elif start_color_weakness_value == True:
-            img_o = f"blind_images/" + COLOR_TABLE[i] + ".png"
+            img_o = BLIND_CARD_PATH + COLOR_TABLE[i] + ".png"
         btn = Button(image=pygame.image.load(img_o), pos=pos_o, size=size_o)
         lst.append(btn)
     return lst

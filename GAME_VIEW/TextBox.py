@@ -7,7 +7,7 @@ COLOR_ACTIVE = pg.Color('dodgerblue2')
 FONT = pg.font.SysFont('notosansmonocjkkrregular', 32)
 
 
-class InputBox:
+class TextBox:
     def __init__(self, x, y, w, h, text=''):
         self.rect = pg.Rect(x, y, w, h)
         self.color = COLOR_INACTIVE

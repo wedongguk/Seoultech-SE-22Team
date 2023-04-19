@@ -1,6 +1,7 @@
 from abc import *
 import pygame
 
+
 class View(metaclass=ABCMeta):
     @abstractmethod
     def set_size(self):
@@ -8,6 +9,7 @@ class View(metaclass=ABCMeta):
 
     def update(self, view, screen):
         screen.blit(view, (self.x_pos, self.y_pos))
+
 
 def init_view(screen, list):
     for view in list:

@@ -3,7 +3,7 @@ from GAME_VIEW.view import View
 
 
 class Button(View):
-    def __init__(self, image, pos, size):
+    def __init__(self, image, pos, size, check=False):
         self.image = image
         self.x_pos = pos[0]
         self.y_pos = pos[1]

@@ -1,7 +1,13 @@
+import os
+
 import pygame
+
+from GAME_LOGIC import uno_ChkCon
 from GAME_LOGIC.uno_Const import * # const
 from GAME_LOGIC.Effect import effect # Effect
 import GAME_LOGIC.uno_ChkCon # Check Condition
+
+CARD_PATH = os.getcwd() + "/Asset/image/normal_card/"
 
 class Card: # 카드 클래스 생성
     ## 카드의 오리지널 데이터 ##    
@@ -24,7 +30,7 @@ class Card: # 카드 클래스 생성
         self.applyColor = self.color # applyColor 는 cardColor 로 초기값 설정
         
         self.screen_size = (1280, 720)
-        self.default_image = pygame.transform.smoothscale(pygame.image.load(f"images/back.png"), (self.screen_size[0] / 10, self.screen_size[1] / 5))
+        self.default_image = pygame.transform.smoothscale(pygame.image.load(CARD_PATH + "back.png"), (self.screen_size[0] / 10, self.screen_size[1] / 5))
         self.rect = self.default_image.get_rect()
 
     def __del__(self): # card class 소멸자
