@@ -1,13 +1,9 @@
-import random
-import pygame
-from GAME_LOGIC.Timer import Timer
-from GAME_LOGIC.uno_Const import * # const
-from GAME_LOGIC.uno_Pile import * # Pile Class
-from GAME_LOGIC.uno_PlayerList import * # PlayerList Class
-from GAME_LOGIC.uno_Player import * # Player Class
-from GAME_LOGIC.uno_Card import * # Card Class
-from GAME_LOGIC.uno_Bot import * # Bot Class
-import GAME_LOGIC.uno_ChkCon # Check Condition
+from Data.GAME_LOGIC.Timer import Timer
+from Data.GAME_LOGIC.uno_Const import * # const
+from Data.GAME_LOGIC.uno_Pile import * # Pile Class
+from Data.GAME_LOGIC.uno_PlayerList import * # PlayerList Class
+from Data.GAME_LOGIC.uno_Card import * # Card Class
+from Data.GAME_LOGIC.uno_Bot import * # Bot Class
 
 class Game: # game 클래스 생성
     deckList = [] # 남은 덱

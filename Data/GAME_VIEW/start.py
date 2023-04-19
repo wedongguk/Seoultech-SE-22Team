@@ -1,12 +1,14 @@
-from GAME_LOGIC.uno_Player import *
-from GAME_LOGIC.unoCore import Game
-from GAME_LOGIC.uno_Pile import *
-from GAME_LOGIC.uno_Const import *
-from GAME_VIEW.view import init_view
-from GAME_VIEW.text import Text
-from GAME_VIEW.button import Button
+import sys
+
+from Data.GAME_LOGIC.uno_Player import *
+from Data.GAME_LOGIC.unoCore import Game
+from Data.GAME_LOGIC.uno_Pile import *
+from Data.GAME_LOGIC.uno_Const import *
+from Data.GAME_VIEW.view import init_view
+from Data.GAME_VIEW.text import Text
+from Data.GAME_VIEW.button import Button
 import configparser
-from util import *
+from Data.GAME_VIEW.util import *
 
 
 bgm_volume = 1
@@ -17,7 +19,7 @@ check_os = True
 start_color_weakness_value = False
 
 config = configparser.ConfigParser()
-config.read('config.ini', encoding='utf-8')
+config.read('Data/config.ini', encoding='utf-8')
 
 font = pygame.font.SysFont(None, 30)
 
@@ -51,7 +53,7 @@ def start_game(screen, screen_width, screen_height, num, name, color_weakness_va
     global bet_card
     global cannot_bet
     global card_draw
-    bgm = pygame.mixer.Sound(SOUND_PATH + "bgm.mp3")
+    bgm = pygame.mixer.Sound(SOUND_PATH + "game_bgm.mp3")
     bgm.play(-1)
     bet_card = pygame.mixer.Sound(SOUND_PATH + "bet_card.wav")
     cannot_bet = pygame.mixer.Sound(SOUND_PATH + "cannot_bet.wav")

@@ -1,5 +1,5 @@
 import random
-from GAME_LOGIC.uno_Const import *  # const
+from Data.GAME_LOGIC.uno_Const import *  # const
 
 
 def distribution(game, mode):  # 카드를 분배

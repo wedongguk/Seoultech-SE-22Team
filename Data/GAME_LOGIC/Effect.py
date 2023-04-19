@@ -1,4 +1,4 @@
-from GAME_LOGIC.uno_Const import * # const
+from Data.GAME_LOGIC.uno_Const import * # const
 
 def effect(card, game):  # 특수 카드의 효과를 처리하기 위한 메서드.
     eCode = card.effectCode # eCode를 통해 어떤 종류인지 판단

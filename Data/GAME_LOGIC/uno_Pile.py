@@ -1,5 +1,5 @@
 import random
-from GAME_LOGIC.uno_Card import *
+from Data.GAME_LOGIC.uno_Card import *
 
 
 class Pile:  # pile 클래스 생성

@@ -1,5 +1,5 @@
-from GAME_LOGIC.uno_Const import *  #
-from GAME_LOGIC.uno_Card import *  #
+from Data.GAME_LOGIC.uno_Const import *  #
+from Data.GAME_LOGIC.uno_Card import *  #
 
 
 def canUse(top, chk):  # 카드를 낼 수 있는지 체크하는 메서드

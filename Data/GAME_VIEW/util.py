@@ -3,17 +3,19 @@ import sys
 
 import pygame
 
-BUTTON_PATH = os.getcwd() + "/Asset/image/button/"
-SCREEN_PATH = os.getcwd() + "/Asset/image/screen/"
-SOUND_PATH = os.getcwd() + "/Asset/sound/"
-ASSET_PATH = os.getcwd() + "/Asset/image/etc/"
-BLIND_CARD_PATH = os.getcwd() + "/Asset/image/blind_card/"
+BUTTON_PATH = os.getcwd() + "/Data/Asset/image/button/"
+SCREEN_PATH = os.getcwd() + "/Data/Asset/image/screen/"
+SOUND_PATH = os.getcwd() + "/Data/Asset/sound/"
+ASSET_PATH = os.getcwd() + "/Data/Asset/image/etc/"
+BLIND_CARD_PATH = os.getcwd() + "/Data/Asset/image/blind_card/"
+CARD_PATH = os.getcwd() + "/Data/Asset/image/normal_card/"
+
 
 
 def init_pygame():
     pygame.init()
     pygame.display.set_caption("Uno game")
-    icon = pygame.image.load(os.getcwd() + "/Asset/image/etc/icon.png")
+    icon = pygame.image.load(os.getcwd() + "/Data/Asset/image/etc/icon.png")
     pygame.display.set_icon(icon)
 
 

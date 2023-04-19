@@ -1,5 +1,4 @@
 from abc import *
-import pygame
 
 
 class View(metaclass=ABCMeta):

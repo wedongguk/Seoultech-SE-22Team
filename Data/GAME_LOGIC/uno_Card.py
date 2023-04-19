@@ -2,12 +2,10 @@ import os
 
 import pygame
 
-from GAME_LOGIC import uno_ChkCon
-from GAME_LOGIC.uno_Const import * # const
-from GAME_LOGIC.Effect import effect # Effect
-import GAME_LOGIC.uno_ChkCon # Check Condition
-
-CARD_PATH = os.getcwd() + "/Asset/image/normal_card/"
+from Data.GAME_LOGIC import uno_ChkCon
+from Data.GAME_LOGIC.uno_Const import * # const
+from Data.GAME_LOGIC.Effect import effect # Effect
+from Data.GAME_VIEW.util import CARD_PATH
 
 class Card: # 카드 클래스 생성
     ## 카드의 오리지널 데이터 ##    
