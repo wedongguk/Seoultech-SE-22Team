@@ -13,6 +13,7 @@ from text import Text
 from button import Button
 from screenSupporter import sliceRect
 import configparser
+from start_Object import *
 
 bgm_volume = 1
 click_volume = 1
@@ -52,6 +53,7 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
 
     playerCardPage = 0
     nowCardIdx = 0
+    ch = CardHolder(8)
 
     clock = pygame.time.Clock()
     global bgm
@@ -110,10 +112,9 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
         ##### slot_Area #####
 
         ##### user_Area #####
-
-        userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, nowCardIdx ,start_color_weakness_value)  # 유저 핸드
-
-        pageBtn = cardPageBtn(screen, user_lBtn_rect, user_rBtn_rect)  # 핸드 넘기는 버튼
+        ch.update(g.userHand())
+        cardHolderDict = {'lbtn': user_lBtn_rect, 'rbtn': user_rBtn_rect, 'cardZone': user_cardZone_rect} 
+        cardHolder = veiwCardHolder(screen, ch, g ,cardHolderDict, start_color_weakness_value) 
 
         ##### user_Area #####
 
@@ -157,23 +158,10 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                for i in range(0, len(userH)):
-                    if userH[i].rect.collidepoint(event.pos):  # 카드 버튼
-                        played = g.eventCardBtn(playerCardPage * 8 + i)
-                        if played:
-                            print("낼 수 있는 카드")
-                            bet_card.play(0)
-                        else:
-                            print("낼 수 없는 카드")
-                            cannot_bet.play(0)
-
-                if pageBtn[0].rect.collidepoint(event.pos):  # 페이지-1
-                    playerCardPage = cardPageUpDown(g.userHand(), playerCardPage, 1)
-
-                if pageBtn[1].rect.collidepoint(event.pos):  # 페이지+1
-                    playerCardPage = cardPageUpDown(g.userHand(), playerCardPage, 0)
-
+                
+            eventCardHolder(ch, cardHolder, g, event ,config) # cardHolder
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 for i in range(0, len(cbtn)):  # 색깔 바꾸는 버튼
                     if cbtn[i].rect.collidepoint(event.pos):
                         g.eventColorBtn(i)
@@ -189,7 +177,7 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
                     screen_width = resolution[0]
                     screen_height = resolution[1]
                     pygame.display.set_mode((screen_width, screen_height))
-                    userH = createCards(screen, g.userHand(), g, user_cardZone_rect, playerCardPage, nowCardIdx ,start_color_weakness_value)  # 유저 핸드
+                    cardHolder = veiwCardHolder(screen, ch, g ,cardHolderDict, start_color_weakness_value) # cardHolder
                     openCardIndicator(screen, g, board_rect, start_color_weakness_value)  # openCard
                     createIndicator(screen, g.openCard.cardList[-1], board_rect, start_color_weakness_value)  # indicator
             elif event.type == pygame.KEYDOWN:
@@ -202,34 +190,10 @@ def start(screen, screen_width, screen_height, num, name, color_weakness_value, 
                     # openCardIndicator(screen, g, board_rect, start_color_weakness_value)  # openCard
                     # createIndicator(screen, g.openCard.cardList[-1], board_rect,
                     #                 start_color_weakness_value)  # indicator
-                elif ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['LEFT_MOVE']).upper():
-                    print(config['system']['left_move'])
-                    nowCardIdx, playerCardPage = CardMoveUsingKeyBoard(g.userHand(), nowCardIdx, playerCardPage, 1)
-                    print(nowCardIdx)
-
-                elif ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['RIGHT_MOVE']).upper():
-                    print(config['system']['RIGHT_MOVE'])
-                    nowCardIdx, playerCardPage = CardMoveUsingKeyBoard(g.userHand(), nowCardIdx, playerCardPage, 0)
-                    print(nowCardIdx)
-
-                elif ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['SELECT']).upper():
-                    played = g.eventCardBtn(nowCardIdx)
-                    if played:
-                        print("낼 수 있는 카드")
-                        bet_card.play(0)
-                    else:
-                        print("낼 수 없는 카드")
-                        cannot_bet.play(0)
+                
                 elif ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['DRAW']).upper():
                     if actlist['drawBtn']:  # actList가 true인 경우에만 함수 실행
                         g.eventDrawBtn()
-
-            mouse_pos = pygame.mouse.get_pos()
-
-            # check if the mouse is over the fa_rect
-            for i in range(0, len(userH)):  # 색깔 바꾸는 버튼
-                if userH[i].rect.collidepoint(mouse_pos):
-                    nowCardIdx = playerCardPage * 8 + i
 
         pygame.display.flip()
 
@@ -690,103 +654,128 @@ def createBackCards(card_lst, rect):
 
 ##### card generator #####
 
+##### CardHolder #####
 
-##### user space #####
-
-def createCards(screen, card_lst, game, rect, page, nowCard , start_color_weakness_value):
+def veiwCardHolder(screen, cardHolder, game ,rectDict, start_color_weakness_value):
+    
+    ## rect ##
+    lbtn = rectDict['lbtn']
+    rbtn = rectDict['rbtn']
+    cardZone = rectDict['cardZone']
+    
+    ## bg ##
+    pygame.draw.rect(screen, (0, 0, 255), lbtn)
+    pygame.draw.rect(screen, (0, 170, 255), cardZone)
+    pygame.draw.rect(screen, (0, 0, 255), rbtn)
+    
     temp = []
+    result = {}
     btn = None
-    size_x = rect[2] / 8
+    size_x = cardZone[2]/8
     size_y = size_x * 1.2
 
-    pos_x = rect[0]
-    pos_y = rect[1] + size_y / 4
+    pos_x = cardZone[0]
+    pos_y = cardZone[1] + size_y/4
 
-    p = page * 8
+    
+    cardList = cardHolder.show()
 
-    for i in range(0, 8):
-
-        if len(card_lst) > p + i:
-            pos_o = (pos_x + size_x * i, pos_y)
-            size_o = (size_x, size_y)
-            if card_lst[p + i].canUse(game):
-                pos_o = (pos_o[0], rect[1])
-            temp.append(createOneCard(card_lst[p + i], pos_o, size_o, start_color_weakness_value))
-            if i+p == nowCard:
-                btn = Button(image=pygame.image.load(f"select.png"), pos=pos_o, size=size_o)
-
+    for i in range(len(cardList)):
+        pos_o = (pos_x + size_x * i, pos_y)
+        size_o = (size_x, size_y)
+        if cardList[i].canUse(game):
+            pos_o = (pos_o[0], cardZone[1])
+        temp.append(createOneCard(cardList[i], pos_o, size_o, start_color_weakness_value))
+        if cardHolder.realIdx(i) == cardHolder.nowIdx:
+            btn = Button(image=pygame.image.load(f"select.png"), pos=pos_o, size=size_o)
+    
     init_view(screen, temp)
     if btn != None:
         init_view(screen, [btn])
-    return temp
+            
+    centerL = rectCenter(lbtn)
+    centerR = rectCenter(rbtn)
 
-
-def cardPageBtn(screen, lrect, rrect):
-    centerL = rectCenter(lrect)
-    centerR = rectCenter(rrect)
-
-    size_lx = lrect[2]
-    size_ly = lrect[2]
-
-    size_rx = rrect[2]
-    size_ry = rrect[2]
-
-    pos_lx = lrect[0]
-    pos_ly = centerL[1] - lrect[2] / 2
-
-    pos_rx = rrect[0]
-    pos_ry = centerR[1] - rrect[2] / 2
-
+    size_lx, size_ly = lbtn[2], lbtn[2]  
+    pos_lx, pos_ly = lbtn[0], centerL[1] - lbtn[2] / 2
     rectL = (pos_lx, pos_ly, size_lx, size_ly)
-    rectR = (pos_rx, pos_ry, size_rx, size_ry)
-
     pygame.draw.rect(screen, (255, 255, 255), rectL)
-    pygame.draw.rect(screen, (255, 255, 255), rectR)
-
     lbtn = Button(image=pygame.image.load(f"leftArrow.png"), pos=(rectL[0], rectL[1]), size=(rectL[2], rectL[3]))
+    
+    size_rx, size_ry = rbtn[2], rbtn[2]
+    pos_rx, pos_ry = rbtn[0], centerR[1] - rbtn[2] / 2
+    rectR = (pos_rx, pos_ry, size_rx, size_ry)
+    pygame.draw.rect(screen, (255, 255, 255), rectR)
     rbtn = Button(image=pygame.image.load(f"rightArrow.png"), pos=(rectR[0], rectR[1]), size=(rectR[2], rectR[3]))
+    
     init_view(screen, [lbtn, rbtn])
+    result['cards'] = temp
+    result['lbtn'] = lbtn
+    result['rbtn'] = rbtn
+    
 
-    return [lbtn, rbtn]
+    return result
 
+def eventCardHolder(cardHolder, rectDict, game, event ,config):
+    
+    ## rect ##
+    cards = rectDict['cards'] 
+    lbtn = rectDict['lbtn']
+    rbtn = rectDict['rbtn']
+    
+    ## sound ##
+    bet_card = pygame.mixer.Sound("bet_card.wav")
+    cannot_bet = pygame.mixer.Sound("cannot_bet.wav")
+    
 
-def cardPageUpDown(card_lst, nowPage, upDown):
-    if upDown == 0:  # right
-        if len(card_lst) - (nowPage + 1) * 8 > 0:
-            return nowPage + 1
-        else:
-            print('페이지를 증가시킬 수 없다.')
-            return nowPage
-    else:  # left
-        if nowPage != 0:
-            return nowPage - 1
-        else:
-            print('페이지를 감소 시킬 수 없다.')
-            return nowPage
-
-
-def CardMoveUsingKeyBoard(card_lst, nowIdx, nowPage, LR):
-    n = len(card_lst)
-
-    if LR == 0:  # right
-        if n - 1 > nowIdx:
-            if nowIdx % 8 == 7:
-                return (nowIdx + 1, cardPageUpDown(card_lst, nowPage, LR))
+    ## mouse ##
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        for i in range(0, len(cards)):
+            if cards[i].rect.collidepoint(event.pos):  # 카드 버튼
+                played = game.eventCardBtn(cardHolder.realIdx(i))
+                if played:
+                    print("낼 수 있는 카드")
+                    bet_card.play(0)
+                    if len(cardHolder.userHand) == cardHolder.nowIdx:    
+                        cardHolder.decIdx()
+                else:
+                    print("낼 수 없는 카드")
+                    cannot_bet.play(0)
+    
+        if lbtn.rect.collidepoint(event.pos):  # 페이지 -1
+            cardHolder.pageDown()
+    
+        if rbtn.rect.collidepoint(event.pos):  # 페이지 +1
+            cardHolder.pageUp()
+            
+    mouse_pos = pygame.mouse.get_pos()
+    for i in range(0, len(cards)):  # 마우스 감지
+        if cards[i].rect.collidepoint(mouse_pos):
+            cardHolder.nowIdx = cardHolder.realIdx(i)
+    
+    ## keyborad ##
+    
+    if event.type == pygame.KEYDOWN:
+        if ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['LEFT_MOVE']).upper():
+            print(config['system']['left_move']) # -1칸
+            cardHolder.decIdx()
+        
+        elif ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['RIGHT_MOVE']).upper():
+            print(config['system']['RIGHT_MOVE']) # +1칸
+            cardHolder.incIdx()
+        
+        elif ("pygame.K_"+pygame.key.name(event.key)).upper() == (config['system']['SELECT']).upper():
+            played = game.eventCardBtn(cardHolder.nowIdx)
+            if played:
+                print("낼 수 있는 카드")
+                bet_card.play(0)
+                if len(cardHolder.userHand) == cardHolder.nowIdx:    
+                    cardHolder.decIdx()
             else:
-                return (nowIdx + 1, nowPage)
-        else:
-            return (nowIdx, nowPage)
-    else:  # left
-        if nowIdx > 0:
-            if nowIdx % 8 == 0:
-                return (nowIdx - 1, cardPageUpDown(card_lst, nowPage, LR))
-            else:
-                return (nowIdx - 1, nowPage)
-        else:
-            return (nowIdx, nowPage)
-
-
-##### user space #####
+                print("낼 수 없는 카드")
+                cannot_bet.play(0)
+    
+##### CardHolder #####
 
 
 ##### board space #####
