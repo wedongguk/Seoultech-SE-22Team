@@ -1,10 +1,7 @@
-from Data.GAME_LOGIC.uno_Const import MODE_NORMAL, MODE_ALLCARD, MODE_CHANGECOLOR, MODE_OPENSHUFFLE
-from Data.GAME_VIEW.OBJECT.textbox import TextBox
 from Data.GAME_VIEW.OBJECT.view import init_view
 from Data.GAME_VIEW.OBJECT.button import Button
 from Data.GAME_VIEW.OBJECT.text import Text
 from Data.GAME_VIEW.util import *
-import configparser
 
 init_pygame()
 
@@ -14,17 +11,6 @@ if bool(config['system']['COLOR_WEAKNESS_MODE']):
     color_weakness_value = True
 else:
     color_weakness_value = False
-
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
-
-BUTTON_WIDTH = 220
-BUTTON_HEIGHT = 50
-
-SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
-x_pos = SCREEN_WIDTH / 2 - BUTTON_WIDTH / 2
-y_pos = SCREEN_HEIGHT / 2 - BUTTON_HEIGHT / 2
 
 # 메인 루프
 def main_screen():

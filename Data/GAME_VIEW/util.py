@@ -10,6 +10,17 @@ config.read('Data/config.ini', encoding='utf-8')
 
 font = pygame.font.SysFont("notosanscjkkr", 30)
 
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
+
+BUTTON_WIDTH = 220
+BUTTON_HEIGHT = 50
+
+SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+x_pos = SCREEN_WIDTH / 2 - BUTTON_WIDTH / 2
+y_pos = SCREEN_HEIGHT / 2 - BUTTON_HEIGHT / 2
+
 BUTTON_PATH = os.getcwd() + "/Data/Asset/image/button/"
 SCREEN_PATH = os.getcwd() + "/Data/Asset/image/screen/"
 SOUND_PATH = os.getcwd() + "/Data/Asset/sound/"
