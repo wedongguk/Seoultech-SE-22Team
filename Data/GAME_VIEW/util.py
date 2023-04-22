@@ -1,7 +1,14 @@
 import os
 import sys
-
+import configparser
 import pygame
+
+pygame.init()
+
+config = configparser.ConfigParser()
+config.read('Data/config.ini', encoding='utf-8')
+
+font = pygame.font.SysFont("notosanscjkkr", 30)
 
 BUTTON_PATH = os.getcwd() + "/Data/Asset/image/button/"
 SCREEN_PATH = os.getcwd() + "/Data/Asset/image/screen/"
@@ -10,6 +17,10 @@ ASSET_PATH = os.getcwd() + "/Data/Asset/image/etc/"
 BLIND_CARD_PATH = os.getcwd() + "/Data/Asset/image/blind_card/"
 CARD_PATH = os.getcwd() + "/Data/Asset/image/normal_card/"
 
+CLICK_SOUND = pygame.mixer.Sound(SOUND_PATH + "click_bgm.wav")
+MAIN_BGM = pygame.mixer.Sound(SOUND_PATH + "main_bgm.mp3")
+MAIN_BGM.set_volume(0.7)
+MAIN_BGM.play(-1)
 
 
 def init_pygame():

@@ -1,5 +1,5 @@
 import pygame
-from Data.GAME_VIEW.view import View
+from Data.GAME_VIEW.OBJECT.view import View
 
 class Text(View):
     def __init__(self, text_input, font, pos, size, color, screen):

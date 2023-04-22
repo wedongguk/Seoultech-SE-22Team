@@ -1,15 +1,13 @@
-import sys
-
 from Data.GAME_LOGIC.uno_Player import *
 from Data.GAME_LOGIC.unoCore import Game
 from Data.GAME_LOGIC.uno_Pile import *
 from Data.GAME_LOGIC.uno_Const import *
-from Data.GAME_VIEW.view import init_view
-from Data.GAME_VIEW.text import Text
-from Data.GAME_VIEW.button import Button
-import configparser
+from Data.GAME_VIEW.OBJECT.view import init_view
+from Data.GAME_VIEW.OBJECT.text import Text
+from Data.GAME_VIEW.OBJECT.button import Button
 from Data.GAME_VIEW.util import *
 
+import configparser
 
 bgm_volume = 1
 click_volume = 1
@@ -21,13 +19,10 @@ start_color_weakness_value = False
 config = configparser.ConfigParser()
 config.read('Data/config.ini', encoding='utf-8')
 
-font = pygame.font.SysFont(None, 30)
-
-
-
-
 def start_game(screen, screen_width, screen_height, num, name, color_weakness_value, mode):
     global start_color_weakness_value
+    global bgm, bet_card, cannot_bet, card_draw
+
     start_color_weakness_value = color_weakness_value
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
@@ -49,10 +44,6 @@ def start_game(screen, screen_width, screen_height, num, name, color_weakness_va
     nowCardIdx = 0
 
     clock = pygame.time.Clock()
-    global bgm
-    global bet_card
-    global cannot_bet
-    global card_draw
     bgm = pygame.mixer.Sound(SOUND_PATH + "game_bgm.mp3")
     bgm.play(-1)
     bet_card = pygame.mixer.Sound(SOUND_PATH + "bet_card.wav")
@@ -207,7 +198,6 @@ def start_game(screen, screen_width, screen_height, num, name, color_weakness_va
                         g.eventDrawBtn()
 
             mouse_pos = pygame.mouse.get_pos()
-
             # check if the mouse is over the fa_rect
             for i in range(0, len(userH)):  # 색깔 바꾸는 버튼
                 if userH[i].rect.collidepoint(mouse_pos):
@@ -714,8 +704,10 @@ def cardPageBtn(screen, lrect, rrect):
     pygame.draw.rect(screen, (255, 255, 255), rectL)
     pygame.draw.rect(screen, (255, 255, 255), rectR)
 
-    lbtn = Button(image=pygame.image.load(ASSET_PATH + "leftArrow.png"), pos=(rectL[0], rectL[1]), size=(rectL[2], rectL[3]))
-    rbtn = Button(image=pygame.image.load(ASSET_PATH + "rightArrow.png"), pos=(rectR[0], rectR[1]), size=(rectR[2], rectR[3]))
+    lbtn = Button(image=pygame.image.load(ASSET_PATH + "leftArrow.png"), pos=(rectL[0], rectL[1]),
+                  size=(rectL[2], rectL[3]))
+    rbtn = Button(image=pygame.image.load(ASSET_PATH + "rightArrow.png"), pos=(rectR[0], rectR[1]),
+                  size=(rectR[2], rectR[3]))
     init_view(screen, [lbtn, rbtn])
 
     return [lbtn, rbtn]
@@ -755,7 +747,6 @@ def CardMoveUsingKeyBoard(card_lst, nowIdx, nowPage, LR):
                 return nowIdx - 1, nowPage
         else:
             return nowIdx, nowPage
-
 
 
 def openCardIndicator(screen, game, rect, start_color_weakness_value):

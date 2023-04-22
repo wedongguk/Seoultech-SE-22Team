@@ -1,5 +1,5 @@
 import pygame
-from Data.GAME_VIEW.view import View
+from Data.GAME_VIEW.OBJECT.view import View
 
 
 class Button(View):
