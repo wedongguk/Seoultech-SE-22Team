@@ -71,3 +71,9 @@ def event_changeColor(game): # 엔드 이벤트 - 오픈 카드의 색이 바뀜
     if game.turn%5 == 0:
         game.openCard.cardList[-1].applyColor = random.randrange(0,4)
 
+def event_shuffleOpen(game):
+    if game.turn%5 == 0:
+        game.openCard.shuffle()
+        topCard = game.openCard.takeTopCard()
+        game.placeOpenCardZone(topCard)
+        print("뒤섞")
