@@ -30,8 +30,6 @@ CARD_PATH = os.getcwd() + "/Data/Asset/image/normal_card/"
 
 CLICK_SOUND = pygame.mixer.Sound(SOUND_PATH + "click_bgm.wav")
 MAIN_BGM = pygame.mixer.Sound(SOUND_PATH + "main_bgm.mp3")
-MAIN_BGM.set_volume(0.7)
-MAIN_BGM.play(-1)
 
 
 def init_pygame():

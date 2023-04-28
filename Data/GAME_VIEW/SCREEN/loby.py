@@ -7,8 +7,8 @@ from Data.GAME_VIEW.util import *
 
 
 def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=MODE_NORMAL):
-    x_pos = SCREEN_WIDTH/2 - BUTTON_WIDTH/2
-    y_pos = SCREEN_HEIGHT/2 - BUTTON_HEIGHT/2
+    x_pos = SCREEN_WIDTH / 2 - BUTTON_WIDTH / 2
+    y_pos = SCREEN_HEIGHT / 2 - BUTTON_HEIGHT / 2
 
     init_bg(SCREEN, SCREEN_PATH + "options_screen.png", SCREEN_WIDTH, SCREEN_HEIGHT)
 
@@ -94,7 +94,7 @@ def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=
                     from Data.GAME_VIEW.SCREEN.start import start_game
                     MAIN_BGM.stop()
                     from UNO_RUN import color_weakness_value
-                    start_game(SCREEN, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),
+                    start_game(int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),
                                AI_num,
                                name_list, color_weakness_value, mode)
                 elif back_button.rect.collidepoint(event.pos):

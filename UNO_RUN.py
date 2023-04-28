@@ -4,7 +4,6 @@ from Data.GAME_VIEW.OBJECT.text import Text
 from Data.GAME_VIEW.util import *
 
 init_pygame()
-
 check_config(config)
 
 if bool(config['system']['COLOR_WEAKNESS_MODE']):
@@ -12,9 +11,12 @@ if bool(config['system']['COLOR_WEAKNESS_MODE']):
 else:
     color_weakness_value = False
 
+
 # 메인 루프
 def main_screen():
     init_bg(SCREEN, SCREEN_PATH + "start_screen.jpeg", 1280, 720)
+    MAIN_BGM.set_volume(0.7)
+    MAIN_BGM.play(-1)
     while True:
         play_button = Button(image=pygame.image.load(BUTTON_PATH + "play_button.png"),
                              pos=(x_pos, y_pos + 200),
