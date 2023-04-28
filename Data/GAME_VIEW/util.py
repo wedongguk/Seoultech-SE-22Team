@@ -43,7 +43,7 @@ def init_bg(screen, image, width, height):
     screen.fill("black")
     bg = pygame.image.load(image)
     bg = pygame.transform.scale(bg, (width, height))
-    screen.blit(bg, (0,0))
+    screen.blit(bg, (0, 0))
 
 
 def check_config(config):
@@ -66,7 +66,7 @@ def check_config(config):
 
 
 def save_config(config):
-    with open('config.ini', 'w', encoding='utf-8') as config_file:
+    with open('/Data/config.ini', 'w', encoding='utf-8') as config_file:
         config.write(config_file)
 
 
