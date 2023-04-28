@@ -19,7 +19,8 @@ start_color_weakness_value = False
 config = configparser.ConfigParser()
 config.read('Data/config.ini', encoding='utf-8')
 
-def start_game(screen, screen_width, screen_height, num, name, color_weakness_value, mode):
+
+def start_game(screen_width, screen_height, num, name, color_weakness_value, mode):
     global start_color_weakness_value
     global bgm, bet_card, cannot_bet, card_draw
 
@@ -117,7 +118,6 @@ def start_game(screen, screen_width, screen_height, num, name, color_weakness_va
 
         g.update()
 
-        # botHand(screen, screen_size, pc1)
         pause_button = Button(image=pygame.image.load(BUTTON_PATH + "pause_button.png"),
                               pos=(30, 30),
                               size=(50, 50))
