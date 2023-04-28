@@ -36,8 +36,8 @@ def story_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
                 quit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.rect.collidepoint(event.pos):
-                    from Data.GAME_VIEW.SCREEN.game_mode import play
-                    play()
+                    from Data.GAME_VIEW.SCREEN.game_mode import select_game_mode
+                    select_game_mode(SCREEN, SCREEN_HEIGHT, SCREEN_WIDTH, BUTTON_WIDTH, BUTTON_HEIGHT)
                 elif story_mode_1.rect.collidepoint(event.pos):
                     from Data.GAME_VIEW.SCREEN.loby import loby
                     loby(SCREEN, SCREEN_HEIGHT, SCREEN_WIDTH, BUTTON_WIDTH, BUTTON_HEIGHT)
