@@ -47,7 +47,7 @@ def main_screen():
                 if play_button.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     from Data.GAME_VIEW.SCREEN.game_mode import select_game_mode
-                    select_game_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
+                    select_game_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT+5)
                 elif options_button.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     from Data.GAME_VIEW.SCREEN.option import options
