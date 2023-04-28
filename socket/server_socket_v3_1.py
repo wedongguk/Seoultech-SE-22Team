@@ -52,7 +52,7 @@ class UserManager: # 사용자관리 및 채팅 메세지 전송을 담당하는
 
    def sendMessageToAll(self, msg):
       for conn, addr in self.users.values():
-         conn.send(msg.encode())
+        conn.send(msg.encode())
           
 
 class MyTcpHandler(socketserver.BaseRequestHandler):
@@ -65,7 +65,7 @@ class MyTcpHandler(socketserver.BaseRequestHandler):
          username = self.registerUsername()
          msg = self.request.recv(1024)
          while msg:
-            print(msg.decode())
+            print(msg.decode()) # 메세지 decode 후 프린트
             if self.userman.messageHandler(username, msg.decode()) == -1:
                self.request.close()
                break
@@ -101,9 +101,3 @@ def runServer():
       server.server_close()
 
 runServer()
-print("runserver")
-time.sleep(5)
-print("timesleep 5")
-
-from client_socket_v3 import runChat
-runChat()
