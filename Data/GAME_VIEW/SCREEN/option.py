@@ -4,6 +4,7 @@ from Data.GAME_VIEW.OBJECT.view import init_view
 from Data.GAME_VIEW.util import *
 import pygame
 
+
 def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
     global UNO, SELECT, LEFT, RIGHT, DRAW, width, height
     global color_weakness_value
@@ -13,86 +14,112 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
 
     # option 화면에 필요한 버튼 설정
     back_button = Button(image=pygame.image.load(BUTTON_PATH + "back_button.png"),
-                         pos=(30, 30),
-                         size=(50, 50))
+                         pos=(set_size(30, SCREEN_WIDTH), set_size(30, SCREEN_WIDTH)),
+                         size=(set_size(50, SCREEN_WIDTH), set_size(50, SCREEN_WIDTH)))
     save_button = Button(image=pygame.image.load(BUTTON_PATH + "save_button.png"),
-                         pos=(x_pos, y_pos + 230),
+                         pos=(x_pos, y_pos + set_size(230, SCREEN_WIDTH)),
                          size=(BUTTON_WIDTH, BUTTON_HEIGHT))
     reset_button = Button(image=pygame.image.load(BUTTON_PATH + "reset_button.png"),
-                          pos=(x_pos, y_pos + 300),
+                          pos=(x_pos, y_pos + set_size(300, SCREEN_WIDTH)),
                           size=(BUTTON_WIDTH, BUTTON_HEIGHT))
 
     on_button = Button(image=pygame.image.load(BUTTON_PATH + "on.png"),
-                       pos=(SCREEN.get_rect().centerx - 150, SCREEN.get_rect().centery - 230),
-                       size=(130, 60))
+                       pos=(SCREEN.get_rect().centerx - set_size(150, SCREEN_WIDTH),
+                            SCREEN.get_rect().centery - set_size(230, SCREEN_WIDTH)),
+                       size=(set_size(130, SCREEN_WIDTH), set_size(60, SCREEN_WIDTH)))
     off_button = Button(image=pygame.image.load(BUTTON_PATH + "off.png"),
-                        pos=(SCREEN.get_rect().centerx + 50, SCREEN.get_rect().centery - 230),
-                        size=(130, 60))
+                        pos=(SCREEN.get_rect().centerx + set_size(50, SCREEN_WIDTH),
+                             SCREEN.get_rect().centery - set_size(230, SCREEN_WIDTH)),
+                        size=(set_size(130, SCREEN_WIDTH), set_size(60, SCREEN_WIDTH)))
+
+    resolution_button = []
+
+
     button_1920 = Button(image=pygame.image.load(BUTTON_PATH + "1920_button.png"),
-                         pos=(SCREEN.get_rect().centerx - 300, SCREEN.get_rect().centery - 80),
-                         size=(160, 60))
+                         pos=(SCREEN.get_rect().centerx - set_size(300, SCREEN_WIDTH),
+                              SCREEN.get_rect().centery - set_size(80, SCREEN_WIDTH)),
+                         size=(set_size(160, SCREEN_WIDTH), set_size(60, SCREEN_WIDTH)))
     button_1280 = Button(image=pygame.image.load(BUTTON_PATH + "1280_button.png"),
-                         pos=(SCREEN.get_rect().centerx - 80, SCREEN.get_rect().centery - 80),
-                         size=(160, 60))
+                         pos=(SCREEN.get_rect().centerx - set_size(80, SCREEN_WIDTH),
+                              SCREEN.get_rect().centery - set_size(80, SCREEN_WIDTH)),
+                         size=(set_size(160, SCREEN_WIDTH), set_size(60, SCREEN_WIDTH)))
     button_960 = Button(image=pygame.image.load(BUTTON_PATH + "960_button.png"),
-                        pos=(SCREEN.get_rect().centerx + 140, SCREEN.get_rect().centery - 80),
-                        size=(160, 60))
+                        pos=(SCREEN.get_rect().centerx + set_size(140, SCREEN_WIDTH),
+                             SCREEN.get_rect().centery - set_size(80, SCREEN_WIDTH)),
+                        size=(set_size(160, SCREEN_WIDTH), set_size(60, SCREEN_WIDTH)))
 
     # option 화면에 필요한 텍스트 설정
     color_weakness_mode_text = Text(text_input="Color Weakness Mode",
                                     font="notosanscjkkr",
                                     color=(0, 0, 0),
-                                    pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + 100),
-                                    size=50,
+                                    pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(100, SCREEN_WIDTH)),
+                                    size=set_size(50, SCREEN_WIDTH),
                                     screen=SCREEN)
 
     resolution_text = Text(text_input="Resolution",
                            font="notosanscjkkr",
                            color=(0, 0, 0),
-                           pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + 240),
-                           size=50,
+                           pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(240, SCREEN_WIDTH)),
+                           size=set_size(50, SCREEN_WIDTH),
                            screen=SCREEN)
 
     key_setting_text = Text(text_input="Key Setting",
                             font="notosanscjkkr",
                             color=(0, 0, 0),
-                            pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + 380),
-                            size=50,
+                            pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(380, SCREEN_WIDTH)),
+                            size=set_size(50, SCREEN_WIDTH),
                             screen=SCREEN)
 
     uno_text = Text(text_input="UNO",
                     font="notosanscjkkr",
                     color=(0, 0, 0),
-                    pos=(SCREEN.get_rect().centerx - 200, SCREEN.get_rect().top + 420),
-                    size=25,
+                    pos=(SCREEN.get_rect().centerx - set_size(200, SCREEN_WIDTH),
+                         SCREEN.get_rect().top + set_size(420, SCREEN_WIDTH)),
+                    size=set_size(25, SCREEN_WIDTH),
                     screen=SCREEN)
+
+    uno_set_button = Button(image=pygame.image.load(BUTTON_PATH + "key_button.png"),
+                            pos=(SCREEN.get_rect().centerx - set_size(240, SCREEN_WIDTH),
+                                 SCREEN.get_rect().centery + set_size(90, SCREEN_WIDTH)),
+                            size=(set_size(80, SCREEN_WIDTH), set_size(80, SCREEN_WIDTH)))
+
+    uno_button_text = Text(text_input="UNO",
+                           font="notosanscjkkr",
+                           color=(0, 0, 0),
+                           pos=(SCREEN.get_rect().centerx - set_size(200, SCREEN_WIDTH),
+                                uno_set_button.y_pos),
+                           size=set_size(25, SCREEN_WIDTH),
+                           screen=SCREEN)
 
     return_text = Text(text_input="RETURN",
                        font="notosanscjkkr",
                        color=(0, 0, 0),
-                       pos=(SCREEN.get_rect().centerx - 100, SCREEN.get_rect().top + 420),
-                       size=25,
+                       pos=(SCREEN.get_rect().centerx - set_size(100, SCREEN_WIDTH),
+                            SCREEN.get_rect().top + set_size(420, SCREEN_WIDTH)),
+                       size=set_size(25, SCREEN_WIDTH),
                        screen=SCREEN)
 
     left_move_text = Text(text_input="LEFT",
                           font="notosanscjkkr",
                           color=(0, 0, 0),
-                          pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + 420),
-                          size=25,
+                          pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(420, SCREEN_WIDTH)),
+                          size=set_size(25, SCREEN_WIDTH),
                           screen=SCREEN)
 
     right_move_text = Text(text_input="RIGHT",
                            font="notosanscjkkr",
                            color=(0, 0, 0),
-                           pos=(SCREEN.get_rect().centerx + 100, SCREEN.get_rect().top + 420),
-                           size=25,
+                           pos=(SCREEN.get_rect().centerx + set_size(100, SCREEN_WIDTH),
+                                SCREEN.get_rect().top + set_size(420, SCREEN_WIDTH)),
+                           size=set_size(25, SCREEN_WIDTH),
                            screen=SCREEN)
 
     draw_text = Text(text_input="DRAW",
                      font="notosanscjkkr",
                      color=(0, 0, 0),
-                     pos=(SCREEN.get_rect().centerx + 200, SCREEN.get_rect().top + 420),
-                     size=25,
+                     pos=(SCREEN.get_rect().centerx + set_size(200, SCREEN_WIDTH),
+                          SCREEN.get_rect().top + set_size(420, SCREEN_WIDTH)),
+                     size=set_size(25, SCREEN_WIDTH),
                      screen=SCREEN)
 
     # 설정값 불러오기
@@ -104,24 +131,19 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
         off_button.image = pygame.image.load(BUTTON_PATH + "off_checked.png")
 
     if config['system']['SCREEN_WIDTH'] == "1920":
-        width = "1920"
-        height = "1080"
         button_1920.image = pygame.image.load(BUTTON_PATH + "1920_checked.png")
         button_1280.image = pygame.image.load(BUTTON_PATH + "1280_button.png")
         button_960.image = pygame.image.load(BUTTON_PATH + "960_button.png")
     elif config['system']['SCREEN_WIDTH'] == "1280":
-        width = "1280"
-        height = "720"
         button_1920.image = pygame.image.load(BUTTON_PATH + "1920_button.png")
         button_1280.image = pygame.image.load(BUTTON_PATH + "1280_checked.png")
         button_960.image = pygame.image.load(BUTTON_PATH + "960_button.png")
     elif config['system']['SCREEN_WIDTH'] == "960":
-        width = "960"
-        height = "540"
         button_1920.image = pygame.image.load(BUTTON_PATH + "1920_button.png")
         button_1280.image = pygame.image.load(BUTTON_PATH + "1280_button.png")
         button_960.image = pygame.image.load(BUTTON_PATH + "960_checked.png")
 
+    RESOLUTION = [config['system']['SCREEN_WIDTH'], config['system']['SCREEN_HEIGHT']]
     while True:
         init_bg(SCREEN, SCREEN_PATH + "options_screen.png", SCREEN_WIDTH, SCREEN_HEIGHT)
 
@@ -138,7 +160,10 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
         # 버튼 표시
         init_view(SCREEN,
                   [back_button, save_button, on_button, off_button,
-                   button_1920, button_1280, button_960, reset_button])
+                   button_1920, button_1280, button_960, reset_button,
+                   uno_set_button])
+
+        uno_button_text.init_text()
 
         UNO = eval(f"{config['system']['UNO']}")
         SELECT = eval(f"{config['system']['SELECT']}")
@@ -148,12 +173,13 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
 
         # 키 설정
         key_setting_bg = pygame.image.load(BUTTON_PATH + "key_button.png")
-        key_setting_bg = pygame.transform.scale(key_setting_bg, (80, 80))
+        key_setting_bg = pygame.transform.scale(key_setting_bg,
+                                                (set_size(80, SCREEN_WIDTH), set_size(80, SCREEN_WIDTH)))
 
         # 우노 버튼 설정
         Uno_button_rect = key_setting_bg.get_rect()
-        Uno_button_rect.centerx = SCREEN.get_rect().centerx - 200
-        Uno_button_rect.centery = SCREEN.get_rect().top + 480
+        Uno_button_rect.centerx = SCREEN.get_rect().centerx - set_size(200, SCREEN_WIDTH)
+        Uno_button_rect.centery = SCREEN.get_rect().top + set_size(480, SCREEN_WIDTH)
         Uno_text = font.render(pygame.key.name(UNO), True, (0, 0, 0))
         Uno_rect = Uno_text.get_rect()
         Uno_rect.centerx = Uno_button_rect.centerx
@@ -161,8 +187,8 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
 
         # 선택 버튼 설정
         Select_button_rect = key_setting_bg.get_rect()
-        Select_button_rect.centerx = SCREEN.get_rect().centerx - 100
-        Select_button_rect.centery = SCREEN.get_rect().top + 480
+        Select_button_rect.centerx = SCREEN.get_rect().centerx - set_size(100, SCREEN_WIDTH)
+        Select_button_rect.centery = SCREEN.get_rect().top + set_size(480, SCREEN_WIDTH)
         Select_text = font.render(pygame.key.name(SELECT), True, (0, 0, 0))
         Select_rect = Select_text.get_rect()
         Select_rect.centerx = Select_button_rect.centerx
@@ -171,7 +197,7 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
         # 왼쪽 이동 버튼 설정
         L_button_rect = key_setting_bg.get_rect()
         L_button_rect.centerx = SCREEN.get_rect().centerx
-        L_button_rect.centery = SCREEN.get_rect().top + 480
+        L_button_rect.centery = SCREEN.get_rect().top + set_size(480, SCREEN_WIDTH)
         L_text = font.render(pygame.key.name(LEFT), True, (0, 0, 0))
         L_rect = L_text.get_rect()
         L_rect.centerx = L_button_rect.centerx
@@ -179,8 +205,8 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
 
         # 오른쪽 이동 버튼 설정
         R_button_rect = key_setting_bg.get_rect()
-        R_button_rect.centerx = SCREEN.get_rect().centerx + 100
-        R_button_rect.centery = SCREEN.get_rect().top + 480
+        R_button_rect.centerx = SCREEN.get_rect().centerx + set_size(100, SCREEN_WIDTH)
+        R_button_rect.centery = SCREEN.get_rect().top + set_size(480, SCREEN_WIDTH)
         R_text = font.render(pygame.key.name(RIGHT), True, (0, 0, 0))
         R_rect = R_text.get_rect()
         R_rect.centerx = R_button_rect.centerx
@@ -188,8 +214,8 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
 
         # 드로우 버튼 설정
         Draw_button_rect = key_setting_bg.get_rect()
-        Draw_button_rect.centerx = SCREEN.get_rect().centerx + 200
-        Draw_button_rect.centery = SCREEN.get_rect().top + 480
+        Draw_button_rect.centerx = SCREEN.get_rect().centerx + set_size(200, SCREEN_WIDTH)
+        Draw_button_rect.centery = SCREEN.get_rect().top + set_size(480, SCREEN_WIDTH)
         Draw_text = font.render(pygame.key.name(DRAW), True, (0, 0, 0))
         Draw_rect = Draw_text.get_rect()
         Draw_rect.centerx = Draw_button_rect.centerx
@@ -217,8 +243,8 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
                     main_screen()
                 elif save_button.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
-                    config['system']['SCREEN_WIDTH'] = str(width)
-                    config['system']['SCREEN_HEIGHT'] = str(height)
+                    config['system']['SCREEN_WIDTH'] = str(RESOLUTION[0])
+                    config['system']['SCREEN_HEIGHT'] = str(RESOLUTION[1])
                     save_config(config)
                     from UNO_RUN import main_screen
                     main_screen()
@@ -230,13 +256,7 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
                     button_1280.image = pygame.image.load(BUTTON_PATH + "1280_checked.png")
                     button_960.image = pygame.image.load(BUTTON_PATH + "960_button.png")
 
-                    config['system']['COLOR_WEAKNESS_MODE'] = "FALSE"
-                    config['system']['SCREEN_WIDTH'] = "1280"
-                    config['system']['SCREEN_HEIGHT'] = "720"
-                    config['system']['UNO'] = 'pygame.K_u'
-                    config['system']['LEFT_MOVE'] = 'pygame.K_RIGHT'
-                    config['system']['RIGHT_MOVE'] = 'pygame.K_LEFT'
-                    config['system']['SELECT'] = 'pygame.K_RETURN'
+                    reset_config(config)
 
                     width = "1280"
                     height = "720"
@@ -244,12 +264,12 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
                     CLICK_SOUND.play(0)
                     print("Press the key for Uno direction")
                     UNO = key_change()
-                    if pygame.key.name(UNO) == 'up' or pygame.key.name(UNO) == 'right' or pygame.key.name(
-                            UNO) == 'left' or pygame.key.name(UNO) == 'return':
-                        config['system']['UNO'] = 'pygame.K_' + (pygame.key.name(UNO)).upper()
-                    else:
-                        config['system']['UNO'] = 'pygame.K_' + pygame.key.name(UNO)
-                    save_config(config)
+                    # if pygame.key.name(UNO) == 'up' or pygame.key.name(UNO) == 'right' or pygame.key.name(
+                    #         UNO) == 'left' or pygame.key.name(UNO) == 'return':
+                    #     config['system']['UNO'] = 'pygame.K_' + (pygame.key.name(UNO)).upper()
+                    # else:
+                    #     config['system']['UNO'] = 'pygame.K_' + pygame.key.name(UNO)
+                    # save_config(config)
                 elif Select_button_rect.collidepoint(pygame.mouse.get_pos()):
                     CLICK_SOUND.play(0)
                     print("Press the key for Select")
@@ -265,23 +285,22 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
                     CLICK_SOUND.play(0)
                     print("Press the key for LEFT")
                     LEFT = key_change()
-                    pygame.key.name(LEFT)
-                    if pygame.key.name(LEFT) == 'up' or pygame.key.name(LEFT) == 'right' or pygame.key.name(
-                            LEFT) == 'left' or pygame.key.name(LEFT) == 'return':
-                        config['system']['LEFT_MOVE'] = 'pygame.K_' + (pygame.key.name(LEFT)).upper()
-                    else:
-                        config['system']['LEFT_MOVE'] = 'pygame.K_' + pygame.key.name(LEFT)
-                    save_config(config)
+                    # if pygame.key.name(LEFT) == 'up' or pygame.key.name(LEFT) == 'right' or pygame.key.name(
+                    #         LEFT) == 'left' or pygame.key.name(LEFT) == 'return':
+                    #     config['system']['LEFT_MOVE'] = 'pygame.K_' + (pygame.key.name(LEFT)).upper()
+                    # else:
+                    #     config['system']['LEFT_MOVE'] = 'pygame.K_' + pygame.key.name(LEFT)
+                    # save_config(config)
                 elif R_button_rect.collidepoint(pygame.mouse.get_pos()):
                     CLICK_SOUND.play(0)
                     print("Press the key for RIGHT")
                     RIGHT = key_change()
-                    if pygame.key.name(RIGHT) == 'up' or pygame.key.name(RIGHT) == 'right' or pygame.key.name(
-                            RIGHT) == 'left' or pygame.key.name(RIGHT) == 'return':
-                        config['system']['RIGHT_MOVE'] = 'pygame.K_' + (pygame.key.name(RIGHT)).upper()
-                    else:
-                        config['system']['RIGHT_MOVE'] = 'pygame.K_' + pygame.key.name(RIGHT)
-                    save_config(config)
+                    # if pygame.key.name(RIGHT) == 'up' or pygame.key.name(RIGHT) == 'right' or pygame.key.name(
+                    #         RIGHT) == 'left' or pygame.key.name(RIGHT) == 'return':
+                    #     config['system']['RIGHT_MOVE'] = 'pygame.K_' + (pygame.key.name(RIGHT)).upper()
+                    # else:
+                    #     config['system']['RIGHT_MOVE'] = 'pygame.K_' + pygame.key.name(RIGHT)
+                    # save_config(config)
                 elif Draw_rect.collidepoint(pygame.mouse.get_pos()):
                     CLICK_SOUND.play(0)
                     print("Press the key for DRAW")
@@ -309,22 +328,26 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
                     button_1920.image = pygame.image.load(BUTTON_PATH + "1920_checked.png")
                     button_1280.image = pygame.image.load(BUTTON_PATH + "1280_button.png")
                     button_960.image = pygame.image.load(BUTTON_PATH + "960_button.png")
-                    width = "1920"
-                    height = "1080"
+                    RESOLUTION[0] = 1920
+                    RESOLUTION[1] = 1080
                 elif button_1280.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     button_1920.image = pygame.image.load(BUTTON_PATH + "1920_button.png")
                     button_1280.image = pygame.image.load(BUTTON_PATH + "1280_checked.png")
                     button_960.image = pygame.image.load(BUTTON_PATH + "960_button.png")
-                    width = "1280"
-                    height = "720"
+                    RESOLUTION[0] = 1280
+                    RESOLUTION[1] = 720
                 elif button_960.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     button_1920.image = pygame.image.load(BUTTON_PATH + "1920_button.png")
                     button_1280.image = pygame.image.load(BUTTON_PATH + "1280_button.png")
                     button_960.image = pygame.image.load(BUTTON_PATH + "960_checked.png")
-                    width = "960"
-                    height = "540"
+                    RESOLUTION[0] = 960
+                    RESOLUTION[1] = 540
+                elif uno_set_button.rect.collidepoint(event.pos):
+                    UNO = key_change()
+                    print("Press the key for DRAW")
+
         pygame.display.flip()
 
 
