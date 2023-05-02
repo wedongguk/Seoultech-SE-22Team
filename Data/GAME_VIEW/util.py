@@ -10,17 +10,6 @@ config.read('Data/config.ini', encoding='utf-8')
 
 font = pygame.font.SysFont("notosanscjkkr", 30)
 
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
-
-BUTTON_WIDTH = 220
-BUTTON_HEIGHT = 50
-
-SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
-x_pos = SCREEN_WIDTH / 2 - BUTTON_WIDTH / 2
-y_pos = SCREEN_HEIGHT / 2 - BUTTON_HEIGHT / 2
-
 BUTTON_PATH = os.getcwd() + "/Data/Asset/image/button/"
 SCREEN_PATH = os.getcwd() + "/Data/Asset/image/screen/"
 SOUND_PATH = os.getcwd() + "/Data/Asset/sound/"
@@ -53,16 +42,7 @@ def check_config(config):
             print("config file o")
     except:
         print("config file x")
-        config['system'] = {}
-        config['system']['is_new'] = "False"
-        config['system']['COLOR_WEAKNESS_MODE'] = "FALSE"
-        config['system']['SCREEN_WIDTH'] = "1280"
-        config['system']['SCREEN_HEIGHT'] = "720"
-        config['system']['UNO'] = 'pygame.K_u'
-        config['system']['LEFT_MOVE'] = 'pygame.K_RIGHT'
-        config['system']['RIGHT_MOVE'] = 'pygame.K_LEFT'
-        config['system']['SELECT'] = 'pygame.K_RETURN'
-        config['system']['DRAW'] = 'pygame.K_d'
+        reset_config(config)
         save_config(config)
 
 
@@ -71,6 +51,22 @@ def save_config(config):
         config.write(config_file)
 
 
+def reset_config(config):
+    config['system'] = {}
+    config['system']['is_new'] = "False"
+    config['system']['COLOR_WEAKNESS_MODE'] = "False"
+    config['system']['SCREEN_WIDTH'] = "1280"
+    config['system']['SCREEN_HEIGHT'] = "720"
+    config['system']['UNO'] = 'pygame.K_u'
+    config['system']['LEFT_MOVE'] = 'pygame.K_RIGHT'
+    config['system']['RIGHT_MOVE'] = 'pygame.K_LEFT'
+    config['system']['SELECT'] = 'pygame.K_RETURN'
+    config['system']['DRAW'] = 'pygame.K_d'
+
 def quit():
     pygame.quit()
     sys.exit()
+
+
+def set_size(size, resolution):
+    return int(size * resolution / 1280)
