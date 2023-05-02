@@ -1,6 +1,7 @@
 import socketserver
 import threading
 import time
+import os
 
 HOST = ''
 PORT = 9009
@@ -91,6 +92,7 @@ class ChatingServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 def runServer():
    print('+++ 채팅 서버를 시작합니다.')
    print('+++ 채팅 서버를 끝내려면 Ctrl-C를 누르세요.')
+   print('process id', os.getpid())
 
    try:
       server = ChatingServer((HOST, PORT), MyTcpHandler)
@@ -99,5 +101,3 @@ def runServer():
       print('--- 채팅 서버를 종료합니다.')
       server.shutdown()
       server.server_close()
-
-runServer()
