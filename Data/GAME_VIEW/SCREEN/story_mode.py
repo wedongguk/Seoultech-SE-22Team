@@ -5,6 +5,13 @@ from Data.GAME_VIEW.OBJECT.textbox import TextBox
 from Data.GAME_VIEW.OBJECT.view import init_view
 from Data.GAME_VIEW.util import *
 
+init_pygame()
+check_config(config)
+
+if bool(config['system']['COLOR_WEAKNESS_MODE']):
+    color_weakness_value = True
+else:
+    color_weakness_value = False
 
 def story_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
     init_bg(SCREEN, SCREEN_PATH + "story_mode_map.png", SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -40,20 +47,18 @@ def story_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
                     select_game_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
                 elif story_mode_1.rect.collidepoint(event.pos):
                     from Data.GAME_VIEW.SCREEN.loby import loby
-                    loby(SCREEN, SCREEN_HEIGHT, SCREEN_WIDTH, BUTTON_WIDTH, BUTTON_HEIGHT)
+                    loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
                 elif story_mode_2.rect.collidepoint(event.pos):
                     from Data.GAME_VIEW.SCREEN.start import start_game
-                    from UNO_RUN import color_weakness_value
-                    start_game(SCREEN, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']), 3,
+                    start_game(int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']), 3,
                                ["USER", "COMPUTER1", "COMPUTER2", "COMPUTER3", "COMPUTER4"], color_weakness_value,
                                MODE_ALLCARD)
                 elif story_mode_3.rect.collidepoint(event.pos):
                     from Data.GAME_VIEW.SCREEN.start import start_game
-                    from UNO_RUN import color_weakness_value
-                    start_game(SCREEN, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']), 2,
+                    start_game(int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']), 2,
                                ["USER", "COMPUTER1", "COMPUTER2"], color_weakness_value,
                                MODE_CHANGECOLOR)
                 elif story_mode_4.rect.collidepoint(event.pos):
-                    from Data.GAME_VIEW.SCREEN.start import start_game
-                    loby(SCREEN, SCREEN_HEIGHT, SCREEN_WIDTH, BUTTON_WIDTH, BUTTON_HEIGHT, mode = MODE_OPENSHUFFLE)
+                    from Data.GAME_VIEW.SCREEN.loby import loby
+                    loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode = MODE_OPENSHUFFLE)
         pygame.display.flip()

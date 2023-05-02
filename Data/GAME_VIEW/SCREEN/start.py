@@ -589,7 +589,7 @@ def createOneCard(card_o, pos_o, size_o, start_color_weakness_value):
     if not start_color_weakness_value:
         c_img = CARD_PATH + c.imgName() + ".png"
     elif start_color_weakness_value:
-        c_img = CARD_PATH + c.imgName() + ".png"
+        c_img = BLIND_CARD_PATH + c.imgName() + ".png"
     btn = Button(image=pygame.image.load(c_img), pos=pos_o, size=size_o)
     return btn
 
