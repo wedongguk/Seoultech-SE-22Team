@@ -14,29 +14,37 @@ else:
 
 # 메인 루프
 def main_screen():
-    init_bg(SCREEN, SCREEN_PATH + "start_screen.jpeg", 1280, 720)
-    MAIN_BGM.set_volume(0.7)
-    MAIN_BGM.play(-1)
+    SCREEN_WIDTH = int(config['system']['SCREEN_WIDTH'])
+    SCREEN_HEIGHT = int(config['system']['SCREEN_HEIGHT'])
+
+    SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    BUTTON_WIDTH = (220 * SCREEN_WIDTH) / 1280
+    BUTTON_HEIGHT = (50 * SCREEN_WIDTH) / 1280
+
+    center_x = SCREEN_WIDTH / 2 - BUTTON_WIDTH / 2
+    center_y = SCREEN_HEIGHT / 2 - BUTTON_HEIGHT / 2
+
+    init_bg(SCREEN, SCREEN_PATH + "start_screen.jpeg", SCREEN_WIDTH, SCREEN_HEIGHT)
+
+    play_button = Button(image=pygame.image.load(BUTTON_PATH + "play_button.png"),
+                         pos=(center_x, center_y + set_size(200, SCREEN_WIDTH)),
+                         size=(BUTTON_WIDTH, BUTTON_HEIGHT))
+
+    options_button = Button(image=pygame.image.load(BUTTON_PATH + "options_button.png"),
+                            pos=(center_x, center_y + set_size(260, SCREEN_WIDTH)),
+                            size=(BUTTON_WIDTH, BUTTON_HEIGHT))
+
+    exit_button = Button(image=pygame.image.load(BUTTON_PATH + "exit_button.png"),
+                         pos=(center_x, center_y + set_size(320, SCREEN_WIDTH)),
+                         size=(BUTTON_WIDTH, BUTTON_HEIGHT))
+
+    title_text = Text(text_input="UNO GAME",
+                      font="notosanscjkkr",
+                      color=(0, 0, 0),
+                      pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + 30),
+                      size=set_size(70, SCREEN_WIDTH),
+                      screen=SCREEN)
     while True:
-        play_button = Button(image=pygame.image.load(BUTTON_PATH + "play_button.png"),
-                             pos=(x_pos, y_pos + 200),
-                             size=(BUTTON_WIDTH, BUTTON_HEIGHT))
-
-        options_button = Button(image=pygame.image.load(BUTTON_PATH + "options_button.png"),
-                                pos=(x_pos, y_pos + 260),
-                                size=(BUTTON_WIDTH, BUTTON_HEIGHT))
-
-        exit_button = Button(image=pygame.image.load(BUTTON_PATH + "exit_button.png"),
-                             pos=(x_pos, y_pos + 320),
-                             size=(BUTTON_WIDTH, BUTTON_HEIGHT))
-
-        title_text = Text(text_input="UNO GAME",
-                          font="notosanscjkkr",
-                          color=(0, 0, 0),
-                          pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + 30),
-                          size=70,
-                          screen=SCREEN)
-
         init_view(SCREEN, [play_button, options_button, exit_button])
         title_text.init_text()
 
@@ -47,7 +55,7 @@ def main_screen():
                 if play_button.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     from Data.GAME_VIEW.SCREEN.game_mode import select_game_mode
-                    select_game_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT+5)
+                    select_game_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT + 5)
                 elif options_button.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     from Data.GAME_VIEW.SCREEN.option import options
@@ -57,5 +65,6 @@ def main_screen():
                     quit()
         pygame.display.update()
 
-
+MAIN_BGM.set_volume(0.7)
+MAIN_BGM.play(-1)
 main_screen()
