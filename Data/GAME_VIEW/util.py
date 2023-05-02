@@ -30,6 +30,7 @@ CARD_PATH = os.getcwd() + "/Data/Asset/image/normal_card/"
 
 CLICK_SOUND = pygame.mixer.Sound(SOUND_PATH + "click_bgm.wav")
 MAIN_BGM = pygame.mixer.Sound(SOUND_PATH + "main_bgm.mp3")
+GAME_BGM = pygame.mixer.Sound(SOUND_PATH + "game_bgm.mp3")
 
 
 def init_pygame():
@@ -43,7 +44,7 @@ def init_bg(screen, image, width, height):
     screen.fill("black")
     bg = pygame.image.load(image)
     bg = pygame.transform.scale(bg, (width, height))
-    screen.blit(bg, (0,0))
+    screen.blit(bg, (0, 0))
 
 
 def check_config(config):
@@ -66,7 +67,7 @@ def check_config(config):
 
 
 def save_config(config):
-    with open('config.ini', 'w', encoding='utf-8') as config_file:
+    with open(os.getcwd() + '/Data/config.ini', 'w', encoding='utf-8') as config_file:
         config.write(config_file)
 
 

@@ -9,17 +9,11 @@ from Data.GAME_VIEW.OBJECT.text import Text
 from Data.GAME_VIEW.OBJECT.button import Button
 from Data.GAME_VIEW.util import *
 
-import configparser
-
 bgm_volume = 1
 click_volume = 1
 
 check_os = True
-
 start_color_weakness_value = False
-
-config = configparser.ConfigParser()
-config.read('Data/config.ini', encoding='utf-8')
 
 
 def start_game(screen_width, screen_height, num, name, color_weakness_value, mode):
@@ -29,11 +23,7 @@ def start_game(screen_width, screen_height, num, name, color_weakness_value, mod
     start_color_weakness_value = color_weakness_value
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
-    x_pos = screen_width / 2
-    y_pos = screen_height / 2
-
     screen.fill((0, 0, 0))
-    screen = pygame.display.set_mode(screen_size)
 
     user1 = Player(name[0], True)
     gamePlayerList = [user1]
@@ -49,10 +39,12 @@ def start_game(screen_width, screen_height, num, name, color_weakness_value, mod
 
     clock = pygame.time.Clock()
     bgm = pygame.mixer.Sound(SOUND_PATH + "game_bgm.mp3")
-    bgm.play(-1)
     bet_card = pygame.mixer.Sound(SOUND_PATH + "bet_card.wav")
     cannot_bet = pygame.mixer.Sound(SOUND_PATH + "cannot_bet.wav")
     card_draw = pygame.mixer.Sound(SOUND_PATH + "card_draw.mp3")
+
+    bgm.play(-1)
+
     while True:
         ##### 화면 초기화 #####
         screen.fill((0, 0, 0))
@@ -68,17 +60,9 @@ def start_game(screen_width, screen_height, num, name, color_weakness_value, mod
 
         pygame.draw.rect(screen, (120, 120, 120), user_rect)
 
-        # user_rect_u = (user_rect[0], user_rect[1], user_rect[2], user_rect[3] / 2)
-        # user_rect_d = (user_rect[0], user_rect[1] + user_rect_u[3], user_rect[2], user_rect[3] / 2)
         slice_userSpace = sliceRect(user_rect, [1, 1], 'horizontal')
         user_rect_u = slice_userSpace[0]
         pygame.draw.rect(screen, (120, 200, 100), user_rect_u)
-
-        # user_lBtn_rect = (user_rect_d[0], user_rect_d[1], user_rect_d[2] / 10, user_rect_d[3])
-        # user_cardZone_rect = (
-        #     user_lBtn_rect[0] + user_lBtn_rect[2], user_rect_d[1], user_rect_d[2] * 8 / 10, user_rect_d[3])
-        # user_rBtn_rect = (
-        #     user_cardZone_rect[0] + user_cardZone_rect[2], user_rect_d[1], user_rect_d[2] / 10, user_rect_d[3])
 
         slice_cardSlot = sliceRect(slice_userSpace[1], [1, 8, 1], 'vertical')
         user_lBtn_rect = slice_cardSlot[0]
@@ -123,7 +107,7 @@ def start_game(screen_width, screen_height, num, name, color_weakness_value, mod
         dbtn = createDrawBtn(screen, g, board_rect)  # draw 버튼
         ubtn = createUnoBtn(screen, g, board_rect)  # uno 버튼
 
-        if g.is_effctTime == False:
+        if not g.is_effctTime:
             timerInd(screen, board_rect, g.timer.time)
         else:
             eTimerInd(screen, board_rect, g.effectTimer.time)
@@ -690,8 +674,8 @@ def veiwCardHolder(screen, cardHolder, game, rectDict, start_color_weakness_valu
 
     return result
 
-def eventCardHolder(cardHolder, rectDict, game, event, config):
 
+def eventCardHolder(cardHolder, rectDict, game, event, config):
     ## rect ##
     cards = rectDict['cards']
     lbtn = rectDict['lbtn']
@@ -760,9 +744,9 @@ def openCardIndicator(screen, game, rect, start_color_weakness_value):
 def createIndicator(screen, card_o, rect, start_color_weakness_value):
     c = card_o
     txt = COLOR_TABLE2[c.applyColor]
-    if start_color_weakness_value == False:
+    if not start_color_weakness_value:
         c_img = CARD_PATH + txt + ".png"
-    elif start_color_weakness_value == True:
+    elif start_color_weakness_value:
         c_img = BLIND_CARD_PATH + txt + ".png"
 
     center = rectCenter(rect)

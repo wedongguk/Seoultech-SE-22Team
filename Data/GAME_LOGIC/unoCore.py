@@ -236,6 +236,68 @@ class Game: # game 클래스 생성
                 break
         
         return result
+    
+    def actList_M(self, uid):
+        idx = self.playerList.uti(uid)
+        if idx == None:
+            print('그런 uid를 가진 플레이어는 존재하지 않는다.')
+            return None
+        else:
+            result = {'drawBtn': True,'unoBtn': True, 'colorBtn': True, 'numberBtn': True}
+            if (self.playerList.turnIdx().uid == uid):
+                result['drawBtn'] = False
+            
+            if (self.state == NORM):
+                result['unoBtn'] = False
+        
+            if (self.is_effctTime == True):
+                result['unoBtn'] = False
+        
+                result['colorBtn'] = self.is_selectColor
+                result['numberBtn'] = self.is_selectNumber
+            
+            return result
+    
+    def eventCardBtn_M(self, idx, uid): # 카드 클릭시 이벤트
+        pidx = self.playerList.uti(uid)
+        if pidx != None:
+            if self.is_effctTime == False:
+                if self.playerList.turnPlayer().uid == uid:
+                    if self.playerList.turnPlayer().handCardList[idx].canUse(self) == True:
+                        useCard = self.playerList.turnPlayer().delCard(idx)
+                        self.placeOpenCardZone(useCard)
+                        
+                        self.playerList.turnPlayer().UnoAndWinnerChecker(self)
+                        
+                        self.endPhase()
+                        return True
+                    else:
+                        print(self.playerList.turnPlayer().handCardList[idx].info()+"는 낼 수 없어요")
+                        return False
+                    
+            else:
+                print("아직 당신의 턴이 아니에요")
+                return False
+            
+        else:
+            print('해당 uid를 가진 플레이어는 존재하지 않습니다.')
+            return False
+            
+    def uidHand(self, uid): # 유저의 패 리스트를 반환합니다.
+        idx = self.playerList.uti(uid)
+        if idx != None:
+            result = self.playerList.idxPlayer(idx).handCardList
+            return result
+        else:
+            return None
+        
+    def eventUnoBtn_M(self, uid): # 우노 버튼 클릭시 이벤트
+        idx = self.playerList.uti(uid)
+        if idx != None:
+            if self.state == UNO:
+                self.processUno(idx)
+        else:
+            print('해당 uid를 가진 플레이어는 존재하지 않습니다.')
         
     def userHand(self): # 유저의 패 리스트를 반환합니다.
         result = self.playerList.idxPlayer(self.searchUserIdx()).handCardList
