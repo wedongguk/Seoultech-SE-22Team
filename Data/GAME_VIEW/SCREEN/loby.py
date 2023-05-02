@@ -5,6 +5,14 @@ from Data.GAME_VIEW.OBJECT.textbox import TextBox
 from Data.GAME_VIEW.OBJECT.view import init_view
 from Data.GAME_VIEW.util import *
 
+init_pygame()
+check_config(config)
+
+if bool(config['system']['COLOR_WEAKNESS_MODE']):
+    color_weakness_value = True
+else:
+    color_weakness_value = False
+
 
 def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=MODE_NORMAL):
     x_pos = SCREEN_WIDTH / 2 - BUTTON_WIDTH / 2
@@ -93,7 +101,6 @@ def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=
                         temp += 1
                     from Data.GAME_VIEW.SCREEN.start import start_game
                     MAIN_BGM.stop()
-                    from UNO_RUN import color_weakness_value
                     start_game(int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),
                                AI_num,
                                name_list, color_weakness_value, mode)
