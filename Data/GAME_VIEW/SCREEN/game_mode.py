@@ -12,26 +12,26 @@ def select_game_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_H
     init_bg(SCREEN, SCREEN_PATH + "options_screen.png", SCREEN_WIDTH, SCREEN_HEIGHT)
 
     back_button = Button(image=pygame.image.load(BUTTON_PATH + "back_button.png"),
-                         pos=(30, 30),
-                         size=(50, 50))
+                         pos=(set_size(30, SCREEN_WIDTH), set_size(30, SCREEN_WIDTH)),
+                         size=(set_size(50, SCREEN_WIDTH), set_size(50, SCREEN_WIDTH)))
 
     single_mode_button = Button(image=pygame.image.load(BUTTON_PATH + "single_mode_button.png"),
-                                 pos=(x_pos, y_pos - 100),
-                                 size=(BUTTON_WIDTH, BUTTON_HEIGHT))
-
-    multi_mode_button = Button(image=pygame.image.load(BUTTON_PATH + "multi_mode_button.png"),
-                                pos=(x_pos, y_pos),
+                                pos=(x_pos, y_pos - set_size(100, SCREEN_WIDTH)),
                                 size=(BUTTON_WIDTH, BUTTON_HEIGHT))
 
+    multi_mode_button = Button(image=pygame.image.load(BUTTON_PATH + "multi_mode_button.png"),
+                               pos=(x_pos, y_pos),
+                               size=(BUTTON_WIDTH, BUTTON_HEIGHT))
+
     story_mode_button = Button(image=pygame.image.load(BUTTON_PATH + "story_mode_button.png"),
-                               pos=(x_pos, y_pos + 100),
+                               pos=(x_pos, y_pos + set_size(100, SCREEN_WIDTH)),
                                size=(BUTTON_WIDTH, BUTTON_HEIGHT))
 
     title_text = Text(text_input="Select game mode",
                       font="notosanscjkkr",
                       color=(0, 0, 0),
-                      pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + 100),
-                      size=50,
+                      pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(100, SCREEN_WIDTH)),
+                      size=set_size(50, SCREEN_WIDTH),
                       screen=SCREEN)
     title_text.init_text()
     init_view(SCREEN, [back_button, single_mode_button, multi_mode_button, story_mode_button])

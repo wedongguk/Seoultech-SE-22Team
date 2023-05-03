@@ -25,11 +25,11 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
 
     on_button = Button(image=pygame.image.load(BUTTON_PATH + "on.png"),
                        pos=(SCREEN.get_rect().centerx - set_size(150, SCREEN_WIDTH),
-                            SCREEN.get_rect().centery - set_size(230, SCREEN_WIDTH)),
+                            SCREEN.get_rect().centery - set_size(280, SCREEN_WIDTH)),
                        size=(set_size(130, SCREEN_WIDTH), set_size(60, SCREEN_WIDTH)))
     off_button = Button(image=pygame.image.load(BUTTON_PATH + "off.png"),
                         pos=(SCREEN.get_rect().centerx + set_size(50, SCREEN_WIDTH),
-                             SCREEN.get_rect().centery - set_size(230, SCREEN_WIDTH)),
+                             SCREEN.get_rect().centery - set_size(280, SCREEN_WIDTH)),
                         size=(set_size(130, SCREEN_WIDTH), set_size(60, SCREEN_WIDTH)))
 
     resolution_button = []
@@ -37,29 +37,29 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
 
     button_1920 = Button(image=pygame.image.load(BUTTON_PATH + "1920_button.png"),
                          pos=(SCREEN.get_rect().centerx - set_size(300, SCREEN_WIDTH),
-                              SCREEN.get_rect().centery - set_size(80, SCREEN_WIDTH)),
+                              SCREEN.get_rect().centery - set_size(120, SCREEN_WIDTH)),
                          size=(set_size(160, SCREEN_WIDTH), set_size(60, SCREEN_WIDTH)))
     button_1280 = Button(image=pygame.image.load(BUTTON_PATH + "1280_button.png"),
                          pos=(SCREEN.get_rect().centerx - set_size(80, SCREEN_WIDTH),
-                              SCREEN.get_rect().centery - set_size(80, SCREEN_WIDTH)),
+                              SCREEN.get_rect().centery - set_size(120, SCREEN_WIDTH)),
                          size=(set_size(160, SCREEN_WIDTH), set_size(60, SCREEN_WIDTH)))
     button_960 = Button(image=pygame.image.load(BUTTON_PATH + "960_button.png"),
                         pos=(SCREEN.get_rect().centerx + set_size(140, SCREEN_WIDTH),
-                             SCREEN.get_rect().centery - set_size(80, SCREEN_WIDTH)),
+                             SCREEN.get_rect().centery - set_size(120, SCREEN_WIDTH)),
                         size=(set_size(160, SCREEN_WIDTH), set_size(60, SCREEN_WIDTH)))
 
     # option 화면에 필요한 텍스트 설정
     color_weakness_mode_text = Text(text_input="Color Weakness Mode",
                                     font="notosanscjkkr",
                                     color=(0, 0, 0),
-                                    pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(100, SCREEN_WIDTH)),
+                                    pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(50, SCREEN_WIDTH)),
                                     size=set_size(50, SCREEN_WIDTH),
                                     screen=SCREEN)
 
     resolution_text = Text(text_input="Resolution",
                            font="notosanscjkkr",
                            color=(0, 0, 0),
-                           pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(240, SCREEN_WIDTH)),
+                           pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(210, SCREEN_WIDTH)),
                            size=set_size(50, SCREEN_WIDTH),
                            screen=SCREEN)
 
@@ -255,9 +255,8 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
                     button_1920.image = pygame.image.load(BUTTON_PATH + "1920_button.png")
                     button_1280.image = pygame.image.load(BUTTON_PATH + "1280_checked.png")
                     button_960.image = pygame.image.load(BUTTON_PATH + "960_button.png")
-
                     reset_config(config)
-
+                    save_config(config)
                     width = "1280"
                     height = "720"
                 elif Uno_button_rect.collidepoint(pygame.mouse.get_pos()):
