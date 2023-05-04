@@ -127,10 +127,6 @@ def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=
                 elif AI_5.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     set_computer(5)
-                # elif Server_socket.rect.collidepoint(event.pos):
-                #     runServer()
-                # elif Client_socket.rect.collidepoint(event.pos):
-                #     runChat()
                     
 
             for box in input_boxes:

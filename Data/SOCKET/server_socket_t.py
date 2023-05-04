@@ -1,6 +1,8 @@
 import socket
 from _thread import *
 import sys
+from player_t import Player
+import pickle
 
 server = "10.16.144.212"
 port = 5555
@@ -18,31 +20,17 @@ except socket.error as e:
 s.listen(2)
 print("Waiting for a connection, Server Started")
 
-# position 읽기
-def read_pos(str):
-    str = str.split(",")
-    return int(str[0]), int(str[1])
-
-# position 만들기
-def make_pos(tup):
-    return str(tup[0]) + "," + str(tup[1])
-
-# position 초기화
-# pos[0]은 첫번째 player 위치
-# pos[1]은 두번째 player 위치
-# pos는 모든 플레이어의 위치 정보를 가지고 있음
-
-pos = [(0,0),(150,150)]
+players = [Player(0,0,50,50,(255,0,0)), Player(100,100,50,50,(0,0,255))]
 
 # 특정 플레이어에게 정보 전달을 위함
 def threaded_client(conn, player):
-    conn.send(str.encode(make_pos(pos[player])))
+    conn.send(pickle.dumps(players[player]))
     reply = ""
     while True:
         try:
             # String 값 데이터 decode
-            data = read_pos(conn.recv(2048).decode())
-            pos[player] = data
+            data = pickle.loads(conn.recv(2048))
+            players[player] = data
 
             if not data:
                 print("Disconnected")
@@ -50,10 +38,10 @@ def threaded_client(conn, player):
             else:
                 if player == 1:
                     # player가 1 이면 pos 0의 위치를 보냄
-                    reply = pos[0]
+                    reply = players[0]
                 else:
                     # player가 2 이면 pos 1의 위치를 보냄
-                    reply = pos[1]
+                    reply = players[1]
 
                 # data는 받은 데이터
                 print("Received: ", data)
@@ -61,7 +49,7 @@ def threaded_client(conn, player):
                 print("Sending : ", reply)
 
             # send 보냄
-            conn.sendall(str.encode(make_pos(reply)))
+            conn.sendall(pickle.dumps(reply))
         except:
             break
 
