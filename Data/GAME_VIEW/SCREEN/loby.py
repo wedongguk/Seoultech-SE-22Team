@@ -28,19 +28,19 @@ def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=
                           size=(BUTTON_WIDTH, BUTTON_HEIGHT))
 
     AI_1 = Button(image=pygame.image.load(BUTTON_PATH + "1_checked.png"),
-                  pos=(x_pos - set_size(360, SCREEN_WIDTH), y_pos - set_size(120, SCREEN_WIDTH)),
+                  pos=(x_pos - set_size(360, SCREEN_WIDTH), y_pos - set_size(180, SCREEN_WIDTH)),
                   size=(set_size(100, SCREEN_WIDTH), set_size(100, SCREEN_WIDTH)))
     AI_2 = Button(image=pygame.image.load(BUTTON_PATH + "empty.png"),
-                  pos=(x_pos - set_size(160, SCREEN_WIDTH), y_pos - set_size(120, SCREEN_WIDTH)),
+                  pos=(x_pos - set_size(160, SCREEN_WIDTH), y_pos - set_size(180, SCREEN_WIDTH)),
                   size=(set_size(100, SCREEN_WIDTH), set_size(100, SCREEN_WIDTH)))
     AI_3 = Button(image=pygame.image.load(BUTTON_PATH + "empty.png"),
-                  pos=(x_pos + set_size(40, SCREEN_WIDTH), y_pos - set_size(120, SCREEN_WIDTH)),
+                  pos=(x_pos + set_size(40, SCREEN_WIDTH), y_pos - set_size(180, SCREEN_WIDTH)),
                   size=(set_size(100, SCREEN_WIDTH), set_size(100, SCREEN_WIDTH)))
     AI_4 = Button(image=pygame.image.load(BUTTON_PATH + "empty.png"),
-                  pos=(x_pos + set_size(240, SCREEN_WIDTH), y_pos - set_size(120, SCREEN_WIDTH)),
+                  pos=(x_pos + set_size(240, SCREEN_WIDTH), y_pos - set_size(180, SCREEN_WIDTH)),
                   size=(set_size(100, SCREEN_WIDTH), set_size(100, SCREEN_WIDTH)))
     AI_5 = Button(image=pygame.image.load(BUTTON_PATH + "empty.png"),
-                  pos=(x_pos + set_size(440, SCREEN_WIDTH), y_pos - set_size(120, SCREEN_WIDTH)),
+                  pos=(x_pos + set_size(440, SCREEN_WIDTH), y_pos - set_size(180, SCREEN_WIDTH)),
                   size=(set_size(100, SCREEN_WIDTH), set_size(100, SCREEN_WIDTH)))
 
     title_text = Text(text_input="Set computer that will play with you",
@@ -52,37 +52,25 @@ def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=
     subtitle_text = Text(text_input="Set your name",
                          font="notosanscjkkr",
                          color=(0, 0, 0),
-                         pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(450, SCREEN_WIDTH)),
+                         pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(400, SCREEN_WIDTH)),
                          size=set_size(50, SCREEN_WIDTH),
                          screen=SCREEN)
     AI_list = [AI_1, AI_2, AI_3, AI_4, AI_5]
     title_text.init_text()
     subtitle_text.init_text()
 
-    input_boxes = [TextBox(SCREEN.get_rect().left + set_size(520, SCREEN_WIDTH),
-                           set_size(500, SCREEN_WIDTH),
-                           set_size(80, SCREEN_WIDTH),
-                           set_size(32, SCREEN_WIDTH)),
-                   TextBox(SCREEN.get_rect().left + set_size(120, SCREEN_WIDTH),
-                           set_size(350, SCREEN_WIDTH),
-                           set_size(80, SCREEN_WIDTH),
-                           set_size(32, SCREEN_WIDTH)),
-                   TextBox(SCREEN.get_rect().left + set_size(320, SCREEN_WIDTH),
-                           set_size(350, SCREEN_WIDTH),
-                           set_size(80, SCREEN_WIDTH),
-                           set_size(32, SCREEN_WIDTH)),
-                   TextBox(SCREEN.get_rect().left + set_size(520, SCREEN_WIDTH),
-                           set_size(350, SCREEN_WIDTH),
-                           set_size(80, SCREEN_WIDTH),
-                           set_size(32, SCREEN_WIDTH)),
-                   TextBox(SCREEN.get_rect().left + set_size(720, SCREEN_WIDTH),
-                           set_size(350, SCREEN_WIDTH),
-                           set_size(80, SCREEN_WIDTH),
-                           set_size(32, SCREEN_WIDTH)),
-                   TextBox(SCREEN.get_rect().left + set_size(920, SCREEN_WIDTH),
-                           set_size(350, SCREEN_WIDTH),
-                           set_size(80, SCREEN_WIDTH),
+    input_boxes = [TextBox(SCREEN.get_rect().left + set_size(535, SCREEN_WIDTH),
+                           set_size(450, SCREEN_WIDTH),
+                           set_size(200, SCREEN_WIDTH),
                            set_size(32, SCREEN_WIDTH))]
+
+    for i in range(0, 5):
+        input_boxes.append(
+            TextBox(SCREEN.get_rect().left + set_size(130 + i*200, SCREEN_WIDTH),
+                    set_size(270, SCREEN_WIDTH),
+                    set_size(170, SCREEN_WIDTH),
+                    set_size(32, SCREEN_WIDTH))
+        )
 
     init_view(SCREEN, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
     bool_list = [True, False, False, False, False]
