@@ -447,6 +447,8 @@ def pause(screen, screen_width, screen_height, width):
                 elif exit_button.rect.collidepoint(event.pos):
                     bgm.stop()
                     from UNO_RUN import main_screen
+                    MAIN_BGM.set_volume(0.7)
+                    MAIN_BGM.play(-1)
                     main_screen()
                 elif button_1920.rect.collidepoint(event.pos):
                     resolution = 1920
@@ -550,7 +552,7 @@ def winner_screen(screen, screen_width, screen_height, winner):
     screen = pygame.display.set_mode(screen_size)
     screen.fill("black")
 
-    winner_bg = init_bg("options_screen.png", screen_width, screen_height)
+    winner_bg = init_bg(SCREEN_PATH + "options_screen.png", screen_width, screen_height)
     screen.blit(winner_bg, (0, 0))
 
     button_width = 220
@@ -559,7 +561,7 @@ def winner_screen(screen, screen_width, screen_height, winner):
     x_pos = screen_width / 2 - button_width / 2
     y_pos = screen_height / 2 - button_height / 2
 
-    play_button = Button(image=pygame.image.load("play_button.png"),
+    play_button = Button(image=pygame.image.load(BUTTON_PATH + "play_button.png"),
                          pos=(x_pos, y_pos + 200),
                          size=(button_width, button_height))
     winnername_text = Text(text_input=winner + ' is winner!',
@@ -587,7 +589,7 @@ def createOneCard(card_o, pos_o, size_o, start_color_weakness_value):
     if not start_color_weakness_value:
         c_img = CARD_PATH + c.imgName() + ".png"
     elif start_color_weakness_value:
-        c_img = CARD_PATH + c.imgName() + ".png"
+        c_img = BLIND_CARD_PATH + c.imgName() + ".png"
     btn = Button(image=pygame.image.load(c_img), pos=pos_o, size=size_o)
     return btn
 

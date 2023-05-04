@@ -4,9 +4,6 @@ from Data.GAME_VIEW.OBJECT.text import Text
 from Data.GAME_VIEW.OBJECT.textbox import TextBox
 from Data.GAME_VIEW.OBJECT.view import init_view
 from Data.GAME_VIEW.util import *
-from Data.SOCKET.server_socket_v3_2 import runServer
-from Data.SOCKET.client_socket_v3_2 import runChat
-
 
 init_pygame()
 check_config(config)
@@ -24,58 +21,56 @@ def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=
     init_bg(SCREEN, SCREEN_PATH + "options_screen.png", SCREEN_WIDTH, SCREEN_HEIGHT)
 
     back_button = Button(image=pygame.image.load(BUTTON_PATH + "back_button.png"),
-                         pos=(30, 30),
-                         size=(50, 50))
+                         pos=(set_size(30, SCREEN_WIDTH), set_size(30, SCREEN_WIDTH)),
+                         size=(set_size(50, SCREEN_WIDTH), set_size(50, SCREEN_WIDTH)))
     start_button = Button(image=pygame.image.load(BUTTON_PATH + "start_button.png"),
-                          pos=(x_pos, y_pos + 260),
+                          pos=(x_pos, y_pos + set_size(260, SCREEN_WIDTH)),
                           size=(BUTTON_WIDTH, BUTTON_HEIGHT))
 
     AI_1 = Button(image=pygame.image.load(BUTTON_PATH + "1_checked.png"),
-                  pos=(x_pos - 360, y_pos - 120),
-                  size=(100, 100))
+                  pos=(x_pos - set_size(360, SCREEN_WIDTH), y_pos - set_size(180, SCREEN_WIDTH)),
+                  size=(set_size(100, SCREEN_WIDTH), set_size(100, SCREEN_WIDTH)))
     AI_2 = Button(image=pygame.image.load(BUTTON_PATH + "empty.png"),
-                  pos=(x_pos - 160, y_pos - 120),
-                  size=(100, 100))
+                  pos=(x_pos - set_size(160, SCREEN_WIDTH), y_pos - set_size(180, SCREEN_WIDTH)),
+                  size=(set_size(100, SCREEN_WIDTH), set_size(100, SCREEN_WIDTH)))
     AI_3 = Button(image=pygame.image.load(BUTTON_PATH + "empty.png"),
-                  pos=(x_pos + 40, y_pos - 120),
-                  size=(100, 100))
+                  pos=(x_pos + set_size(40, SCREEN_WIDTH), y_pos - set_size(180, SCREEN_WIDTH)),
+                  size=(set_size(100, SCREEN_WIDTH), set_size(100, SCREEN_WIDTH)))
     AI_4 = Button(image=pygame.image.load(BUTTON_PATH + "empty.png"),
-                  pos=(x_pos + 240, y_pos - 120),
-                  size=(100, 100))
+                  pos=(x_pos + set_size(240, SCREEN_WIDTH), y_pos - set_size(180, SCREEN_WIDTH)),
+                  size=(set_size(100, SCREEN_WIDTH), set_size(100, SCREEN_WIDTH)))
     AI_5 = Button(image=pygame.image.load(BUTTON_PATH + "empty.png"),
-                  pos=(x_pos + 440, y_pos - 120),
-                  size=(100, 100))
-    
-    # Server_socket = Button(image=pygame.image.load(BUTTON_PATH + "empty.png"),
-    #               pos=(x_pos - 360, y_pos + 260),
-    #               size=(100, 100))
-    
-    # Client_socket = Button(image=pygame.image.load(BUTTON_PATH + "empty.png"),
-    #               pos=(x_pos + 440, y_pos + 260),
-    #               size=(100, 100))
+                  pos=(x_pos + set_size(440, SCREEN_WIDTH), y_pos - set_size(180, SCREEN_WIDTH)),
+                  size=(set_size(100, SCREEN_WIDTH), set_size(100, SCREEN_WIDTH)))
 
     title_text = Text(text_input="Set computer that will play with you",
                       font="notosanscjkkr",
                       color=(0, 0, 0),
-                      pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + 100),
-                      size=50,
+                      pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(100, SCREEN_WIDTH)),
+                      size=set_size(50, SCREEN_WIDTH),
                       screen=SCREEN)
     subtitle_text = Text(text_input="Set your name",
                          font="notosanscjkkr",
                          color=(0, 0, 0),
-                         pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + 450),
-                         size=50,
+                         pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(400, SCREEN_WIDTH)),
+                         size=set_size(50, SCREEN_WIDTH),
                          screen=SCREEN)
     AI_list = [AI_1, AI_2, AI_3, AI_4, AI_5]
     title_text.init_text()
     subtitle_text.init_text()
 
-    input_boxes = [TextBox(SCREEN.get_rect().left + 520, 500, 80, 32),
-                   TextBox(SCREEN.get_rect().left + 120, 350, 80, 32),
-                   TextBox(SCREEN.get_rect().left + 320, 350, 80, 32),
-                   TextBox(SCREEN.get_rect().left + 520, 350, 80, 32),
-                   TextBox(SCREEN.get_rect().left + 720, 350, 80, 32),
-                   TextBox(SCREEN.get_rect().left + 920, 350, 80, 32)]
+    input_boxes = [TextBox(SCREEN.get_rect().left + set_size(535, SCREEN_WIDTH),
+                           set_size(450, SCREEN_WIDTH),
+                           set_size(200, SCREEN_WIDTH),
+                           set_size(32, SCREEN_WIDTH))]
+
+    for i in range(0, 5):
+        input_boxes.append(
+            TextBox(SCREEN.get_rect().left + set_size(130 + i*200, SCREEN_WIDTH),
+                    set_size(270, SCREEN_WIDTH),
+                    set_size(170, SCREEN_WIDTH),
+                    set_size(32, SCREEN_WIDTH))
+        )
 
     init_view(SCREEN, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
     bool_list = [True, False, False, False, False]

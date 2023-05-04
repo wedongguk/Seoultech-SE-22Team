@@ -12,6 +12,7 @@ class TextBox:
         self.rect = pg.Rect(x, y, w, h)
         self.color = COLOR_INACTIVE
         self.text = text
+        self.w = w
         self.txt_surface = FONT.render(text, True, self.color)
         self.active = False
 
@@ -39,7 +40,7 @@ class TextBox:
 
     def update(self):
         # Resize the box if the text is too long.
-        width = max(200, self.txt_surface.get_width()+10)
+        width = max(self.w, self.txt_surface.get_width()+10)
         self.rect.w = width
 
     def draw(self, screen):
