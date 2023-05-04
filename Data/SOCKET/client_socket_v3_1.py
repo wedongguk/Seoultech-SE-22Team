@@ -33,3 +33,4 @@ def runChat():
          sock.send(msg.encode())
             
 
+runChat()

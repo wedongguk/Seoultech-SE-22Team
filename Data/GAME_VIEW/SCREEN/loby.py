@@ -46,13 +46,13 @@ def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=
                   pos=(x_pos + 440, y_pos - 120),
                   size=(100, 100))
     
-    Server_socket = Button(image=pygame.image.load(BUTTON_PATH + "empty.png"),
-                  pos=(x_pos - 360, y_pos + 260),
-                  size=(100, 100))
+    # Server_socket = Button(image=pygame.image.load(BUTTON_PATH + "empty.png"),
+    #               pos=(x_pos - 360, y_pos + 260),
+    #               size=(100, 100))
     
-    Client_socket = Button(image=pygame.image.load(BUTTON_PATH + "empty.png"),
-                  pos=(x_pos + 440, y_pos + 260),
-                  size=(100, 100))
+    # Client_socket = Button(image=pygame.image.load(BUTTON_PATH + "empty.png"),
+    #               pos=(x_pos + 440, y_pos + 260),
+    #               size=(100, 100))
 
     title_text = Text(text_input="Set computer that will play with you",
                       font="notosanscjkkr",
@@ -77,7 +77,7 @@ def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=
                    TextBox(SCREEN.get_rect().left + 720, 350, 80, 32),
                    TextBox(SCREEN.get_rect().left + 920, 350, 80, 32)]
 
-    init_view(SCREEN, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5, Server_socket, Client_socket])
+    init_view(SCREEN, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
     bool_list = [True, False, False, False, False]
 
     def set_computer(num):
@@ -132,10 +132,10 @@ def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=
                 elif AI_5.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     set_computer(5)
-                elif Server_socket.rect.collidepoint(event.pos):
-                    runServer()
-                elif Client_socket.rect.collidepoint(event.pos):
-                    runChat()
+                # elif Server_socket.rect.collidepoint(event.pos):
+                #     runServer()
+                # elif Client_socket.rect.collidepoint(event.pos):
+                #     runChat()
                     
 
             for box in input_boxes:
@@ -143,7 +143,7 @@ def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=
         for box in input_boxes:
             box.update()
         init_bg(SCREEN, SCREEN_PATH + "options_screen.png", SCREEN_WIDTH, SCREEN_HEIGHT)
-        init_view(SCREEN, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5, Server_socket, Client_socket])
+        init_view(SCREEN, [back_button, start_button, AI_1, AI_2, AI_3, AI_4, AI_5])
         title_text.init_text()
         subtitle_text.init_text()
         for box in input_boxes:
