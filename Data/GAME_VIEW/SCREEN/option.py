@@ -34,7 +34,6 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
 
     resolution_button = []
 
-
     button_1920 = Button(image=pygame.image.load(BUTTON_PATH + "1920_button.png"),
                          pos=(SCREEN.get_rect().centerx - set_size(300, SCREEN_WIDTH),
                               SCREEN.get_rect().centery - set_size(120, SCREEN_WIDTH)),
@@ -144,6 +143,7 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
         button_960.image = pygame.image.load(BUTTON_PATH + "960_checked.png")
 
     RESOLUTION = [config['system']['SCREEN_WIDTH'], config['system']['SCREEN_HEIGHT']]
+
     while True:
         init_bg(SCREEN, SCREEN_PATH + "options_screen.png", SCREEN_WIDTH, SCREEN_HEIGHT)
 
@@ -257,8 +257,9 @@ def options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT):
                     button_960.image = pygame.image.load(BUTTON_PATH + "960_button.png")
                     reset_config(config)
                     save_config(config)
-                    width = "1280"
-                    height = "720"
+                    RESOLUTION[0] = 1280
+                    RESOLUTION[1] = 720
+
                 elif Uno_button_rect.collidepoint(pygame.mouse.get_pos()):
                     CLICK_SOUND.play(0)
                     print("Press the key for Uno direction")
