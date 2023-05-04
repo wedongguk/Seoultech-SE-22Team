@@ -2,9 +2,11 @@ from Data.GAME_VIEW.OBJECT.view import init_view
 from Data.GAME_VIEW.OBJECT.button import Button
 from Data.GAME_VIEW.OBJECT.text import Text
 from Data.GAME_VIEW.util import *
+import os
 
 init_pygame()
 check_config(config)
+print('process id', os.getpid())
 
 if bool(config['system']['COLOR_WEAKNESS_MODE']):
     color_weakness_value = True

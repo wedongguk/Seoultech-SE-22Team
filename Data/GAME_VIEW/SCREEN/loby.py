@@ -88,6 +88,7 @@ def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=
             if event.type == pygame.QUIT:
                 quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
+                # start 버튼 클릭 이벤트 발생시
                 if start_button.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     AI_num = 0
@@ -126,6 +127,8 @@ def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=
                 elif AI_5.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     set_computer(5)
+                    
+
             for box in input_boxes:
                 box.handle_event(event)
         for box in input_boxes:
