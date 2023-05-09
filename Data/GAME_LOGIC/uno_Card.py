@@ -104,11 +104,3 @@ class Card: # 카드 클래스 생성
         result = {'orignColor': o_Col, 'orignNumber': o_Num, 'effctCode': e_Code, 'attackNumber': atk_Num, 'applyColor': a_Col,'applyNumber': a_Num}
         
         return result
-    
-#test code#
-
-#c1 = Card(RED, 2)
-#c2 = Card(RED, effectCode = EFFECT_DRAW+EFFECT_REVERSE, attackNumber = 2)
-#c3 = Card(NO_COLOR, effectCode = EFFECT_DRAW, attackNumber = 4)
-
-#print(c1.imgName(), c2.imgName(), c3.imgName())

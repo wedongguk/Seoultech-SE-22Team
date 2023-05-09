@@ -38,9 +38,12 @@ class PlayerList:
     
     def reverse(self): # 리버스 효과 적용
         self.direction *= -1
-        if self.applySkip == False:
-            self.nextIdx = (self.nextIdx + 2*self.direction)%self.size()
-            self.applySkip = True
+        if self.size() != 2:
+            if self.applySkip == False:
+                self.nextIdx = (self.nextIdx + 2*self.direction)%self.size()
+                self.applySkip = True
+        else:
+            self.skip()
     
     def turnPlayer(self): # 현재 플레이어 반환
         return self.playerList[self.turnIdx]
