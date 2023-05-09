@@ -1,4 +1,4 @@
-# from uno_Card import *
+import random
 
 class Player: # player 클래스 생성
     playerName = '' # 플레이어 이름
@@ -44,6 +44,51 @@ class Player: # player 클래스 생성
             return 1
         else:
             return 0
+        
+    def weighted_draw(self, game, num): # game의 DeckList에서 카드를 뽑아 패로 가져옵니다.
+        
+        if (len(game.deckList.cardList) == 0) and (len(game.openCard.cardList) == 1):
+            print("섞을 카드가 없어요w")
+        else:
+            if len(game.deckList.cardList) < num: # 뽑을 카드 부족하면
+                print('뽑을 카드가 없으므로 openCard를 가져오겠습니다.w')
+                top = game.openCard.takeTopCard() # 맨 위 카드 하나 빼놓고
+                game.deckList + game.openCard.cardList # 나머지는 합쳐서
+                game.deckList.shuffle() # 셔플
+                game.openCard + [top] # 빼둔 카드 openCard에 둠
+            
+        
+            for i in range(0, num): # num 만큼 반복
+                result = self.drawOneCardW(game)
+                if result == 0:
+                    print('뽑을 카드가 없어요w')
+                    break
+        
+    def drawOneCardW(self, game):
+        cardList = game.deckList.cardList
+        if len(cardList) != 0:
+            start = 0
+            weightList = []
+            for i in range(len(cardList)):
+                if (cardList[i].effectCode & NO_EFFECT) == NO_EFFECT:
+                    start += 2
+                else:
+                    start += 3
+                weightList.append(start)
+            
+            randRange = random.randrange(0,start)
+            start = 0
+            idx = None
+            for i in range(len(cardList)):
+                if (start <= randRange) and (weightList[i] > randRange):
+                    idx = i
+                    break
+                else:
+                    start = weightList[i]
+            self.handCardList.append(game.deckList.takeIdxCard(idx))
+            return 1
+        else:
+            return 0
     
     def UnoAndWinnerChecker(self, game):
         if len(self.handCardList) == 0: # 카드를 내서 0장이 되면 게임이 끝난다.
@@ -80,17 +125,8 @@ class Player: # player 클래스 생성
                 chkList.append(i)
         
         return chkList
-        
-    def delIndex(self, i, color): # 삭제할 카드의 인덱스를 찾습니다. i : 삭제할 숫자, color : 삭제할 색깔
-        for c in self.handCardList:
-            #c.cardNumber = 3
-            #c.cardColor = green
-            if c.number == i: # 이 부분이 수행 안됨
-                #print(c.cardNumber)
-                if c.color == color: # 이 부분이 수행 안됨
-                    return self.handCardList.index(c) # c의 인덱스 값 리턴
 
-    def printCurSta(self): # 현재 Player 카드 리스트
+    def printCurSta(self): # 현재 Player 카드 리스트 ## 테스트할 필요 없다고 판단
         print(self.playerName + ": ", self.allHand(), "\n")
         
     def data(self): # Front에서 card instance의 정보를 dictionary로 확인하기 위한 메서드
