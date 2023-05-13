@@ -40,6 +40,10 @@ def main_screen():
                          pos=(center_x, center_y + set_size(320, SCREEN_WIDTH)),
                          size=(BUTTON_WIDTH, BUTTON_HEIGHT))
 
+    achievements_button = Button(image=pygame.image.load(BUTTON_PATH + "achievement_button.png"),
+                                 pos=(set_size(30, SCREEN_WIDTH), set_size(30, SCREEN_WIDTH)),
+                                 size=(set_size(50, SCREEN_WIDTH), set_size(50, SCREEN_WIDTH)))
+
     title_text = Text(text_input="UNO GAME",
                       font="notosanscjkkr",
                       color=(0, 0, 0),
@@ -47,7 +51,7 @@ def main_screen():
                       size=set_size(70, SCREEN_WIDTH),
                       screen=SCREEN)
     while True:
-        init_view(SCREEN, [play_button, options_button, exit_button])
+        init_view(SCREEN, [play_button, options_button, exit_button, achievements_button])
         title_text.init_text()
 
         for event in pygame.event.get():
@@ -66,6 +70,7 @@ def main_screen():
                     CLICK_SOUND.play(0)
                     quit()
         pygame.display.update()
+
 
 MAIN_BGM.set_volume(0.7)
 MAIN_BGM.play(-1)

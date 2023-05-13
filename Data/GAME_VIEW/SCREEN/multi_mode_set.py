@@ -19,28 +19,33 @@ def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEI
                          size=(set_size(50, SCREEN_WIDTH), set_size(50, SCREEN_WIDTH)))
 
     join_box = Button(image=pygame.image.load(ASSET_PATH + "box.png"),
-                      pos=(SCREEN.get_rect().right - 580, 70),
-                      size=(400, 500))
+                      pos=(SCREEN.get_rect().right - set_size(580, SCREEN_WIDTH),
+                           set_size(70, SCREEN_WIDTH)),
+                      size=(set_size(400, SCREEN_WIDTH), set_size(500, SCREEN_WIDTH)))
     create_box = Button(image=pygame.image.load(ASSET_PATH + "box.png"),
-                        pos=(SCREEN.get_rect().left + 170, 70),
-                        size=(400, 500))
+                        pos=(SCREEN.get_rect().left + set_size(170, SCREEN_WIDTH),
+                             set_size(70, SCREEN_WIDTH)),
+                        size=(set_size(400, SCREEN_WIDTH), set_size(500, SCREEN_WIDTH)))
     create_button = Button(image=pygame.image.load(BUTTON_PATH + "create_button.png"),
-                           pos=(create_box.rect.centerx - 110, SCREEN.get_rect().bottom - 110),
+                           pos=(create_box.rect.centerx - set_size(110, SCREEN_WIDTH),
+                                SCREEN.get_rect().bottom - set_size(110, SCREEN_WIDTH)),
                            size=(BUTTON_WIDTH, BUTTON_HEIGHT))
     join_button = Button(image=pygame.image.load(BUTTON_PATH + "join_button.png"),
-                         pos=(join_box.rect.centerx - 110, SCREEN.get_rect().bottom - 110),
+                         pos=(join_box.rect.centerx - set_size(110, SCREEN_WIDTH),
+                              SCREEN.get_rect().bottom - set_size(110, SCREEN_WIDTH)),
                          size=(BUTTON_WIDTH, BUTTON_HEIGHT))
 
     create_game_text = Text(text_input="CREATE GAME",
                             font="notosanscjkkr",
                             color=(0, 0, 0),
-                            pos=(create_box.rect.centerx, SCREEN.get_rect().top + 110),
+                            pos=(create_box.rect.centerx,
+                                 SCREEN.get_rect().top + set_size(110, SCREEN_WIDTH)),
                             size=set_size(50, SCREEN_WIDTH),
                             screen=SCREEN)
     join_game_text = Text(text_input="JOIN GAME",
                           font="notosanscjkkr",
                           color=(0, 0, 0),
-                          pos=(join_box.rect.centerx, SCREEN.get_rect().top + 110),
+                          pos=(join_box.rect.centerx, SCREEN.get_rect().top + set_size(110, SCREEN_WIDTH)),
                           size=set_size(50, SCREEN_WIDTH),
                           screen=SCREEN)
 
