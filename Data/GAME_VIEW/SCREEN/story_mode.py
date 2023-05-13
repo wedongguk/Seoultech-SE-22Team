@@ -48,7 +48,7 @@ def story_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
     init_view(SCREEN, [back_button, story_mode_1, story_mode_2, story_mode_3, story_mode_4, start_button])
 
     def show_popup(stage):
-        global text, mode
+        global text, mode, text_rect
         font = pygame.font.Font(None, set_size(36, SCREEN_WIDTH))
         description = [
             "첫 분배시 컴퓨터 플레이어가 기술 카드를 50% 더 높은 확률로 받게 됨.컴퓨터 플레이어가 거꾸로 진행과 건너 뛰기 등의 기술카드를 적절히 조합하여 2~3장 이상의 카드를 한 번에 낼 수 있는 콤보를 사용.",
@@ -66,11 +66,6 @@ def story_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
 
         init_bg(SCREEN, SCREEN_PATH + "story_mode_map.png", SCREEN_WIDTH, SCREEN_HEIGHT)
         init_view(SCREEN, [back_button, story_mode_1, story_mode_2, story_mode_3, story_mode_4, start_button])
-
-        close_button = Button(image=pygame.image.load(BUTTON_PATH + "back_button.png"),
-                         pos=(SCREEN_WIDTH - text_rect.left - set_size(10, SCREEN_WIDTH) - 10,
-                              text_rect.top - set_size(10, SCREEN_WIDTH) + set_size(200, SCREEN_WIDTH)),
-                         size=(30, 30))
 
         pygame.draw.rect(SCREEN, (255, 255, 255),
                          (text_rect.left - set_size(10, SCREEN_WIDTH),
@@ -108,6 +103,11 @@ def story_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
                 elif story_mode_4.rect.collidepoint(event.pos):
                     from Data.GAME_VIEW.SCREEN.loby import loby
                     loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=MODE_OPENSHUFFLE)
+                elif text_rect.collidepoint(event.pos):
+                    init_bg(SCREEN, SCREEN_PATH + "story_mode_map.png", SCREEN_WIDTH, SCREEN_HEIGHT)
+                    init_view(SCREEN,
+                              [back_button, story_mode_1, story_mode_2, story_mode_3, story_mode_4, start_button])
+                    pygame.display.flip()
                 elif start_button.rect.collidepoint(event.pos):
                     if mode == "A":
                         from Data.GAME_VIEW.SCREEN.start import start_game
