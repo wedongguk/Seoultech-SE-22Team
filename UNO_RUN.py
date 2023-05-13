@@ -41,8 +41,8 @@ def main_screen():
                          size=(BUTTON_WIDTH, BUTTON_HEIGHT))
 
     achievements_button = Button(image=pygame.image.load(BUTTON_PATH + "achievement_button.png"),
-                         pos=(set_size(30, SCREEN_WIDTH), set_size(30, SCREEN_WIDTH)),
-                         size=(set_size(50, SCREEN_WIDTH), set_size(50, SCREEN_WIDTH)))
+                                 pos=(set_size(30, SCREEN_WIDTH), set_size(30, SCREEN_WIDTH)),
+                                 size=(set_size(50, SCREEN_WIDTH), set_size(50, SCREEN_WIDTH)))
 
     title_text = Text(text_input="UNO GAME",
                       font="notosanscjkkr",
