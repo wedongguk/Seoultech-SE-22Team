@@ -44,13 +44,13 @@ def loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=
                   size=(set_size(100, SCREEN_WIDTH), set_size(100, SCREEN_WIDTH)))
 
     title_text = Text(text_input="Set computer that will play with you",
-                      font="notosanscjkkr",
+                      font=FONT_PATH,
                       color=(0, 0, 0),
                       pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(100, SCREEN_WIDTH)),
                       size=set_size(50, SCREEN_WIDTH),
                       screen=SCREEN)
     subtitle_text = Text(text_input="Set your name",
-                         font="notosanscjkkr",
+                         font=FONT_PATH,
                          color=(0, 0, 0),
                          pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(400, SCREEN_WIDTH)),
                          size=set_size(50, SCREEN_WIDTH),
