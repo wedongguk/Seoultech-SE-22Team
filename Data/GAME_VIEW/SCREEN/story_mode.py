@@ -49,9 +49,9 @@ def story_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
 
     def show_popup(stage):
         global text, mode, text_rect
-        font = pygame.font.Font(None, set_size(36, SCREEN_WIDTH))
+        font = pygame.font.Font(FONT_PATH, set_size(36, SCREEN_WIDTH))
         description = [
-            "첫 분배시 컴퓨터 플레이어가 기술 카드를 50% 더 높은 확률로 받게 됨.컴퓨터 플레이어가 거꾸로 진행과 건너 뛰기 등의 기술카드를 적절히 조합하여 2~3장 이상의 카드를 한 번에 낼 수 있는 콤보를 사용.",
+            "첫 분배시 컴퓨터 플레이어가 기술 카드를 50% 더 높은 확률로 받게 됨.컴퓨터 플레이어가 거꾸로 진행과\n 건너 뛰기 등의 기술카드를 적절히 조합하여 2~3장 이상의 카드를 한 번에 낼 수 있는 콤보를 사용.",
             "3명의 컴퓨터 플레이어와 대전 / 첫 카드를 제외하고 모든 카드를 같은 수만큼 플레이어들에게 분배.",
             "2명의 컴퓨터 플레이어와 대전 / 매 5턴마다 낼 수 있는 카드의 색상이 무작위로 변경됨."
         ]
@@ -112,7 +112,7 @@ def story_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
                     if mode == "A":
                         from Data.GAME_VIEW.SCREEN.start import start_game
                         start_game(int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']), 2,
-                                   ["USER", "COMPUTER1", "COMPUTER2"], color_weakness_value, MODE_CHANGECOLOR)
+                                   ["USER", "COMPUTER1", "COMPUTER2"], color_weakness_value, MODE_ALLCARD)
                     elif mode == "B":
                         from Data.GAME_VIEW.SCREEN.start import start_game
                         start_game(int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']), 2,

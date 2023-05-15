@@ -16,6 +16,7 @@ SOUND_PATH = os.getcwd() + "/Data/Asset/sound/"
 ASSET_PATH = os.getcwd() + "/Data/Asset/image/etc/"
 BLIND_CARD_PATH = os.getcwd() + "/Data/Asset/image/blind_card/"
 CARD_PATH = os.getcwd() + "/Data/Asset/image/normal_card/"
+FONT_PATH = os.getcwd() + "/Data/Asset/font/font.ttf"
 
 CLICK_SOUND = pygame.mixer.Sound(SOUND_PATH + "click_bgm.wav")
 MAIN_BGM = pygame.mixer.Sound(SOUND_PATH + "main_bgm.mp3")
