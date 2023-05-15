@@ -25,7 +25,7 @@ BUTTON_WIDTH = (220 * SCREEN_WIDTH) / 1280
 BUTTON_HEIGHT = (50 * SCREEN_WIDTH) / 1280
 
 
-def multi_start_game(is_server, screen_width, screen_height, num, name, color_weakness_value, mode):
+def multi_start_game(is_server, screen_width, screen_height, num, name, color_weakness_value, mode, server_pw, client_pw):
     global start_color_weakness_value
     global bgm, bet_card, cannot_bet, card_draw
 
@@ -33,6 +33,13 @@ def multi_start_game(is_server, screen_width, screen_height, num, name, color_we
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
     screen.fill((0, 0, 0))
+    print(client_pw)
+    print(server_pw)
+
+    if client_pw != server_pw:
+        print("비밀번호 입력 실패")
+    elif client_pw == server_pw:
+        print("비밀번호 입력 성공")
 
     
     user1 = Player(name[0], True)

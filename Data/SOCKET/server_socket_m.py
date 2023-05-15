@@ -8,9 +8,11 @@ import time
 
 import pickle
 
-def start_server():
+
+def start_server(pw):
     server = "10.50.60.86"
     port = 5555
+    password = pw
 
     #소켓 생성
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -22,20 +24,22 @@ def start_server():
         str(e)
 
     # 소켓 리스닝
-    s.listen(2)
+    s.listen(5)
     print("Waiting for a connection, Server Started")
 
     from Data.GAME_LOGIC.uno_Player import Player
     players = [Player("cli1", True), Player("cli2", True)]
     
-    # 입출력 테스트
+    # 입출력 테스트를 위한 샘플 handlist 1번, 2 번
     players[0].handCardList = ["1번 플레이어 카드리스트"]
     players[1].handCardList = ["2번 플레이어 카드리스트"]
+    print("players handlist init")
 
     # 이 부분과 player 부분이 관련있음
     currentPlayer = 0
 
     while True:
+        # 클라이언트가 접속 요청시 accept 함수를 통해 연결 수락
         conn, addr = s.accept()
         print("연결됨 : ", addr)
 
