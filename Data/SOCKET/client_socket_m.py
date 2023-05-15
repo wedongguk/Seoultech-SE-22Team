@@ -8,12 +8,12 @@ sys.path.append(r'{}'.format(os.getcwd()))
 # class Player
 
 
-def client():
+def client(ip):
      # main
     run = True
     # 소켓 생성
     from Data.SOCKET.network_m import Network
-    n = Network()
+    n = Network(ip)
     p = n.getP()
     clock = pygame.time.Clock()
 
@@ -35,4 +35,5 @@ def client():
         
         # 상대방으로 부터 읽은 num 표시
         print()
+        print("클라이언트 연결")
         print("{0} 가 받은 카드리스트  : {1}".format(p.__class__.__name__, p2Screen.handCardList))

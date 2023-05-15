@@ -103,8 +103,9 @@ def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEI
                     # print("make obj")
                     # 여기서 게임이 실행됨
                     from Data.SOCKET.server_socket_m import start_server, start_new_thread
-                    start_new_thread(start_server, ())
-                    multi_start_game(is_server, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),AI_num, name_list, color_weakness_value, mode)
+                    start_new_thread(start_server, (input_boxes[0].text, ))
+                    server_pw = input_boxes[0].text
+                    multi_start_game(is_server, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),AI_num, name_list, color_weakness_value, mode, server_pw, client_pw="0000")
                     
                     
                     # pygame_thread_obj = threading.Thread(target=pygame_thread, args=(socket_queue, is_server,AI_num, name_list, color_weakness_value, mode))
@@ -123,12 +124,19 @@ def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEI
                     pass
 
                 elif join_button.rect.collidepoint(event.pos):                   
-                    is_server = False
-                    multi_start_game(is_server, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),AI_num, name_list, color_weakness_value, mode)
                     # 클라이언트 소켓 생성
-                    print("client socket")
-                    from Data.SOCKET.client_socket_m import client
-                    client()
+                    print("client socket")  
+                    from Data.SOCKET.client_socket_m import client                    
+                    # 클라이언트 ip 주소 입력창
+                    # client(input_boxes[2].text)
+                    from Data.SOCKET.server_socket_m import start_new_thread
+                    start_new_thread(client, (input_boxes[2].text, ))
+                    pw = input_boxes[3].text
+                    server_pw = input_boxes[0].text
+                    is_server = False
+                    
+                    multi_start_game(is_server, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),AI_num, name_list, color_weakness_value, mode, server_pw, client_pw=pw)
+
                     
                     
 
