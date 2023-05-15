@@ -886,7 +886,7 @@ def nameSlot(screen, rect, player):
     pygame.draw.rect(screen, (255, 255, 255), nameArea)
 
     font_size = size_y
-    font = pygame.font.Font(None, font_size)
+    font = pygame.font.Font(FONT_PATH, font_size)
 
     center = rectCenter(nameArea)
     text = font.render(player.playerName, True, (0, 0, 0))
