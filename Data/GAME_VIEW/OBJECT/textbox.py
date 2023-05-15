@@ -1,10 +1,10 @@
 import pygame as pg
-
+from Data.GAME_VIEW.util import FONT_PATH
 
 pg.init()
 COLOR_INACTIVE = pg.Color('black')
 COLOR_ACTIVE = pg.Color('dodgerblue2')
-FONT = pg.font.SysFont('notosansmonocjkkrregular', 32)
+FONT = pg.font.Font(FONT_PATH, 32)
 
 
 class TextBox:
