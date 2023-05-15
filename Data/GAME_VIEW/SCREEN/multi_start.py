@@ -45,10 +45,10 @@ def multi_start_game(is_server, screen_width, screen_height, num, name, color_we
     g.ready(screen_size)
     
     # 서버 클라이언트 설정
-    if is_server:
-        start_server()
-    else:
-        client()
+    # if is_server:
+    #     start_server()
+    # else:
+    #     client()
 
     
 
@@ -68,8 +68,8 @@ def multi_start_game(is_server, screen_width, screen_height, num, name, color_we
     # 게임 무한 루프 문
 
     while True:
-        if is_server:
-            start_new_thread()
+        # if is_server:
+            # start_new_thread()
         ##### 화면 초기화 #####
         screen.fill((0, 0, 0))
 

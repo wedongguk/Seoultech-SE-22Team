@@ -45,7 +45,7 @@ def main_screen():
                                  size=(set_size(50, SCREEN_WIDTH), set_size(50, SCREEN_WIDTH)))
 
     title_text = Text(text_input="UNO GAME",
-                      font="notosanscjkkr",
+                      font=FONT_PATH,
                       color=(0, 0, 0),
                       pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + 30),
                       size=set_size(70, SCREEN_WIDTH),

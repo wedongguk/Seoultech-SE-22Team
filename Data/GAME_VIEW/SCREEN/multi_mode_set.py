@@ -7,8 +7,13 @@ from Data.GAME_VIEW.OBJECT.textbox import TextBox
 from Data.GAME_VIEW.OBJECT.view import init_view
 from Data.GAME_VIEW.SCREEN.multi_start import multi_start_game
 from Data.GAME_VIEW.util import *
-from Data.SOCKET.client_socket_m import client
-from Data.SOCKET.server_socket_m import start_server, start_new_thread
+from _thread import *
+import threading
+
+from _thread import *
+import pickle
+
+from queue import Queue
 
 
 def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=MODE_NORMAL):
@@ -77,35 +82,81 @@ def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEI
                 quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 is_server = True
+                print("multi_set_mode")
+
+                socket_queue = Queue()
+                AI_num = 2
+                name_list = ["1번 플레이어", "2번 플레이어", "3번 플레이어"]
+                color_weakness_value = False
+
+
+
+
                 if create_button.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     # 서버 소켓 생성
-                    print("server")
-                    # start_server()
-                    # start_new_thread()
+                    print("server socket")
                     
-                    AI_num = 2
-                    name_list = ["1번 플레이어", "2번 플레이어", "3번 플레이어"]
-                    color_weakness_value = False
                     
-                    multi_start_game(is_server, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),AI_num, name_list, color_weakness_value, mode)
+                    
 
+                    # print("make obj")
+                    # 여기서 게임이 실행됨
+                    from Data.SOCKET.server_socket_m import start_server, start_new_thread
+                    start_new_thread(start_server, ())
+                    multi_start_game(is_server, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),AI_num, name_list, color_weakness_value, mode)
+                    
+                    
+                    # pygame_thread_obj = threading.Thread(target=pygame_thread, args=(socket_queue, is_server,AI_num, name_list, color_weakness_value, mode))
+                    # server_socket_obj = threading.Thread(target=server_socket, args=(socket_queue, ))
+                    # print("before start")
+                    # # 두개 스레드 시작
+                    # pygame_thread_obj.start()
+                    # print("server start")
+                    # server_socket_obj.start()
+
+                    # # 두개 스레드 종료 대기
+                    # pygame_thread_obj.join()
+                    # server_socket_obj.join()
+                        
                     
                     pass
 
-                elif join_button.rect.collidepoint(event.pos):
-                    # 클라이언트 소켓 생성
+                elif join_button.rect.collidepoint(event.pos):                   
                     is_server = False
-                    print("client")
+                    multi_start_game(is_server, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),AI_num, name_list, color_weakness_value, mode)
+                    # 클라이언트 소켓 생성
+                    print("client socket")
+                    from Data.SOCKET.client_socket_m import client
                     client()
-                    multi_start_game(is_server)
+                    
+                    
+
+                    # pygame_thread_obj = threading.Thread(target=pygame_thread, args=(socket_queue, is_server,AI_num, name_list, color_weakness_value, mode))
+                    # client_socket_obj = threading.Thread(target=client_socket, args=(socket_queue, ))
+
+                    # pygame_thread_obj.start()
+                    # if is_server:
+                    #     server_socket_obj.start()
+                    #     print("server start")
+                    # if not is_server:
+                    #     client_socket_obj.start()
+
+                    # pygame_thread_obj.join()
+
+                    # if is_server:
+                    #     server_socket_obj.join()
+                    #     print("server join")
+                    # if not is_server:
+                    #     client_socket_obj.join()
+                    
                     pass
 
                 
                 elif back_button.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     from Data.GAME_VIEW.SCREEN.game_mode import select_game_mode
-                    select_game_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
+                    select_game_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)                
             for box in input_boxes:
                 box.handle_event(event)
         for box in input_boxes:
@@ -117,3 +168,28 @@ def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEI
         for box in input_boxes:
             box.draw(SCREEN)
         pygame.display.flip()
+
+# def pygame_thread(socket_queue, is_server, AI_num, name_list, color_weakness_value, mode):
+
+
+#     multi_start_game(is_server, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),AI_num, name_list, color_weakness_value, mode)
+#     print("게임 스레드 시작")
+
+#     # start_new_thread(multi_start_game, (is_server, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),AI_num, name_list, color_weakness_value, mode))
+
+#     while True:
+#         if not socket_queue.empty():
+#             message = socket_queue.get()
+#             print(message)
+
+# def server_socket(socket_queue):
+#     # 서버 소켓 생성
+#     print("server 스레드 시작")
+#     from Data.SOCKET.server_socket_m import start_server, start_new_thread
+#     # start_new_thread(start_server, (socket_queue, ))
+
+# def client_socket(socket_queue):
+#     is_server = False
+#     print("client 스레드 시작")
+#     from Data.SOCKET.client_socket_m import client
+#     # start_new_thread(client, (socket_queue, ))
