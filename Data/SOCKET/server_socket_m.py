@@ -1,12 +1,15 @@
 import socket
 from _thread import *
+import os
 import sys
+sys.path.append(r'C:\Users\jongh\소공\SE-22Team')
+sys.path.append(r'{}'.format(os.getcwd()))
 import time
-from Data.GAME_LOGIC.uno_Player import Player
+
 import pickle
 
 def start_server():
-    server = "10.16.144.212"
+    server = "10.50.60.86"
     port = 5555
 
     #소켓 생성
@@ -22,6 +25,7 @@ def start_server():
     s.listen(2)
     print("Waiting for a connection, Server Started")
 
+    from Data.GAME_LOGIC.uno_Player import Player
     players = [Player("cli1", True), Player("cli2", True)]
     
     # 입출력 테스트
@@ -40,7 +44,7 @@ def start_server():
         print(currentPlayer)
 
 
-def threaded_client(conn, player, players):
+def threaded_client(socket_queue, conn, player, players):
     conn.send(pickle.dumps(players[player]))
     reply = ""
 
@@ -49,6 +53,9 @@ def threaded_client(conn, player, players):
             time.sleep(3)
             data = pickle.loads(conn.recv(2048))
             players[player] = data
+
+            socket_queue.put(data)
+            print(data)
 
             if not data:
                 print("연결불가")
@@ -73,6 +80,5 @@ def threaded_client(conn, player, players):
     print("연결 종료")
     conn.close()
     sys.exit()
-
 
 
