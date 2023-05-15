@@ -8,6 +8,7 @@ from Data.GAME_VIEW.OBJECT.view import init_view
 from Data.GAME_VIEW.OBJECT.text import Text
 from Data.GAME_VIEW.OBJECT.button import Button
 from Data.GAME_VIEW.util import *
+from datetime import datetime
 
 bgm_volume = 1
 click_volume = 1
@@ -19,6 +20,11 @@ start_color_weakness_value = False
 def start_game(screen_width, screen_height, num, name, color_weakness_value, mode):
     global start_color_weakness_value
     global bgm, bet_card, cannot_bet, card_draw
+    global turn_num
+    global now
+    global is_other_Uno, is_use_effect
+    
+    now = datetime.now()
 
     start_color_weakness_value = color_weakness_value
     screen_size = (screen_width, screen_height)
@@ -166,7 +172,10 @@ def start_game(screen_width, screen_height, num, name, color_weakness_value, mod
         pygame.display.flip()
 
         if g.winner is not None:
-            winner_screen(screen, screen_width, screen_height, g.winner.playerName)
+            turn_num = g.turn // len(gamePlayerList)
+            is_other_Uno = g.other_Uno
+            is_use_effect = g.use_effect
+            winner_screen(screen, screen_width, screen_height, g.winner.playerName, mode)
 
         clock.tick(60)
 
@@ -546,20 +555,61 @@ def key_change():
 
 
 ##### winner_sreen #####
-def winner_screen(screen, screen_width, screen_height, winner):
+def winner_screen(screen, screen_width, screen_height, winner, mode):
     global check_os
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
     screen.fill("black")
 
-    winner_bg = init_bg(SCREEN_PATH + "options_screen.png", screen_width, screen_height)
-    screen.blit(winner_bg, (0, 0))
+    init_bg(screen, SCREEN_PATH + "options_screen.png", screen_width, screen_height)
 
     button_width = 220
     button_height = 50
 
     x_pos = screen_width / 2 - button_width / 2
     y_pos = screen_height / 2 - button_height / 2
+    
+    if mode == MODE_COMBO :
+        if config['system']['STORY_A_WIN'] == "False":
+            config['system']['STORY_A_WIN'] = "True"
+            config['system']['STORY_A_WIN_DATE'] = str(now.date())
+            save_config(config)
+    elif mode == MODE_ALLCARD :
+        if config['system']['STORY_B_WIN'] == "False":
+            config['system']['STORY_B_WIN'] = "True"
+            config['system']['STORY_B_WIN_DATE'] = str(now.date())
+            save_config(config)
+    elif mode == MODE_CHANGECOLOR :
+        if config['system']['STORY_C_WIN'] == "False":
+            config['system']['STORY_C_WIN'] = "True"
+            config['system']['STORY_C_WIN_DATE'] = str(now.date())
+            save_config(config)
+    elif mode == MODE_OPENSHUFFLE :
+        if config['system']['STORY_D_WIN'] == "False":
+            config['system']['STORY_D_WIN'] = "True"
+            config['system']['STORY_D_WIN_DATE'] = str(now.date())
+            save_config(config)
+    else:
+        if config['system']['SINGLE_WIN'] == "False":
+            config['system']['SINGLE_WIN'] = "True"
+            config['system']['SINGLE_WIN_DATE'] = str(now.date())
+            save_config(config)
+        if  turn_num <= 10:
+            if config['system']['TEN_TURN_WIN'] == "False":
+                config['system']['TEN_TURN_WIN'] = "True"
+                config['system']['TEN_TURN_WIN_DATE'] = str(now.date())
+                save_config(config)
+        if is_other_Uno == False:
+            if config['system']['AFTER_UNO_WIN'] == "False":
+                config['system']['AFTER_UNO_WIN'] = "True"
+                config['system']['AFTER_UNO_WIN_DATE'] = str(now.date())
+                save_config(config)
+        if is_use_effect== False:
+            if config['system']['NO_EFFECT_WIN'] == "False":
+                config['system']['NO_EFFECT_WIN'] = "True"
+                config['system']['NO_EFFECT_WIN_DATE'] = str(now.date())
+                save_config(config)
+            
 
     play_button = Button(image=pygame.image.load(BUTTON_PATH + "play_button.png"),
                          pos=(x_pos, y_pos + 200),
