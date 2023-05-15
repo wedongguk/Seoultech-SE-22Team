@@ -17,6 +17,9 @@ class Game: # game 클래스 생성
     
     is_selectColor = False
     is_selectNumber = False
+    
+    other_Uno = False
+    use_effect = False
 
     # timer #
     is_effctTime = False
@@ -31,6 +34,9 @@ class Game: # game 클래스 생성
         self.botCompeteList = []
         self.winner = None
         self.GameMode = mode
+        
+        self.other_Uno = False
+        self.use_effect = False
         
         self.is_selectColor = False
         self.is_selectNumber = False
@@ -203,6 +209,18 @@ class Game: # game 클래스 생성
                     useCard = self.playerList.turnPlayer().delCard(idx)
                     self.placeOpenCardZone(useCard)
                     
+                    eCode = useCard.effectCode # eCode를 통해 어떤 종류인지 판단
+
+                    if eCode & EFFECT_SKIP == EFFECT_SKIP:  # 다음 플레이어를 스킵하는 효과
+                        self.use_effect = True
+                    if eCode & EFFECT_REVERSE == EFFECT_REVERSE:  # 턴의 진행 방향을 반대로 바꾸는 효과
+                        self.use_effect = True
+                    if eCode & EFFECT_DRAW == EFFECT_DRAW:  # 다음 상대에게 카드를 주는 효과
+                        self.use_effect = True
+                    if eCode & EFFECT_COLOR == EFFECT_COLOR:  # 카드의 색을 바꾸는 효과
+                        self.use_effect = True
+                    if eCode & EFFECT_NUMBER == EFFECT_NUMBER:  # 카드의 숫자를 바꾸는 효과
+                        self.use_effect = True
                     self.playerList.turnPlayer().UnoAndWinnerChecker(self)
                     
                     self.endPhase()
@@ -283,11 +301,20 @@ class Game: # game 클래스 생성
         if self.state == UNO:
             self.state = NORM
             idx_ = idx%self.playerList.size()
-            if self.playerList.prevIdx == idx_:
-                print(self.playerList.prevPlayer().playerName,'가 UNO 우노를 외쳤습니다.(이전 턴에 카드를 내서 1개가 되었습니다.)')
-            else: # 그 외의 플레이어
-                print(self.playerList.idxPlayer(idx).playerName,'가', self.playerList.prevPlayer().playerName,' 의 UNO 우노를 저지했습니다.')
-                self.playerList.prevPlayer().draw(self, 1)
+            if self.playerList.turnPlayer().isUser == True:
+                if self.playerList.prevIdx == idx_:
+                    print(self.playerList.prevPlayer().playerName,'가 UNO 우노를 외쳤습니다.(이전 턴에 카드를 내서 1개가 되었습니다.)')
+                else: # 그 외의 플레이어
+                    print(self.playerList.idxPlayer(idx).playerName,'가', self.playerList.prevPlayer().playerName,' 의 UNO 우노를 저지했습니다.')
+                    self.playerList.prevPlayer().draw(self, 1)
+                    self.other_Uno = True
+            else:
+                if self.playerList.prevIdx == idx_:
+                    print(self.playerList.prevPlayer().playerName,'가 UNO 우노를 외쳤습니다.(이전 턴에 카드를 내서 1개가 되었습니다.)')
+                    self.other_Uno = True
+                else: # 그 외의 플레이어
+                    print(self.playerList.idxPlayer(idx).playerName,'가', self.playerList.prevPlayer().playerName,' 의 UNO 우노를 저지했습니다.')
+                    self.playerList.prevPlayer().draw(self, 1)
         else:
             print('state == UNO에서만 이 메서드가 동작합니다.')
     
