@@ -28,7 +28,7 @@ def select_game_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_H
                                size=(BUTTON_WIDTH, BUTTON_HEIGHT))
 
     title_text = Text(text_input="Select game mode",
-                      font="notosanscjkkr",
+                      font=FONT_PATH,
                       color=(0, 0, 0),
                       pos=(SCREEN.get_rect().centerx, SCREEN.get_rect().top + set_size(100, SCREEN_WIDTH)),
                       size=set_size(50, SCREEN_WIDTH),
