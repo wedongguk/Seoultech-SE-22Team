@@ -1,5 +1,8 @@
 import pygame
-from Data.SOCKET.network_m import Network
+import os
+import sys
+sys.path.append(r'{}'.format(os.getcwd()))
+
 
 # 플레이어 생성 정의
 # class Player
@@ -9,6 +12,7 @@ def client():
      # main
     run = True
     # 소켓 생성
+    from Data.SOCKET.network_m import Network
     n = Network()
     p = n.getP()
     clock = pygame.time.Clock()
@@ -23,9 +27,9 @@ def client():
         p2Screen = n.send(p)
 
         for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    run = False
-                    pygame.quit()
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
 
         
         
