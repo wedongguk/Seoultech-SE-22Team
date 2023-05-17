@@ -94,6 +94,23 @@ def start_game(screen_width, screen_height, num, name, color_weakness_value, mod
         ##### slot_Area #####
 
         ##### user_Area #####
+        
+        description = [
+            "첫 분배시 컴퓨터 플레이어가 기술 카드를 50% 더 높은 확률로 받게 됨.컴퓨터 플레이어가 거꾸로 진행과\n 건너 뛰기 등의 기술카드를 적절히 조합하여 2~3장 이상의 카드를 한 번에 낼 수 있는 콤보를 사용.",
+            "3명의 컴퓨터 플레이어와 대전 / 첫 카드를 제외하고 모든 카드를 같은 수만큼 플레이어들에게 분배.",
+            "2명의 컴퓨터 플레이어와 대전 / 매 5턴마다 낼 수 있는 카드의 색상이 무작위로 변경됨."]
+        center1 = rectCenter(user_rect_u)
+        if mode == MODE_ALLCARD:
+            txt = description[1]
+        elif mode == MODE_COMBO:
+            txt = description[0]
+        elif mode == MODE_CHANGECOLOR:
+            txt = description[2]
+        else:
+            txt = ''
+        font = pygame.font.Font(FONT_PATH, set_size(36, user_rect_u[2]))
+        text = font.render(txt, True, (0, 0, 0))
+        screen.blit(text, (center1[0] - text.get_width() / 2, center1[1] - text.get_height() / 2))
 
         ch.update(g.userHand())
         cardHolderDict = {'lbtn': user_lBtn_rect, 'rbtn': user_rBtn_rect, 'cardZone': user_cardZone_rect}
@@ -120,6 +137,8 @@ def start_game(screen_width, screen_height, num, name, color_weakness_value, mod
         turnInd(screen, board_rect, g.turn)
 
         g.update()
+        
+        deckInd(screen, board_rect, len(g.deckList.cardList))
 
         pause_button = Button(image=pygame.image.load(BUTTON_PATH + "pause_button.png"),
                               pos=(30, 30),
@@ -901,6 +920,25 @@ def eTimerInd(screen, rect, time):
     screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
 
     return Area
+
+def deckInd(screen, rect, num):
+    size_x = round(rect[2] / 20)
+    size_y = size_x
+
+    center = rectCenter(rect)
+    pos_x = center[0] - size_x * 1.2
+    pos_y = (rect[1] + center[1]) / 2 + size_x * 1.7
+
+    Area = (pos_x, pos_y, size_x, size_y)
+    pygame.draw.rect(screen, (255, 255, 255), Area)
+
+    font_size = size_y
+    font = pygame.font.Font(None, font_size)
+
+    center = rectCenter(Area)
+    text = font.render(str(num), True, (0, 0, 0))
+    screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
+
 
 
 ##### board space #####
