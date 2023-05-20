@@ -7,9 +7,11 @@ def effect(card, game):  # 특수 카드의 효과를 처리하기 위한 메서
         effect_skip(game)
 
     if eCode & EFFECT_REVERSE == EFFECT_REVERSE:  # 턴의 진행 방향을 반대로 바꾸는 효과
+        if eCode & EFFECT_DRAW == EFFECT_DRAW:
+            effect_draw(card, game)
         effect_reverse(game)
         
-    if eCode & EFFECT_DRAW == EFFECT_DRAW:  # 다음 상대에게 카드를 주는 효과
+    if eCode & EFFECT_REVERSE != EFFECT_REVERSE and (eCode & EFFECT_DRAW == EFFECT_DRAW):  # 다음 상대에게 카드를 주는 효과
         effect_draw(card, game)
 
     if eCode & EFFECT_COLOR == EFFECT_COLOR:  # 카드의 색을 바꾸는 효과
