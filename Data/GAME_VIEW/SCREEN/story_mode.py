@@ -93,7 +93,9 @@ def story_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
                 elif story_mode_1.rect.collidepoint(event.pos):
                     mode = "A"
                     show_popup(mode)
-                    from Data.GAME_VIEW.SCREEN.loby import loby
+                    from Data.GAME_VIEW.SCREEN.start import start_game
+                    start_game(int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']), 2,
+                               ["USER", "COMPUTER1", "COMPUTER2"], color_weakness_value, MODE_COMBO)
                 elif story_mode_2.rect.collidepoint(event.pos):
                     mode = "B"
                     show_popup(mode)
