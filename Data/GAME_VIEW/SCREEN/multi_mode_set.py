@@ -40,6 +40,30 @@ def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEI
                               SCREEN.get_rect().bottom - set_size(110, SCREEN_WIDTH)),
                          size=(BUTTON_WIDTH, BUTTON_HEIGHT))
 
+    create_password_text = Text(text_input="PASSWORD",
+                                font="notosanscjkkr",
+                                color=(0, 0, 0),
+                                pos=(SCREEN.get_rect().left + set_size(270, SCREEN_WIDTH),
+                                     SCREEN.get_rect().top + set_size(180, SCREEN_WIDTH)),
+                                size=set_size(35, SCREEN_WIDTH),
+                                screen=SCREEN)
+
+    join_ip_text = Text(text_input="IP",
+                        font="notosanscjkkr",
+                        color=(0, 0, 0),
+                        pos=(SCREEN.get_rect().left + set_size(750, SCREEN_WIDTH),
+                             SCREEN.get_rect().top + set_size(180, SCREEN_WIDTH)),
+                        size=set_size(35, SCREEN_WIDTH),
+                        screen=SCREEN)
+
+    join_password_text = Text(text_input="PASSWORD",
+                              font="notosanscjkkr",
+                              color=(0, 0, 0),
+                              pos=(SCREEN.get_rect().left + set_size(800, SCREEN_WIDTH),
+                                   SCREEN.get_rect().top + set_size(280, SCREEN_WIDTH)),
+                              size=set_size(35, SCREEN_WIDTH),
+                              screen=SCREEN)
+
     create_game_text = Text(text_input="CREATE GAME",
                             font="notosanscjkkr",
                             color=(0, 0, 0),
@@ -47,6 +71,7 @@ def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEI
                                  SCREEN.get_rect().top + set_size(110, SCREEN_WIDTH)),
                             size=set_size(50, SCREEN_WIDTH),
                             screen=SCREEN)
+
     join_game_text = Text(text_input="JOIN GAME",
                           font="notosanscjkkr",
                           color=(0, 0, 0),
@@ -56,10 +81,10 @@ def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEI
 
     input_boxes = []
 
-    for i in range(0, 2):
+    for i in range(0, 1):
         input_boxes.append(
             TextBox(SCREEN.get_rect().left + set_size(200, SCREEN_WIDTH),
-                    set_size(200 + i*100, SCREEN_WIDTH),
+                    set_size(200 + i * 100, SCREEN_WIDTH),
                     set_size(340, SCREEN_WIDTH),
                     set_size(32, SCREEN_WIDTH))
         )
@@ -67,13 +92,16 @@ def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEI
     for i in range(0, 2):
         input_boxes.append(
             TextBox(SCREEN.get_rect().right - set_size(550, SCREEN_WIDTH),
-                    set_size(200 + i*100, SCREEN_WIDTH),
+                    set_size(200 + i * 100, SCREEN_WIDTH),
                     set_size(340, SCREEN_WIDTH),
                     set_size(32, SCREEN_WIDTH))
         )
 
     create_game_text.init_text()
     join_game_text.init_text()
+    join_ip_text.init_text()
+    create_password_text.init_text()
+    join_password_text.init_text()
 
     init_view(SCREEN, [back_button, create_box, join_box, create_button, join_button])
     while True:
@@ -89,9 +117,6 @@ def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEI
                 name_list = ["1번 플레이어", "2번 플레이어", "3번 플레이어"]
                 color_weakness_value = False
 
-
-
-
                 if create_button.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     # 서버 소켓 생성
@@ -99,75 +124,32 @@ def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEI
                     # print("make obj")
                     # 여기서 게임이 실행됨
                     from Data.SOCKET.server_socket_m import start_server, start_new_thread
-                    start_new_thread(start_server, (input_boxes[0].text, ))
+                    start_new_thread(start_server, (input_boxes[0].text,))
                     server_pw = input_boxes[0].text
                     # 여기서 서비인지 아닌지를 판단하여 넘겨줘야 함
-
                     from Data.GAME_VIEW.SCREEN.multi_loby import multi_loby
                     multi_loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
-                    
-                    
-                    # multi_start_game(is_server, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),AI_num, name_list, color_weakness_value, mode, server_pw, client_pw="0000")
-                    
-                    
-                    # pygame_thread_obj = threading.Thread(target=pygame_thread, args=(socket_queue, is_server,AI_num, name_list, color_weakness_value, mode))
-                    # server_socket_obj = threading.Thread(target=server_socket, args=(socket_queue, ))
-                    # print("before start")
-                    # # 두개 스레드 시작
-                    # pygame_thread_obj.start()
-                    # print("server start")
-                    # server_socket_obj.start()
-
-                    # # 두개 스레드 종료 대기
-                    # pygame_thread_obj.join()
-                    # server_socket_obj.join()
-                        
-                    
                     pass
 
-                elif join_button.rect.collidepoint(event.pos):                   
+                elif join_button.rect.collidepoint(event.pos):
                     # 클라이언트 소켓 생성
-                    print("client socket")  
-                    from Data.SOCKET.client_socket_m import client                    
+                    print("client socket")
+                    from Data.SOCKET.client_socket_m import client
                     # 클라이언트 ip 주소 입력창
                     # client(input_boxes[2].text)
                     from Data.SOCKET.server_socket_m import start_new_thread
-                    start_new_thread(client, (input_boxes[2].text, ))
+                    start_new_thread(client, (input_boxes[2].text,))
                     pw = input_boxes[3].text
                     server_pw = input_boxes[0].text
                     is_server = False
-                    
+
                     from Data.GAME_VIEW.SCREEN.multi_loby import multi_loby
                     multi_loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
-
-                    
-                    
-
-                    # pygame_thread_obj = threading.Thread(target=pygame_thread, args=(socket_queue, is_server,AI_num, name_list, color_weakness_value, mode))
-                    # client_socket_obj = threading.Thread(target=client_socket, args=(socket_queue, ))
-
-                    # pygame_thread_obj.start()
-                    # if is_server:
-                    #     server_socket_obj.start()
-                    #     print("server start")
-                    # if not is_server:
-                    #     client_socket_obj.start()
-
-                    # pygame_thread_obj.join()
-
-                    # if is_server:
-                    #     server_socket_obj.join()
-                    #     print("server join")
-                    # if not is_server:
-                    #     client_socket_obj.join()
-                    
                     pass
-
-                
                 elif back_button.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     from Data.GAME_VIEW.SCREEN.game_mode import select_game_mode
-                    select_game_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)                
+                    select_game_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
             for box in input_boxes:
                 box.handle_event(event)
         for box in input_boxes:
@@ -176,6 +158,9 @@ def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEI
         init_view(SCREEN, [back_button, create_box, join_box, create_button, join_button])
         create_game_text.init_text()
         join_game_text.init_text()
+        join_ip_text.init_text()
+        join_password_text.init_text()
+        create_password_text.init_text()
         for box in input_boxes:
             box.draw(SCREEN)
         pygame.display.flip()
