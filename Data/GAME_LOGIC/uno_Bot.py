@@ -12,7 +12,7 @@ def distribution(game, mode): # 카드를 분배
 
 def strategy(game, mode): # 봇이 선택하는 전략 
     
-    if mode == MODE_COMBO:
+    if mode == -1000:
         pass
     else:
         strategy_random(game)

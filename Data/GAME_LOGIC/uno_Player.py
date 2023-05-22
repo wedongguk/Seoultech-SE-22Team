@@ -1,4 +1,5 @@
 import random
+from Data.GAME_LOGIC.uno_Const import *  #
 
 class Player: # player 클래스 생성
     playerName = '' # 플레이어 이름
