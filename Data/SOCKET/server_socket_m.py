@@ -46,17 +46,24 @@ def start_server(pw):
         join = True
 
         start_new_thread(threaded_client, (conn, ))
+        
         currentPlayer += 1
         print("현재 플레이어 : ", currentPlayer)
 
 
 def threaded_client(conn):
-    #conn.send(pickle.dumps(players[player]))
+    #conn.send(pickle.dumps())
     reply = ""
 
     while True:
+        print("while True")
         try:
-            time.sleep(3)
+            from Data.GAME_VIEW.SCREEN.multi_mode_set import server_pw
+            reply = server_pw
+            print(reply)
+            conn.sendall(pickle.dumps(reply))
+            print("try")
+            time.sleep(1)
             data = pickle.loads(conn.recv(2048))
             print(conn.recv(2048))
             print(data)
@@ -75,7 +82,7 @@ def threaded_client(conn):
                 #     reply = players[1]
             
             
-            conn.sendall(pickle.dumps(reply))
+            print("보냄")
     
         except:
             break
