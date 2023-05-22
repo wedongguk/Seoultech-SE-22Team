@@ -8,7 +8,6 @@ import time
 
 import pickle
 
-join = False
 
 def start_server(pw):
     server = "10.50.99.56"
@@ -43,44 +42,41 @@ def start_server(pw):
         # 클라이언트가 접속 요청시 accept 함수를 통해 연결 수락
         conn, addr = s.accept()
         print("연결됨 : ", addr)
-        print("클라이언트 JOIN 버튼 클릭")
-        global join
-        join = True
 
-        start_new_thread(threaded_client, (conn, ))
-        
+        start_new_thread(threaded_client, (conn, currentPlayer, players))
         currentPlayer += 1
-        print("현재 플레이어 : ", currentPlayer)
+        print(currentPlayer)
 
 
-def threaded_client(conn):
-    #conn.send(pickle.dumps())
+def threaded_client(socket_queue, conn, player, players):
+    conn.send(pickle.dumps(players[player]))
     reply = ""
 
     while True:
-        print("while True")
         try:
-            from Data.GAME_VIEW.SCREEN.multi_mode_set import server_pw
-            reply = server_pw
-            print(reply)
-            conn.sendall(pickle.dumps(reply))
-            print("try")
-            time.sleep(1)
+            time.sleep(3)
             data = pickle.loads(conn.recv(2048))
-            print(conn.recv(2048))
-            print(data)
-            # players[player] = data
+            players[player] = data
 
-            # socket_queue.put(data)
+            socket_queue.put(data)
+            print(data)
 
             if not data:
                 print("연결불가")
                 break
             else:
-                pass
+                if player == 1:
+                    reply = players[0]
+                elif player == 0:
+                    reply = players[1]
             
-            
-            print("보냄")
+            print()
+            print("=======================================================")
+            print("{0} 번 플레이어가 받은 카드 리스트 : {1}".format(player+1, data.handCardList))
+            print("{0} 번 플레이어가 보낸 카드 리스트 : {1}".format(player+1, reply.handCardList))
+            print("=======================================================")
+            print()
+            conn.sendall(pickle.dumps(reply))
     
         except:
             break
