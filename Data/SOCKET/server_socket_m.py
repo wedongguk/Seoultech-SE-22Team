@@ -10,7 +10,7 @@ import pickle
 
 
 def start_server(pw):
-    server = "10.50.60.86"
+    server = "10.50.99.56"
     port = 5555
     password = pw
 

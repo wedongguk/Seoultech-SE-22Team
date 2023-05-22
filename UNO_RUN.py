@@ -26,6 +26,8 @@ def main_screen():
     center_x = SCREEN_WIDTH / 2 - BUTTON_WIDTH / 2
     center_y = SCREEN_HEIGHT / 2 - BUTTON_HEIGHT / 2
 
+    flag = 0
+    
     init_bg(SCREEN, SCREEN_PATH + "start_screen.jpeg", SCREEN_WIDTH, SCREEN_HEIGHT)
 
     play_button = Button(image=pygame.image.load(BUTTON_PATH + "play_button.png"),
@@ -54,6 +56,7 @@ def main_screen():
         init_view(SCREEN, [play_button, options_button, exit_button, achievements_button])
         title_text.init_text()
 
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
@@ -73,6 +76,51 @@ def main_screen():
                     CLICK_SOUND.play(0)
                     from Data.GAME_VIEW.SCREEN.achievement import achievement_screen
                     achievement_screen(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    if flag > 0:
+                        flag = flag - 1
+                elif event.key == pygame.K_DOWN:
+                    if flag < 3 :
+                        flag = flag + 1
+                elif event.key == pygame.K_RETURN:
+                    if flag == 0:
+                        CLICK_SOUND.play(0)
+                        from Data.GAME_VIEW.SCREEN.achievement import achievement_screen
+                        achievement_screen(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
+                    elif flag == 1 :
+                        CLICK_SOUND.play(0)
+                        from Data.GAME_VIEW.SCREEN.game_mode import select_game_mode
+                        select_game_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT + 5)
+                    elif flag == 2 :
+                        CLICK_SOUND.play(0)
+                        from Data.GAME_VIEW.SCREEN.option import options
+                        options(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
+                    elif flag == 3:
+                        CLICK_SOUND.play(0)
+                        quit()
+        mouse_pos = pygame.mouse.get_pos()
+        
+        if achievements_button.rect.collidepoint(mouse_pos) or flag == 0:
+            achievements_button.image = pygame.image.load(BUTTON_PATH + "selected_achievement_button.png")
+        else : 
+            achievements_button.image = pygame.image.load(BUTTON_PATH + "achievement_button.png")
+        
+        if play_button.rect.collidepoint(mouse_pos) or flag == 1:
+            play_button.image = pygame.image.load(BUTTON_PATH + "selected_play_button.png")
+        else:
+            play_button.image = pygame.image.load(BUTTON_PATH + "play_button.png")
+        
+        if options_button.rect.collidepoint(mouse_pos) or flag == 2:
+            options_button.image = pygame.image.load(BUTTON_PATH + "selected_options_button.png")
+        else:
+            options_button.image = pygame.image.load(BUTTON_PATH + "options_button.png")
+        
+        if exit_button.rect.collidepoint(mouse_pos) or flag == 3:
+            exit_button.image = pygame.image.load(BUTTON_PATH + "selected_exit_button.png")
+        else:
+            exit_button.image = pygame.image.load(BUTTON_PATH + "exit_button.png")
+        
         pygame.display.update()
 
 
