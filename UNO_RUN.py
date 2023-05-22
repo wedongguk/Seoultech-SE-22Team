@@ -72,11 +72,10 @@ def main_screen():
                 elif achievements_button.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     from Data.GAME_VIEW.SCREEN.achievement import achievement_screen
-                    achievement_screen(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, "main")
+                    achievement_screen(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
         pygame.display.update()
 
 
 MAIN_BGM.set_volume(0.7)
 MAIN_BGM.play(-1)
 main_screen()
-os.system('pause')
