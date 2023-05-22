@@ -1,3 +1,5 @@
+import pygame.mouse
+
 from Data.GAME_LOGIC.uno_Player import *
 from Data.GAME_LOGIC.unoCore import Game
 from Data.GAME_LOGIC.uno_Pile import *
@@ -217,6 +219,10 @@ def pause(screen, screen_width, screen_height, width):
                          pos=(30, 30),
                          size=(50, 50))
 
+    achievements_button = Button(image=pygame.image.load(BUTTON_PATH + "achievement_button.png"),
+                                 pos=(set_size(1200, screen_width), set_size(30, screen_width)),
+                                 size=(set_size(50, screen_width), set_size(50, screen_width)))
+
     master_volume_up_button = Button(image=pygame.image.load(BUTTON_PATH + "volume_up_button.png"),
                                      pos=(screen.get_rect().centerx - 120, screen.get_rect().centery - 280),
                                      size=(100, 46))
@@ -299,7 +305,7 @@ def pause(screen, screen_width, screen_height, width):
                             size=30,
                             screen=screen)
 
-    if start_color_weakness_value == True:
+    if start_color_weakness_value:
         on_button.image = pygame.image.load(BUTTON_PATH + "on_checked.png")
         off_button.image = pygame.image.load(BUTTON_PATH + "off.png")
     else:
@@ -318,15 +324,15 @@ def pause(screen, screen_width, screen_height, width):
         button_1280.image = pygame.image.load(BUTTON_PATH + "1280_button.png")
         button_960.image = pygame.image.load(BUTTON_PATH + "960_checked.png")
 
-    bool = True
+    flag = True
     init_bg(screen, SCREEN_PATH + "options_screen.png", 1280, 720)
-    while bool:
+    while flag:
         init_view(screen, [back_button, exit_button,
                            master_volume_up_button, master_volume_down_button,
                            bgm_volume_up_button, bgm_volume_down_button,
                            click_volume_up_button, click_volume_down_button,
                            on_button, off_button,
-                           button_1920, button_1280, button_960])
+                           button_1920, button_1280, button_960, achievements_button])
         master_volume_set_text.init_text()
         bgm_volume_set_text.init_text()
         click_volume_set_text.init_text()
@@ -555,9 +561,12 @@ def pause(screen, screen_width, screen_height, width):
                     else:
                         config['system']['DRAW'] = 'pygame.K_' + pygame.key.name(DRAW)
                     save_config(config)
+                elif achievements_button.rect.collidepoint(pygame.mouse.get_pos()):
+                    from Data.GAME_VIEW.SCREEN.achievement import achievement_screen
+                    achievement_screen(screen, screen_width, screen_height, "pause")
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    bool = False
+                    flag = False
         pygame.display.flip()
 
 
