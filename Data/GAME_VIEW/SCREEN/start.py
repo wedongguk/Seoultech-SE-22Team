@@ -8,6 +8,7 @@ from Data.GAME_VIEW.OBJECT.view import init_view
 from Data.GAME_VIEW.OBJECT.text import Text
 from Data.GAME_VIEW.OBJECT.button import Button
 from Data.GAME_VIEW.util import *
+from datetime import datetime
 
 bgm_volume = 1
 click_volume = 1
@@ -19,6 +20,12 @@ start_color_weakness_value = False
 def start_game(screen_width, screen_height, num, name, color_weakness_value, mode):
     global start_color_weakness_value
     global bgm, bet_card, cannot_bet, card_draw
+    global turn_num
+    global now
+    global is_other_Uno, is_use_effect, is_draw
+    is_draw = False
+    
+    now = datetime.now()
 
     start_color_weakness_value = color_weakness_value
     screen_size = (screen_width, screen_height)
@@ -88,6 +95,23 @@ def start_game(screen_width, screen_height, num, name, color_weakness_value, mod
         ##### slot_Area #####
 
         ##### user_Area #####
+        
+        description = [
+            "첫 분배시 컴퓨터 플레이어가 기술 카드를 50% 더 높은 확률로 받게 됨.컴퓨터 플레이어가 거꾸로 진행과\n 건너 뛰기 등의 기술카드를 적절히 조합하여 2~3장 이상의 카드를 한 번에 낼 수 있는 콤보를 사용.",
+            "3명의 컴퓨터 플레이어와 대전 / 첫 카드를 제외하고 모든 카드를 같은 수만큼 플레이어들에게 분배.",
+            "2명의 컴퓨터 플레이어와 대전 / 매 5턴마다 낼 수 있는 카드의 색상이 무작위로 변경됨."]
+        center1 = rectCenter(user_rect_u)
+        if mode == MODE_ALLCARD:
+            txt = description[1]
+        elif mode == MODE_COMBO:
+            txt = description[0]
+        elif mode == MODE_CHANGECOLOR:
+            txt = description[2]
+        else:
+            txt = ''
+        font = pygame.font.Font(FONT_PATH, set_size(36, user_rect_u[2]))
+        text = font.render(txt, True, (0, 0, 0))
+        screen.blit(text, (center1[0] - text.get_width() / 2, center1[1] - text.get_height() / 2))
 
         ch.update(g.userHand())
         cardHolderDict = {'lbtn': user_lBtn_rect, 'rbtn': user_rBtn_rect, 'cardZone': user_cardZone_rect}
@@ -114,6 +138,8 @@ def start_game(screen_width, screen_height, num, name, color_weakness_value, mod
         turnInd(screen, board_rect, g.turn)
 
         g.update()
+        
+        deckInd(screen, board_rect, len(g.deckList.cardList))
 
         pause_button = Button(image=pygame.image.load(BUTTON_PATH + "pause_button.png"),
                               pos=(30, 30),
@@ -143,6 +169,7 @@ def start_game(screen_width, screen_height, num, name, color_weakness_value, mod
 
                 if dbtn.rect.collidepoint(event.pos):  # 드로우 버튼
                     if actlist['drawBtn']:  # actList가 true인 경우에만 함수 실행
+                        is_draw = True
                         g.eventDrawBtn()
                 elif ubtn.rect.collidepoint(event.pos):  # 우노 버튼
                     if actlist['unoBtn']:  # actList가 true인 경우에만 함수 실행
@@ -166,7 +193,10 @@ def start_game(screen_width, screen_height, num, name, color_weakness_value, mod
         pygame.display.flip()
 
         if g.winner is not None:
-            winner_screen(screen, screen_width, screen_height, g.winner.playerName)
+            turn_num = g.turn // len(gamePlayerList)
+            is_other_Uno = g.other_Uno
+            is_use_effect = g.use_effect
+            winner_screen(screen, screen_width, screen_height, g.winner.playerName, mode)
 
         clock.tick(60)
 
@@ -546,20 +576,75 @@ def key_change():
 
 
 ##### winner_sreen #####
-def winner_screen(screen, screen_width, screen_height, winner):
+def winner_screen(screen, screen_width, screen_height, winner, mode):
     global check_os
     screen_size = (screen_width, screen_height)
     screen = pygame.display.set_mode(screen_size)
     screen.fill("black")
 
-    winner_bg = init_bg(SCREEN_PATH + "options_screen.png", screen_width, screen_height)
-    screen.blit(winner_bg, (0, 0))
+    init_bg(screen, SCREEN_PATH + "options_screen.png", screen_width, screen_height)
 
     button_width = 220
     button_height = 50
 
     x_pos = screen_width / 2 - button_width / 2
     y_pos = screen_height / 2 - button_height / 2
+    
+    if mode == MODE_COMBO :
+        if config['system']['STORY_A_WIN'] == "False":
+            config['system']['STORY_A_WIN'] = "True"
+            config['system']['STORY_A_WIN_DATE'] = str(now.date())
+            save_config(config)
+    elif mode == MODE_ALLCARD :
+        if config['system']['STORY_B_WIN'] == "False":
+            config['system']['STORY_B_WIN'] = "True"
+            config['system']['STORY_B_WIN_DATE'] = str(now.date())
+            save_config(config)
+    elif mode == MODE_CHANGECOLOR :
+        if config['system']['STORY_C_WIN'] == "False":
+            config['system']['STORY_C_WIN'] = "True"
+            config['system']['STORY_C_WIN_DATE'] = str(now.date())
+            save_config(config)
+    elif mode == MODE_OPENSHUFFLE :
+        if config['system']['STORY_D_WIN'] == "False":
+            config['system']['STORY_D_WIN'] = "True"
+            config['system']['STORY_D_WIN_DATE'] = str(now.date())
+            save_config(config)
+        if config['system']['STORY_ALL_WIN'] == "False":
+            config['system']['STORY_ALL_WIN'] = "True"
+            config['system']['STORY_ALL_WIN_DATE'] = str(now.date())
+            save_config(config)
+    else:
+        if config['system']['SINGLE_WIN'] == "False":
+            config['system']['SINGLE_WIN'] = "True"
+            config['system']['SINGLE_WIN_DATE'] = str(now.date())
+            save_config(config)
+        if  turn_num <= 10:
+            if config['system']['TEN_TURN_WIN'] == "False":
+                config['system']['TEN_TURN_WIN'] = "True"
+                config['system']['TEN_TURN_WIN_DATE'] = str(now.date())
+                save_config(config)
+        if  turn_num <= 20:
+            if config['system']['TWENTY_TURN_WIN'] == "False":
+                config['system']['TWENTY_TURN_WIN'] = "True"
+                config['system']['TWENTY_TURN_WIN_DATE'] = str(now.date())
+                save_config(config)
+        if is_other_Uno == False:
+            if config['system']['AFTER_UNO_WIN'] == "False":
+                config['system']['AFTER_UNO_WIN'] = "True"
+                config['system']['AFTER_UNO_WIN_DATE'] = str(now.date())
+                save_config(config)
+        if is_use_effect == False:
+            if config['system']['NO_EFFECT_WIN'] == "False":
+                config['system']['NO_EFFECT_WIN'] = "True"
+                config['system']['NO_EFFECT_WIN_DATE'] = str(now.date())
+                save_config(config)
+        if is_draw == False:
+            if config['system']['NO_DRAW_WIN'] == "False":
+                config['system']['NO_DRAW_WIN'] = "True"
+                config['system']['NO_DRAW_WIN_DATE'] = str(now.date())
+                save_config(config)
+            
 
     play_button = Button(image=pygame.image.load(BUTTON_PATH + "play_button.png"),
                          pos=(x_pos, y_pos + 200),
@@ -851,6 +936,25 @@ def eTimerInd(screen, rect, time):
     screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
 
     return Area
+
+def deckInd(screen, rect, num):
+    size_x = round(rect[2] / 20)
+    size_y = size_x
+
+    center = rectCenter(rect)
+    pos_x = center[0] - size_x * 1.2
+    pos_y = (rect[1] + center[1]) / 2 + size_x * 1.7
+
+    Area = (pos_x, pos_y, size_x, size_y)
+    pygame.draw.rect(screen, (255, 255, 255), Area)
+
+    font_size = size_y
+    font = pygame.font.Font(None, font_size)
+
+    center = rectCenter(Area)
+    text = font.render(str(num), True, (0, 0, 0))
+    screen.blit(text, (center[0] - text.get_width() / 2, center[1] - text.get_height() / 2))
+
 
 
 ##### board space #####

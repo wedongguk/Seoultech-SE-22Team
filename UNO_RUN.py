@@ -69,6 +69,10 @@ def main_screen():
                 elif exit_button.rect.collidepoint(event.pos):
                     CLICK_SOUND.play(0)
                     quit()
+                elif achievements_button.rect.collidepoint(event.pos):
+                    CLICK_SOUND.play(0)
+                    from Data.GAME_VIEW.SCREEN.achievement import achievement_screen
+                    achievement_screen(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
         pygame.display.update()
 
 

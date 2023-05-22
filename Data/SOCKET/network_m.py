@@ -2,9 +2,9 @@ import socket
 import pickle
 
 class Network:
-    def __init__(self):
+    def __init__(self, ip):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server = "https://github.com/rivkode/Seoultech-SE-22Team.git"
+        self.server = ip
         self.port = 5555
         self.addr = (self.server, self.port)
         self.p = self.connect()
