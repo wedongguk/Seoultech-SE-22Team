@@ -5,6 +5,8 @@ from Data.GAME_LOGIC.uno_Const import *  # const
 def distribution(game, mode): # 카드를 분배
     if mode == MODE_ALLCARD:
         distribution_allCard(game)
+    elif mode == MODE_COMBO:
+        distribution_skillCard(game)
     else:
         distribution_normal(game)
 
@@ -59,10 +61,13 @@ def distribution_allCard(game): # 분배 - 모든 카드
         print(i.playerName + ": ", i.allHand(),"\n")
 
 def distribution_skillCard(game): # 분배 - 높은 확률로 기술 카드를 더 받음
-    pass
-
-def weighted_skillCard(game):
-    pass
+    for i in game.playerList.lst(): # 각 플레이어들에게 카드를 나눠줍니다.
+        if i.isUser == False:
+            i.weighted_draw(game, 5) # 나눠줄 카드의 개수 : 임의로 5로 설정했음
+            print(i.playerName + ": ", i.allHand(),"\n")
+        else:
+            i.draw(game, 5) # 나눠줄 카드의 개수 : 임의로 5로 설정했음
+            print(i.playerName + ": ", i.allHand(),"\n")
 
 def event_changeColor(game): # 엔드 이벤트 - 오픈 카드의 색이 바뀜
     if game.turn%5 == 0:
