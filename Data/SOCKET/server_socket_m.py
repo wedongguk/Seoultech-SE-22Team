@@ -48,13 +48,13 @@ def start_server(pw):
         global join
         join = True
 
-        start_new_thread(threaded_client, (conn, ))
+        start_new_thread(threaded_client, (conn, addr))
         
         currentPlayer += 1
         print("현재 플레이어 : ", currentPlayer)
 
 
-def threaded_client(conn):
+def threaded_client(conn, addr):
     #conn.send(pickle.dumps())
     reply = ""
 
@@ -64,21 +64,18 @@ def threaded_client(conn):
             from Data.GAME_VIEW.SCREEN.multi_mode_set import server_pw
             reply = server_pw
             print(reply)
-            conn.sendall(pickle.dumps(reply))
+            # conn.sendall(pickle.dumps(reply))
+            bytes_sent = conn.sendall(reply.encode('utf-8'))
+            if bytes_sent is None:
+                print("Data successfully sent by the client.")
+            else:
+                print("Error in data transmission.")
             print("try")
             time.sleep(1)
-            data = pickle.loads(conn.recv(2048))
-            print(conn.recv(2048))
-            print(data)
             # players[player] = data
 
             # socket_queue.put(data)
 
-            if not data:
-                print("연결불가")
-                break
-            else:
-                pass
             
             
             print("보냄")
