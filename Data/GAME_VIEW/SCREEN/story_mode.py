@@ -96,13 +96,13 @@ def story_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
                     from Data.GAME_VIEW.SCREEN.start import start_game
                     start_game(int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']), 2,
                                ["USER", "COMPUTER1", "COMPUTER2"], color_weakness_value, MODE_COMBO)
-                elif story_mode_2.rect.collidepoint(event.pos):
+                elif story_mode_2.rect.collidepoint(event.pos) and config['system']['STORY_A_WIN'] == "True":
                     mode = "B"
                     show_popup(mode)
-                elif story_mode_3.rect.collidepoint(event.pos):
+                elif story_mode_3.rect.collidepoint(event.pos) and config['system']['STORY_B_WIN'] == "True":
                     mode = "C"
                     show_popup("C")
-                elif story_mode_4.rect.collidepoint(event.pos):
+                elif story_mode_4.rect.collidepoint(event.pos) and config['system']['STORY_C_WIN'] == "True":
                     from Data.GAME_VIEW.SCREEN.loby import loby
                     loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT, mode=MODE_OPENSHUFFLE)
                 elif text_rect.collidepoint(event.pos):
