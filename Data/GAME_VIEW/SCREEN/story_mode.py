@@ -105,11 +105,11 @@ def story_mode(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
                     popup = True
                 elif story_mode_3.rect.collidepoint(event.pos):
                     mode = "C"
-                    show_popup("C")
+                    show_popup(mode)
                     popup = True
                 elif story_mode_4.rect.collidepoint(event.pos):
                     mode = "D"
-                    show_popup("D")
+                    show_popup(mode)
                     popup = True
                 elif popup:
                     if text_rect.collidepoint(event.pos):
