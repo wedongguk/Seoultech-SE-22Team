@@ -5,6 +5,7 @@ import sys
 sys.path.append(r'C:\Users\jongh\소공\SE-22Team')
 sys.path.append(r'{}'.format(os.getcwd()))
 import time
+
 import pickle
 
 join = False
@@ -13,6 +14,7 @@ def start_server(pw):
     server = "10.50.99.56"
     port = 5555
     password = pw
+
     #소켓 생성
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -76,10 +78,6 @@ def threaded_client(conn):
                 break
             else:
                 pass
-                # if player == 1:
-                #     reply = players[0]
-                # elif player == 0:
-                #     reply = players[1]
             
             
             print("보냄")
