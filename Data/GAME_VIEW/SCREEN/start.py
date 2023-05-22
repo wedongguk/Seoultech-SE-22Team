@@ -22,7 +22,8 @@ def start_game(screen_width, screen_height, num, name, color_weakness_value, mod
     global bgm, bet_card, cannot_bet, card_draw
     global turn_num
     global now
-    global is_other_Uno, is_use_effect
+    global is_other_Uno, is_use_effect, is_draw
+    is_draw = False
     
     now = datetime.now()
 
@@ -168,6 +169,7 @@ def start_game(screen_width, screen_height, num, name, color_weakness_value, mod
 
                 if dbtn.rect.collidepoint(event.pos):  # 드로우 버튼
                     if actlist['drawBtn']:  # actList가 true인 경우에만 함수 실행
+                        is_draw = True
                         g.eventDrawBtn()
                 elif ubtn.rect.collidepoint(event.pos):  # 우노 버튼
                     if actlist['unoBtn']:  # actList가 true인 경우에만 함수 실행
@@ -608,6 +610,10 @@ def winner_screen(screen, screen_width, screen_height, winner, mode):
             config['system']['STORY_D_WIN'] = "True"
             config['system']['STORY_D_WIN_DATE'] = str(now.date())
             save_config(config)
+        if config['system']['STORY_ALL_WIN'] == "False":
+            config['system']['STORY_ALL_WIN'] = "True"
+            config['system']['STORY_ALL_WIN_DATE'] = str(now.date())
+            save_config(config)
     else:
         if config['system']['SINGLE_WIN'] == "False":
             config['system']['SINGLE_WIN'] = "True"
@@ -618,15 +624,25 @@ def winner_screen(screen, screen_width, screen_height, winner, mode):
                 config['system']['TEN_TURN_WIN'] = "True"
                 config['system']['TEN_TURN_WIN_DATE'] = str(now.date())
                 save_config(config)
+        if  turn_num <= 20:
+            if config['system']['TWENTY_TURN_WIN'] == "False":
+                config['system']['TWENTY_TURN_WIN'] = "True"
+                config['system']['TWENTY_TURN_WIN_DATE'] = str(now.date())
+                save_config(config)
         if is_other_Uno == False:
             if config['system']['AFTER_UNO_WIN'] == "False":
                 config['system']['AFTER_UNO_WIN'] = "True"
                 config['system']['AFTER_UNO_WIN_DATE'] = str(now.date())
                 save_config(config)
-        if is_use_effect== False:
+        if is_use_effect == False:
             if config['system']['NO_EFFECT_WIN'] == "False":
                 config['system']['NO_EFFECT_WIN'] = "True"
                 config['system']['NO_EFFECT_WIN_DATE'] = str(now.date())
+                save_config(config)
+        if is_draw == False:
+            if config['system']['NO_DRAW_WIN'] == "False":
+                config['system']['NO_DRAW_WIN'] = "True"
+                config['system']['NO_DRAW_WIN_DATE'] = str(now.date())
                 save_config(config)
             
 
