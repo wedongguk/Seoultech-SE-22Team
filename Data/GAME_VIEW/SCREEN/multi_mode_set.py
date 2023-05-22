@@ -96,16 +96,18 @@ def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEI
                     CLICK_SOUND.play(0)
                     # 서버 소켓 생성
                     print("server socket")
-                    
-                    
-                    
-
                     # print("make obj")
                     # 여기서 게임이 실행됨
                     from Data.SOCKET.server_socket_m import start_server, start_new_thread
                     start_new_thread(start_server, (input_boxes[0].text, ))
                     server_pw = input_boxes[0].text
-                    multi_start_game(is_server, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),AI_num, name_list, color_weakness_value, mode, server_pw, client_pw="0000")
+                    # 여기서 서비인지 아닌지를 판단하여 넘겨줘야 함
+
+                    from Data.GAME_VIEW.SCREEN.multi_loby import multi_loby
+                    multi_loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
+                    
+                    
+                    # multi_start_game(is_server, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),AI_num, name_list, color_weakness_value, mode, server_pw, client_pw="0000")
                     
                     
                     # pygame_thread_obj = threading.Thread(target=pygame_thread, args=(socket_queue, is_server,AI_num, name_list, color_weakness_value, mode))
@@ -135,7 +137,8 @@ def multi_mode_set(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEI
                     server_pw = input_boxes[0].text
                     is_server = False
                     
-                    multi_start_game(is_server, int(config['system']['SCREEN_WIDTH']), int(config['system']['SCREEN_HEIGHT']),AI_num, name_list, color_weakness_value, mode, server_pw, client_pw=pw)
+                    from Data.GAME_VIEW.SCREEN.multi_loby import multi_loby
+                    multi_loby(SCREEN, SCREEN_WIDTH, SCREEN_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT)
 
                     
                     
